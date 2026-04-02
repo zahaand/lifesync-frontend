@@ -3,6 +3,9 @@ import {useSearchParams, useNavigate} from 'react-router-dom'
 import {useForm} from 'react-hook-form'
 import {zodResolver} from '@hookform/resolvers/zod'
 import {Loader2} from 'lucide-react'
+import {Input} from '@/components/ui/input'
+import {Label} from '@/components/ui/label'
+import {Button} from '@/components/ui/button'
 import {registerSchema, loginSchema} from '@/types/auth'
 import {useRegister, useLogin} from '@/hooks/useAuth'
 import {useAuthStore, selectIsAuthenticated} from '@/stores/authStore'
@@ -35,14 +38,14 @@ function RegisterForm({onSuccess}: { onSuccess: () => void }) {
             )}
 
             <div>
-                <label htmlFor="register-email" className="mb-1 block text-[12px] font-medium text-[#666360]">
+                <Label htmlFor="register-email" className="mb-1 block text-[12px] font-medium text-[#666360]">
                     Email
-                </label>
-                <input
+                </Label>
+                <Input
                     id="register-email"
                     type="email"
                     placeholder="alice@example.com"
-                    className={`h-[36px] w-full rounded-lg border border-[#C7C4BB] px-3 text-[13px] text-[#2C2C2A] placeholder:text-[#9E9B94] focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] focus:outline-none ${values.email ? 'bg-[#F5F4F0]' : 'bg-white'}`}
+                    className={`h-[36px] rounded-lg border-[#C7C4BB] px-3 text-[13px] text-[#2C2C2A] placeholder:text-[#9E9B94] focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] ${values.email ? 'bg-[#F5F4F0]' : 'bg-white'}`}
                     {...register('email')}
                 />
                 {errors.email && (
@@ -51,14 +54,14 @@ function RegisterForm({onSuccess}: { onSuccess: () => void }) {
             </div>
 
             <div>
-                <label htmlFor="register-username" className="mb-1 block text-[12px] font-medium text-[#666360]">
+                <Label htmlFor="register-username" className="mb-1 block text-[12px] font-medium text-[#666360]">
                     Username
-                </label>
-                <input
+                </Label>
+                <Input
                     id="register-username"
                     type="text"
                     placeholder="alice-dev"
-                    className={`h-[36px] w-full rounded-lg border border-[#C7C4BB] px-3 text-[13px] text-[#2C2C2A] placeholder:text-[#9E9B94] focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] focus:outline-none ${values.username ? 'bg-[#F5F4F0]' : 'bg-white'}`}
+                    className={`h-[36px] rounded-lg border-[#C7C4BB] px-3 text-[13px] text-[#2C2C2A] placeholder:text-[#9E9B94] focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] ${values.username ? 'bg-[#F5F4F0]' : 'bg-white'}`}
                     {...register('username')}
                 />
                 {errors.username ? (
@@ -69,14 +72,14 @@ function RegisterForm({onSuccess}: { onSuccess: () => void }) {
             </div>
 
             <div>
-                <label htmlFor="register-password" className="mb-1 block text-[12px] font-medium text-[#666360]">
+                <Label htmlFor="register-password" className="mb-1 block text-[12px] font-medium text-[#666360]">
                     Password
-                </label>
-                <input
+                </Label>
+                <Input
                     id="register-password"
                     type="password"
                     placeholder="Minimum 8 characters"
-                    className={`h-[36px] w-full rounded-lg border border-[#C7C4BB] px-3 text-[13px] text-[#2C2C2A] placeholder:text-[#9E9B94] focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] focus:outline-none ${values.password ? 'bg-[#F5F4F0]' : 'bg-white'}`}
+                    className={`h-[36px] rounded-lg border-[#C7C4BB] px-3 text-[13px] text-[#2C2C2A] placeholder:text-[#9E9B94] focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] ${values.password ? 'bg-[#F5F4F0]' : 'bg-white'}`}
                     {...register('password')}
                 />
                 {errors.password && (
@@ -84,10 +87,10 @@ function RegisterForm({onSuccess}: { onSuccess: () => void }) {
                 )}
             </div>
 
-            <button
+            <Button
                 type="submit"
                 disabled={mutation.isPending}
-                className="mt-2 flex h-[38px] w-full items-center justify-center rounded-lg bg-[#534AB7] text-[13px] font-medium text-[#EEEDFE] hover:bg-[#3C3489] disabled:opacity-50"
+                className="mt-2 h-[38px] w-full rounded-lg bg-[#534AB7] text-[13px] font-medium text-[#EEEDFE] hover:bg-[#3C3489]"
             >
                 {mutation.isPending ? (
                     <>
@@ -97,7 +100,7 @@ function RegisterForm({onSuccess}: { onSuccess: () => void }) {
                 ) : (
                     'Create account'
                 )}
-            </button>
+            </Button>
         </form>
     )
 }
@@ -129,14 +132,14 @@ function LoginForm() {
             )}
 
             <div>
-                <label htmlFor="login-email" className="mb-1 block text-[12px] font-medium text-[#666360]">
+                <Label htmlFor="login-email" className="mb-1 block text-[12px] font-medium text-[#666360]">
                     Email or username
-                </label>
-                <input
+                </Label>
+                <Input
                     id="login-email"
                     type="email"
                     placeholder="alice@example.com"
-                    className={`h-[36px] w-full rounded-lg border border-[#C7C4BB] px-3 text-[13px] text-[#2C2C2A] placeholder:text-[#9E9B94] focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] focus:outline-none ${values.email ? 'bg-[#F5F4F0]' : 'bg-white'}`}
+                    className={`h-[36px] rounded-lg border-[#C7C4BB] px-3 text-[13px] text-[#2C2C2A] placeholder:text-[#9E9B94] focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] ${values.email ? 'bg-[#F5F4F0]' : 'bg-white'}`}
                     {...register('email')}
                 />
                 {errors.email ? (
@@ -147,30 +150,30 @@ function LoginForm() {
             </div>
 
             <div>
-                <label htmlFor="login-password" className="mb-1 block text-[12px] font-medium text-[#666360]">
+                <Label htmlFor="login-password" className="mb-1 block text-[12px] font-medium text-[#666360]">
                     Password
-                </label>
-                <input
+                </Label>
+                <Input
                     id="login-password"
                     type="password"
                     placeholder="••••••••"
-                    className={`h-[36px] w-full rounded-lg border border-[#C7C4BB] px-3 text-[13px] text-[#2C2C2A] placeholder:text-[#9E9B94] focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] focus:outline-none ${values.password ? 'bg-[#F5F4F0]' : 'bg-white'}`}
+                    className={`h-[36px] rounded-lg border-[#C7C4BB] px-3 text-[13px] text-[#2C2C2A] placeholder:text-[#9E9B94] focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] ${values.password ? 'bg-[#F5F4F0]' : 'bg-white'}`}
                     {...register('password')}
                 />
                 {errors.password && (
                     <p className="mt-1 text-[12px] text-red-600">{errors.password.message}</p>
                 )}
                 <div className="mt-[-4px] mb-3 text-right">
-                    <button type="button" className="text-[12px] text-[#534AB7] hover:underline">
+                    <Button type="button" variant="link" className="h-auto p-0 text-[12px] text-[#534AB7] hover:underline">
                         Forgot password?
-                    </button>
+                    </Button>
                 </div>
             </div>
 
-            <button
+            <Button
                 type="submit"
                 disabled={mutation.isPending}
-                className="mt-2 flex h-[38px] w-full items-center justify-center rounded-lg bg-[#534AB7] text-[13px] font-medium text-[#EEEDFE] hover:bg-[#3C3489] disabled:opacity-50"
+                className="mt-2 h-[38px] w-full rounded-lg bg-[#534AB7] text-[13px] font-medium text-[#EEEDFE] hover:bg-[#3C3489]"
             >
                 {mutation.isPending ? (
                     <>
@@ -180,7 +183,7 @@ function LoginForm() {
                 ) : (
                     'Sign in'
                 )}
-            </button>
+            </Button>
         </form>
     )
 }
@@ -233,28 +236,30 @@ export default function LoginPage() {
 
                 {/* Tabs */}
                 <div className="mb-5 grid h-[34px] grid-cols-2 overflow-hidden rounded-lg border border-[#C7C4BB]">
-                    <button
+                    <Button
                         type="button"
+                        variant="ghost"
                         onClick={() => handleTabChange('signin')}
-                        className={`text-[13px] font-medium transition-colors ${
+                        className={`h-full rounded-none border-0 text-[13px] font-medium transition-colors ${
                             activeTab === 'signin'
-                                ? 'bg-[#534AB7] text-[#EEEDFE]'
+                                ? 'bg-[#534AB7] text-[#EEEDFE] hover:bg-[#534AB7] hover:text-[#EEEDFE]'
                                 : 'bg-white text-[#666360] hover:bg-[#F5F4F0]'
                         }`}
                     >
                         Sign in
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                         type="button"
+                        variant="ghost"
                         onClick={() => handleTabChange('signup')}
-                        className={`text-[13px] font-medium transition-colors ${
+                        className={`h-full rounded-none border-0 text-[13px] font-medium transition-colors ${
                             activeTab === 'signup'
-                                ? 'bg-[#534AB7] text-[#EEEDFE]'
+                                ? 'bg-[#534AB7] text-[#EEEDFE] hover:bg-[#534AB7] hover:text-[#EEEDFE]'
                                 : 'bg-white text-[#666360] hover:bg-[#F5F4F0]'
                         }`}
                     >
                         Sign up
-                    </button>
+                    </Button>
                 </div>
 
                 {/* Success message */}
