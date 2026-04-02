@@ -33,7 +33,7 @@ A registered user visits the application and signs in using their credentials. U
 
 **Acceptance Scenarios**:
 
-1. **Given** a registered user on the Sign In tab, **When** they enter valid credentials and submit, **Then** the system authenticates them, stores their session, and redirects to the dashboard.
+1. **Given** a registered user on the Sign In tab, **When** they enter valid credentials and submit, **Then** the system authenticates them, stores their session, and redirects to the returnUrl if present (fallback to /dashboard).
 2. **Given** a user on the Sign In tab, **When** they enter incorrect credentials, **Then** the system displays an error message (e.g., "Invalid email or password") without revealing which field is wrong.
 3. **Given** a user on the Sign In tab, **When** they submit with empty required fields, **Then** the system displays inline validation errors for each missing field.
 
@@ -108,13 +108,14 @@ An authenticated user decides to sign out. The system clears their session and r
 - **FR-009**: When token refresh fails (e.g., refresh token expired), the system MUST clear session data and redirect to the auth page
 - **FR-010**: System MUST prevent unauthenticated users from accessing protected routes by redirecting them to the auth page
 - **FR-011**: System MUST redirect already-authenticated users away from the auth page to the dashboard
-- **FR-012**: System MUST provide a logout capability that clears all session data and redirects to the auth page
+- **FR-012**: System MUST provide a logout capability that sends the refresh token to the backend for server-side invalidation, clears all local session data, and redirects to the auth page
 - **FR-013**: System MUST display the application layout (sidebar + main content area) on all protected pages; the sidebar MUST show the authenticated user's name/email from the session and static placeholder nav items (e.g., "Dashboard", "Settings"); functional navigation deferred to later sprints
 - **FR-014**: System MUST use the accent color #534AB7 as the primary brand color on the auth page
 - **FR-015**: System MUST disable the submit button while a login or registration request is in progress to prevent duplicate submissions
 - **FR-016**: On 409 Conflict during registration, the system MUST display the error inline under the conflicting field (email or username)
 - **FR-017**: On 401 during login, the system MUST display the hardcoded message "Invalid email or password" (never reveal which field is incorrect)
-- **FR-018**: On 403 during login, the system MUST display "Your account has been suspended. Contact support."
+- **FR-018**: On 403 during login, the system MUST display "Your account has been suspended. Please contact support."
+- **FR-019**: The returnUrl parameter MUST be validated as an internal path (starts with `/`, no external domain or protocol) before redirect; invalid returnUrl values MUST be discarded and the user redirected to /dashboard
 
 ### Key Entities
 
