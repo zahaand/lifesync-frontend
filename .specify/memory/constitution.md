@@ -1,8 +1,8 @@
 <!--
   Sync Impact Report
   ==================
-  Version change: 0.0.0 → 1.0.0 (initial ratification)
-  Modified principles: N/A (initial version)
+  Version change: 1.0.0 → 1.0.1 (patch — clarification fix)
+  Modified principles: Technology Constraints (React Router v6 → v7)
   Added sections:
     - Core Principles (5 principles)
     - Technology Constraints
@@ -86,7 +86,7 @@ pages.
   preprocessors or bundlers.
 - **Styling**: Tailwind CSS v4 utility classes only. No inline `style`
   attributes except for truly dynamic values (e.g., progress bars).
-- **Routing**: React Router v6. All routes defined declaratively.
+- **Routing**: React Router v7. All routes defined declaratively.
   Protected routes MUST use the `ProtectedRoute` wrapper component.
 - **Imports**: All imports MUST use the `@/` path alias. Relative
   imports (`../`) are forbidden except within the same directory.
@@ -131,4 +131,4 @@ task lists MUST be validated against these principles.
 - **Guidance**: Use `CLAUDE.md` for runtime development guidance that
   supplements this constitution.
 
-**Version**: 1.0.0 | **Ratified**: 2026-04-02 | **Last Amended**: 2026-04-02
+**Version**: 1.0.1 | **Ratified**: 2026-04-02 | **Last Amended**: 2026-04-02
