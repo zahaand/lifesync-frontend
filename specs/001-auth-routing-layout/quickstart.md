@@ -5,23 +5,23 @@
 ## Prerequisites
 
 - Node.js 20+
-- pnpm (or npm)
+- npm (or npm)
 - Backend auth service running at the URL configured in `VITE_API_BASE_URL`
 
 ## Setup
 
 ```bash
 # Install dependencies (including new ones for this sprint)
-pnpm install
+npm install
 
 # Start dev server
-pnpm dev
+npm dev
 ```
 
 ## New Dependencies (this sprint)
 
 ```bash
-pnpm add zustand react-hook-form @hookform/resolvers zod
+npm add zustand react-hook-form @hookform/resolvers zod
 ```
 
 ## Environment Variables
