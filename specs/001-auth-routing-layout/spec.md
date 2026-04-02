@@ -109,7 +109,7 @@ An authenticated user decides to sign out. The system clears their session and r
 - **FR-010**: System MUST prevent unauthenticated users from accessing protected routes by redirecting them to the auth page
 - **FR-011**: System MUST redirect already-authenticated users away from the auth page to the dashboard
 - **FR-012**: System MUST provide a logout capability that sends the refresh token to the backend for server-side invalidation, clears all local session data, and redirects to the auth page
-- **FR-013**: System MUST display the application layout (sidebar + main content area) on all protected pages; the sidebar MUST show the authenticated user's name/email from the session and static placeholder nav items (e.g., "Dashboard", "Settings"); functional navigation deferred to later sprints
+- **FR-013**: System MUST display the application layout (sidebar + main content area) on all protected pages; the sidebar MUST show the authenticated user's displayName (fallback to username) and email from the session and static placeholder nav items (e.g., "Dashboard", "Settings"); functional navigation deferred to later sprints
 - **FR-014**: System MUST use the accent color #534AB7 as the primary brand color on the auth page
 - **FR-015**: System MUST disable the submit button while a login or registration request is in progress to prevent duplicate submissions
 - **FR-016**: On 409 Conflict during registration, the system MUST display the error inline under the conflicting field (email or username)
@@ -119,7 +119,7 @@ An authenticated user decides to sign out. The system clears their session and r
 
 ### Key Entities
 
-- **User**: Represents an authenticated individual; key attributes include email, display name, and unique identifier
+- **User**: Represents an authenticated individual; key attributes include email, username, display name, and unique identifier
 - **Authentication Session**: Represents the user's active session; consists of an access token (short-lived), a refresh token (long-lived), and associated user profile information
 - **Registration Request**: Captures user-submitted data for account creation (email, username, and password)
 - **Login Request**: Captures user-submitted credentials for authentication (email and password)
@@ -141,7 +141,7 @@ An authenticated user decides to sign out. The system clears their session and r
 
 - Q: Should access token be stored in localStorage or memory only? → A: Access token in memory only; refresh token in localStorage (security best practice for SPAs).
 - Q: What are the exact frontend validation rules for registration fields? → A: Email RFC format check; password minimum 8 characters (no complexity requirements); username `^[a-z0-9_-]+$` 3–32 characters. Mirror backend rules exactly.
-- Q: How should API error responses be displayed to users? → A: 409 Conflict → field-level error under the conflicting field (email or username); 401 on login → hardcoded "Invalid email or password"; 403 → "Your account has been suspended. Contact support."
+- Q: How should API error responses be displayed to users? → A: 409 Conflict → field-level error under the conflicting field (email or username); 401 on login → hardcoded "Invalid email or password"; 403 → "Your account has been suspended. Please contact support."
 - Q: After login, redirect to originally requested route or always /dashboard? → A: ReturnUrl pattern — redirect to the originally requested protected route; fall back to /dashboard if no prior route.
 - Q: What should the sidebar render this sprint? → A: Static placeholder nav items (e.g., "Dashboard", "Settings") plus user name/email from authStore. Functional nav links deferred to later sprints.
 
@@ -154,3 +154,8 @@ An authenticated user decides to sign out. The system clears their session and r
 - The sidebar includes static placeholder nav items and user name/email this sprint; functional navigation and full profile display are deferred to subsequent sprints
 - The dashboard page (/dashboard) exists as a minimal placeholder route for this sprint
 - The auth page design follows the Figma reference at https://www.figma.com/design/OyeRpnGfCojppIt3nDlh3u with accent color #534AB7
+
+## Deferred / Tech Debt
+
+- **TD-001**: Network error handling — no FR covers generic network failures (server unreachable). A user-friendly error message should be added in a future sprint.
+- **TD-002**: Catch-all route (`*` → `/login`) — implemented in T007/T016 but not formally specified. Documented as an implicit routing convention; consider adding an explicit FR in the next sprint.
