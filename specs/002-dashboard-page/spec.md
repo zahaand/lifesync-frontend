@@ -81,6 +81,8 @@ An authenticated user sees a "New habit" button in the dashboard top bar. Clicki
 - What happens when the greeting is displayed exactly at a time-of-day boundary (e.g., noon)? The greeting should use simple hour-based thresholds (morning: 5–11, afternoon: 12–17, evening: 18–4) evaluated once on render without live updates.
 - What happens when a goal has no milestones? The milestones section for that goal is hidden entirely.
 - What happens when a goal has no deadline (targetDate is null)? The deadline display should show "No deadline" or be omitted, and the goal should sort after goals with deadlines.
+- What happens when a habit shows completedToday=true but todayLogId is null (data inconsistency)? The uncheck action must be disabled (checkbox non-interactive) and a console warning logged.
+- What happens when the user's username is null or empty in the auth store? The greeting must fall back to "Good morning/afternoon/evening" without a name suffix.
 
 ## Requirements *(mandatory)*
 
@@ -88,19 +90,21 @@ An authenticated user sees a "New habit" button in the dashboard top bar. Clicki
 
 - **FR-001**: System MUST display a personalized greeting ("Good morning/afternoon/evening, {username}") based on the client's local time using hour thresholds: morning 5:00–11:59, afternoon 12:00–17:59, evening 18:00–4:59
 - **FR-002**: System MUST display the current date (client-side, formatted for readability, e.g., "Thursday, April 3, 2026") in the dashboard top bar
-- **FR-003**: System MUST display a "New habit" button in the dashboard top bar that opens a stub modal (placeholder for Sprint 3)
-- **FR-004**: System MUST display four stat cards in a row: today's habit completion (X / Y), best streak (N days — habit name), active goals count, and completed goals count
-- **FR-005**: System MUST display a "Today's habits" card listing all active habits with daily frequency, each showing: habit name, completion checkbox for today, and streak badge
+- **FR-003**: System MUST display a "New habit" button in the dashboard top bar that opens a stub modal with the title "Create habit", a message "Full habit creation coming soon", and a Close button. No form fields required this sprint
+- **FR-004**: System MUST display four stat cards in a row: today's habit completion (X / Y), best streak (N days — habit name), active goals count, and completed goals count. After a habit completion toggle, the "Today's habits" stat card (X / Y) MUST update reactively to reflect the new count without a full page reload
+- **FR-005**: System MUST display a "Today's habits" card listing all active habits with daily frequency in backend default order (no client-side resorting), each showing: habit name, completion checkbox for today, and streak badge
 - **FR-006**: System MUST support optimistic updates for habit completion — immediately reflect the checkbox state change in the UI before server confirmation
-- **FR-007**: System MUST revert the optimistic update and display a toast notification (auto-dismissing after ~3 seconds) if the server rejects a habit completion or uncompletion request
+- **FR-007**: System MUST revert the optimistic update and display a toast notification (auto-dismissing after exactly 3 seconds / 3000ms) if the server rejects a habit completion or uncompletion request
 - **FR-008**: System MUST display the "Today's habits" card with a "View all" link that navigates to /habits
 - **FR-009**: System MUST display an "Active goals" card listing up to 5 active goals ordered by deadline ascending (nulls last), each showing: goal name, progress percentage with progress bar, deadline (or "No deadline"), status badge, and the first 3 milestones with completion status (milestones section hidden if goal has none)
 - **FR-010**: System MUST display the "Active goals" card with a "View all" link that navigates to /goals
 - **FR-011**: System MUST display loading skeleton placeholders while data is being fetched for stat cards, habits card, and goals card
 - **FR-012**: System MUST display an empty state message when the user has no active habits (in the habits card) or no active goals (in the goals card)
-- **FR-013**: System MUST use the accent color #534AB7 as the primary brand color, with approved mockup colours for badges and progress bars as defined in the design reference
+- **FR-013**: System MUST use the accent color #534AB7 as the primary brand color. Canonical badge and progress bar colours: streak badge bg #FAEEDA text #854F0B; active goal badge bg #EEEDFE text #3C3489; completed goal badge bg #EAF3DE text #27500A; progress bar fill (active) #534AB7; progress bar fill (completed) #3B6D11
 - **FR-014**: System MUST lay out the dashboard as: top bar (greeting + date + button), stats row (4 cards), then two-column layout with habits card (left) and goals card (right)
 - **FR-015**: The stats card for "Best streak" MUST display the streak length in days and the associated habit name; if multiple habits share the highest streak, show the first one by list order; if no habits have streaks, it MUST show "0 days"
+- **FR-016**: If a GET /habits or GET /goals request fails, the affected card MUST display an error state ("Failed to load. Try again.") with a retry action — independently, without affecting other cards
+- **FR-017**: Habit checkboxes MUST have `aria-label="Mark {habitName} as complete"` (or "incomplete" when already completed). Progress bars MUST have `aria-valuenow`, `aria-valuemin=0`, `aria-valuemax=100`
 
 ### Key Entities
 
