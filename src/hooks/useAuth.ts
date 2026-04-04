@@ -54,7 +54,7 @@ export function useLogin(setError: UseFormSetError<LoginRequest>) {
             const status = error.response?.status
 
             if (status === 401) {
-                setError('root', {message: 'Invalid email or password'})
+                setError('root', {message: 'Invalid credentials'})
             } else if (status === 403) {
                 setError('root', {message: 'Your account has been suspended. Please contact support.'})
             } else {
