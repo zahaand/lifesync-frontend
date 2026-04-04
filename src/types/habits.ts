@@ -1,8 +1,12 @@
+export type HabitFrequency = 'DAILY' | 'WEEKLY' | 'CUSTOM'
+
+export type HabitStatus = 'ACTIVE' | 'PAUSED' | 'ARCHIVED'
+
 export type Habit = {
   id: string
   name: string
-  frequency: string
-  status: string
+  frequency: HabitFrequency
+  status: HabitStatus
   completedToday: boolean
   todayLogId: string | null
   currentStreak: number
