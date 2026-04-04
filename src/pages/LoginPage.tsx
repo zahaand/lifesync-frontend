@@ -132,18 +132,18 @@ function LoginForm() {
             )}
 
             <div>
-                <Label htmlFor="login-email" className="mb-1 block text-[12px] font-medium text-[#666360]">
+                <Label htmlFor="login-identifier" className="mb-1 block text-[12px] font-medium text-[#666360]">
                     Email or username
                 </Label>
                 <Input
-                    id="login-email"
-                    type="email"
+                    id="login-identifier"
+                    type="text"
                     placeholder="alice@example.com"
-                    className={`h-[36px] rounded-lg border-[#C7C4BB] px-3 text-[13px] text-[#2C2C2A] placeholder:text-[#9E9B94] focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] ${values.email ? 'bg-[#F5F4F0]' : 'bg-white'}`}
-                    {...register('email')}
+                    className={`h-[36px] rounded-lg border-[#C7C4BB] px-3 text-[13px] text-[#2C2C2A] placeholder:text-[#9E9B94] focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] ${values.identifier ? 'bg-[#F5F4F0]' : 'bg-white'}`}
+                    {...register('identifier')}
                 />
-                {errors.email ? (
-                    <p className="mt-1 text-[12px] text-red-600">{errors.email.message}</p>
+                {errors.identifier ? (
+                    <p className="mt-1 text-[12px] text-red-600">{errors.identifier.message}</p>
                 ) : (
                     <p className="mt-1 text-[11px] text-[#9E9B94]">You can sign in with either email or username</p>
                 )}
