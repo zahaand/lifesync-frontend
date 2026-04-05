@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { useAuthStore } from '@/stores/authStore'
 import { useLogout } from '@/hooks/useAuth'
+import { useCurrentUser } from '@/hooks/useUsers'
 
 const navItems = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -13,8 +14,12 @@ const navItems = [
 ]
 
 export default function Layout() {
-  const user = useAuthStore((s) => s.user)
+  const authUser = useAuthStore((s) => s.user)
+  const { data: profile } = useCurrentUser()
   const logout = useLogout()
+
+  const displayName = profile?.displayName || profile?.username || authUser?.username || ''
+  const email = profile?.email || authUser?.email || ''
 
   return (
     <div className="flex h-screen">
@@ -47,13 +52,13 @@ export default function Layout() {
         <Separator />
 
         <div className="p-4">
-          {user && (
+          {(authUser || profile) && (
             <div className="mb-3">
               <p className="truncate text-sm font-medium">
-                {user.displayName ?? user.username}
+                {displayName}
               </p>
               <p className="truncate text-xs text-sidebar-foreground/60">
-                {user.email}
+                {email}
               </p>
             </div>
           )}
