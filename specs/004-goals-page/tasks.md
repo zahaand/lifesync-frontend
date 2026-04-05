@@ -19,8 +19,8 @@
 
 **Purpose**: Install missing shadcn/ui components, create feature branch
 
-- [ ] T001 Check and install shadcn/ui Select component if missing via `npx shadcn@latest add select` (per research.md R8)
-- [ ] T002 Create feature branch `004-goals-page` from main via `git checkout -b 004-goals-page`
+- [x] T001 Check and install shadcn/ui Select component if missing via `npx shadcn@latest add select` (per research.md R8)
+- [x] T002 Create feature branch `004-goals-page` from main via `git checkout -b 004-goals-page`
 
 **Checkpoint**: Branch ready, all required shadcn/ui components available
 
@@ -32,10 +32,10 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T003 Extend Goal type with `description`, `linkedHabitIds`, `createdAt` fields; rename `name` → `title` in Goal and Milestone types; add GoalDetail, CreateGoalRequest, UpdateGoalRequest, UpdateGoalProgressRequest, CreateMilestoneRequest, UpdateMilestoneRequest, LinkHabitRequest, GoalHabitLink types in `src/types/goals.ts`
-- [ ] T004 Add API functions to `src/api/goals.ts`: getGoalDetail(id), createGoal, updateGoal, deleteGoal, updateGoalProgress, addMilestone, updateMilestone, deleteMilestone, linkHabit, unlinkHabit — all via apiClient, matching contracts/goals-api.md
-- [ ] T005 Add hooks to `src/hooks/useGoals.ts`: useAllGoals (query key `['goals']`, size:100, no status filter), useGoalDetail(goalId) with `enabled: !!goalId`, useCreateGoal, useUpdateGoal, useDeleteGoal, useUpdateGoalProgress, useAddMilestone, useUpdateMilestone, useDeleteMilestone, useLinkHabit, useUnlinkHabit — all mutations invalidate `['goals']` prefix on success with toast notifications
-- [ ] T006 Add `/goals` route to `src/App.tsx` wrapped in ProtectedRoute, lazy-loading GoalsPage
+- [x] T003 Extend Goal type with `description`, `linkedHabitIds`, `createdAt` fields; rename `name` → `title` in Goal and Milestone types; add GoalDetail, CreateGoalRequest, UpdateGoalRequest, UpdateGoalProgressRequest, CreateMilestoneRequest, UpdateMilestoneRequest, LinkHabitRequest, GoalHabitLink types in `src/types/goals.ts`
+- [x] T004 Add API functions to `src/api/goals.ts`: getGoalDetail(id), createGoal, updateGoal, deleteGoal, updateGoalProgress, addMilestone, updateMilestone, deleteMilestone, linkHabit, unlinkHabit — all via apiClient, matching contracts/goals-api.md
+- [x] T005 Add hooks to `src/hooks/useGoals.ts`: useAllGoals (query key `['goals']`, size:100, no status filter), useGoalDetail(goalId) with `enabled: !!goalId`, useCreateGoal, useUpdateGoal, useDeleteGoal, useUpdateGoalProgress, useAddMilestone, useUpdateMilestone, useDeleteMilestone, useLinkHabit, useUnlinkHabit — all mutations invalidate `['goals']` prefix on success with toast notifications
+- [x] T006 Add `/goals` route to `src/App.tsx` wrapped in ProtectedRoute, lazy-loading GoalsPage
 
 **Checkpoint**: Foundation ready — types compile, API functions defined, hooks wired, route registered
 
@@ -49,13 +49,13 @@
 
 ### Implementation for User Story 1
 
-- [ ] T007 [P] [US1] Create GoalCard component in `src/components/goals/GoalCard.tsx` — displays title, progress % (purple active / green completed), progress bar, deadline or "No deadline", status badge (Active/Completed), footer with "N habits linked" and "N of M milestones done". Accepts `goal`, `isSelected`, `onClick` props. Uses Card from shadcn/ui. Selected state: `border-2 border-[#534AB7]`
-- [ ] T008 [P] [US1] Create GoalEmptyState component in `src/components/goals/GoalEmptyState.tsx` — two variants: (1) no goals: "No goals yet" with create button, (2) no selection: "Select a goal to view details" placeholder
-- [ ] T009 [P] [US1] Create GoalProgress component in `src/components/goals/GoalProgress.tsx` — large progress %, progress bar, number Input (0-100), "Update" Button. Calls useUpdateGoalProgress on button click only. On success toast + cache refresh. Constrain input to integer 0-100. Progress bar color: #534AB7 for ACTIVE, #3B6D11 for COMPLETED
-- [ ] T010 [P] [US1] Create GoalMilestones component in `src/components/goals/GoalMilestones.tsx` — ordered checklist with Checkbox per milestone (green indicator when completed). Add milestone: text Input + "Add" Button (prevent empty). Delete milestone: × Button per row. Uses useAddMilestone, useUpdateMilestone, useDeleteMilestone hooks
-- [ ] T011 [P] [US1] Create GoalLinkedHabits component in `src/components/goals/GoalLinkedHabits.tsx` — list of linked habits with name + streak badge (bg-[#FAEEDA] text-[#854F0B]). Unlink Button per row. Link dropdown (Select) showing only unlinked active habits + "Link" Button. Cross-references linkedHabitIds with useAllHabits() cache. Uses useLinkHabit, useUnlinkHabit hooks. Disable dropdown when all active habits linked
-- [ ] T012 [US1] Create GoalDetail component in `src/components/goals/GoalDetail.tsx` — assembles goal title, description, edit Button, delete Button, GoalProgress, GoalMilestones, GoalLinkedHabits. Uses useGoalDetail(goalId) hook. Shows skeleton placeholder while loading (per FR-005). Receives goalId prop + callbacks for onEdit, onDelete
-- [ ] T013 [US1] Create GoalsPage in `src/pages/GoalsPage.tsx` — master-detail layout. Left column: header ("Goals", "N active · M completed" subtitle including zero-count), "+ New goal" Button, goals list using GoalCard. Right panel: GoalDetail when selectedGoalId set, GoalEmptyState when null. Uses useAllGoals() for list. Local state: selectedGoalId (useState<string|null>), filter tab, modal states
+- [x] T007 [P] [US1] Create GoalCard component in `src/components/goals/GoalCard.tsx` — displays title, progress % (purple active / green completed), progress bar, deadline or "No deadline", status badge (Active/Completed), footer with "N habits linked" and "N of M milestones done". Accepts `goal`, `isSelected`, `onClick` props. Uses Card from shadcn/ui. Selected state: `border-2 border-[#534AB7]`
+- [x] T008 [P] [US1] Create GoalEmptyState component in `src/components/goals/GoalEmptyState.tsx` — two variants: (1) no goals: "No goals yet" with create button, (2) no selection: "Select a goal to view details" placeholder
+- [x] T009 [P] [US1] Create GoalProgress component in `src/components/goals/GoalProgress.tsx` — large progress %, progress bar, number Input (0-100), "Update" Button. Calls useUpdateGoalProgress on button click only. On success toast + cache refresh. Constrain input to integer 0-100. Progress bar color: #534AB7 for ACTIVE, #3B6D11 for COMPLETED
+- [x] T010 [P] [US1] Create GoalMilestones component in `src/components/goals/GoalMilestones.tsx` — ordered checklist with Checkbox per milestone (green indicator when completed). Add milestone: text Input + "Add" Button (prevent empty). Delete milestone: × Button per row. Uses useAddMilestone, useUpdateMilestone, useDeleteMilestone hooks
+- [x] T011 [P] [US1] Create GoalLinkedHabits component in `src/components/goals/GoalLinkedHabits.tsx` — list of linked habits with name + streak badge (bg-[#FAEEDA] text-[#854F0B]). Unlink Button per row. Link dropdown (Select) showing only unlinked active habits + "Link" Button. Cross-references linkedHabitIds with useAllHabits() cache. Uses useLinkHabit, useUnlinkHabit hooks. Disable dropdown when all active habits linked
+- [x] T012 [US1] Create GoalDetail component in `src/components/goals/GoalDetail.tsx` — assembles goal title, description, edit Button, delete Button, GoalProgress, GoalMilestones, GoalLinkedHabits. Uses useGoalDetail(goalId) hook. Shows skeleton placeholder while loading (per FR-005). Receives goalId prop + callbacks for onEdit, onDelete
+- [x] T013 [US1] Create GoalsPage in `src/pages/GoalsPage.tsx` — master-detail layout. Left column: header ("Goals", "N active · M completed" subtitle including zero-count), "+ New goal" Button, goals list using GoalCard. Right panel: GoalDetail when selectedGoalId set, GoalEmptyState when null. Uses useAllGoals() for list. Local state: selectedGoalId (useState<string|null>), filter tab, modal states
 
 **Checkpoint**: US1 complete — user can view goals list, select a goal, see full detail with progress/milestones/linked habits
 
@@ -69,8 +69,8 @@
 
 ### Implementation for User Story 2
 
-- [ ] T014 [US2] Create GoalFormModal component in `src/components/goals/GoalFormModal.tsx` — React Hook Form + Zod. Fields: title (required, 1-200 chars), description (optional, Textarea), targetDate (optional, date Input). Edit mode adds status Select (Active/Completed). Zod schema validates title length. Uses useCreateGoal / useUpdateGoal hooks. mode prop: 'create' | 'edit'. Pre-fills values in edit mode. Submit disabled + spinner while isPending
-- [ ] T015 [US2] Wire GoalFormModal into GoalsPage in `src/pages/GoalsPage.tsx` — "+ New goal" Button opens modal in create mode. Edit Button in GoalDetail opens modal in edit mode with current goal data. On success: close modal, toast, list refreshes via cache invalidation
+- [x] T014 [US2] Create GoalFormModal component in `src/components/goals/GoalFormModal.tsx` — React Hook Form + Zod. Fields: title (required, 1-200 chars), description (optional, Textarea), targetDate (optional, date Input). Edit mode adds status Select (Active/Completed). Zod schema validates title length. Uses useCreateGoal / useUpdateGoal hooks. mode prop: 'create' | 'edit'. Pre-fills values in edit mode. Submit disabled + spinner while isPending
+- [x] T015 [US2] Wire GoalFormModal into GoalsPage in `src/pages/GoalsPage.tsx` — "+ New goal" Button opens modal in create mode. Edit Button in GoalDetail opens modal in edit mode with current goal data. On success: close modal, toast, list refreshes via cache invalidation
 
 **Checkpoint**: US2 complete — user can create and edit goals with form validation
 
@@ -84,7 +84,7 @@
 
 ### Implementation for User Story 3
 
-- [ ] T016 [US3] Verify GoalProgress component handles progress update flow end-to-end in `src/components/goals/GoalProgress.tsx` — ensure server-confirmed status change at 100% (not optimistic), progress editable on COMPLETED goals but does NOT reactivate. Input constrained to integer 0-100 (no decimals, no non-numeric). Disable Update Button while mutation is in flight
+- [x] T016 [US3] Verify GoalProgress component handles progress update flow end-to-end in `src/components/goals/GoalProgress.tsx` — ensure server-confirmed status change at 100% (not optimistic), progress editable on COMPLETED goals but does NOT reactivate. Input constrained to integer 0-100 (no decimals, no non-numeric). Disable Update Button while mutation is in flight
 
 **Checkpoint**: US3 complete — progress updates work with auto-complete at 100%
 
@@ -98,7 +98,7 @@
 
 ### Implementation for User Story 4
 
-- [ ] T017 [US4] Verify GoalMilestones component handles full milestone CRUD in `src/components/goals/GoalMilestones.tsx` — confirm add clears input on success, toggle updates visual indicator (green dot/check for completed), delete removes from list, empty submit prevented, all mutations invalidate cache. SortOrder not sent by frontend (backend auto-assigns)
+- [x] T017 [US4] Verify GoalMilestones component handles full milestone CRUD in `src/components/goals/GoalMilestones.tsx` — confirm add clears input on success, toggle updates visual indicator (green dot/check for completed), delete removes from list, empty submit prevented, all mutations invalidate cache. SortOrder not sent by frontend (backend auto-assigns)
 
 **Checkpoint**: US4 complete — milestones fully manageable within goals
 
@@ -112,7 +112,7 @@
 
 ### Implementation for User Story 5
 
-- [ ] T018 [US5] Verify GoalLinkedHabits component handles full habit link/unlink flow in `src/components/goals/GoalLinkedHabits.tsx` — confirm dropdown excludes already-linked habits, dropdown shows only active habits, "All habits linked" state when none available, streak badge displays correctly, unlink removes from list and habit reappears in dropdown. Handle cold habits cache (useAllHabits triggers fetch if not cached)
+- [x] T018 [US5] Verify GoalLinkedHabits component handles full habit link/unlink flow in `src/components/goals/GoalLinkedHabits.tsx` — confirm dropdown excludes already-linked habits, dropdown shows only active habits, "All habits linked" state when none available, streak badge displays correctly, unlink removes from list and habit reappears in dropdown. Handle cold habits cache (useAllHabits triggers fetch if not cached)
 
 **Checkpoint**: US5 complete — habits can be linked/unlinked with proper filtering
 
@@ -126,8 +126,8 @@
 
 ### Implementation for User Story 6
 
-- [ ] T019 [P] [US6] Create GoalFilters component in `src/components/goals/GoalFilters.tsx` — three tabs: All / Active / Completed. Active tab: bg-[#EEEDFE] text-[#3C3489] border border-[#AFA9EC]. Inactive tab: bg-transparent text-[#666360] border border-[#E8E6DF]. Rounded-full pills. Accepts activeFilter and onFilterChange props
-- [ ] T020 [US6] Wire GoalFilters into GoalsPage in `src/pages/GoalsPage.tsx` — add filterTab state ('ALL' | 'ACTIVE' | 'COMPLETED', default 'ALL'). Filter pipeline: allGoals → filterByTab → render list. When selected goal disappears from filtered list, clear selectedGoalId (FR-018)
+- [x] T019 [P] [US6] Create GoalFilters component in `src/components/goals/GoalFilters.tsx` — three tabs: All / Active / Completed. Active tab: bg-[#EEEDFE] text-[#3C3489] border border-[#AFA9EC]. Inactive tab: bg-transparent text-[#666360] border border-[#E8E6DF]. Rounded-full pills. Accepts activeFilter and onFilterChange props
+- [x] T020 [US6] Wire GoalFilters into GoalsPage in `src/pages/GoalsPage.tsx` — add filterTab state ('ALL' | 'ACTIVE' | 'COMPLETED', default 'ALL'). Filter pipeline: allGoals → filterByTab → render list. When selected goal disappears from filtered list, clear selectedGoalId (FR-018)
 
 **Checkpoint**: US6 complete — filter tabs work with proper detail panel clearing
 
@@ -141,8 +141,8 @@
 
 ### Implementation for User Story 7
 
-- [ ] T021 [US7] Create GoalDeleteDialog component in `src/components/goals/GoalDeleteDialog.tsx` — AlertDialog with goal title in description, "This action cannot be undone" warning. Cancel and Delete buttons. Delete button: bg-red-500 text-white. Uses useDeleteGoal hook. On success: close dialog, toast, clear selectedGoalId
-- [ ] T022 [US7] Wire GoalDeleteDialog into GoalsPage in `src/pages/GoalsPage.tsx` — delete Button in GoalDetail triggers dialog. On confirm: goal removed, detail panel clears to placeholder
+- [x] T021 [US7] Create GoalDeleteDialog component in `src/components/goals/GoalDeleteDialog.tsx` — AlertDialog with goal title in description, "This action cannot be undone" warning. Cancel and Delete buttons. Delete button: bg-red-500 text-white. Uses useDeleteGoal hook. On success: close dialog, toast, clear selectedGoalId
+- [x] T022 [US7] Wire GoalDeleteDialog into GoalsPage in `src/pages/GoalsPage.tsx` — delete Button in GoalDetail triggers dialog. On confirm: goal removed, detail panel clears to placeholder
 
 **Checkpoint**: US7 complete — goals can be permanently deleted with confirmation
 
@@ -152,10 +152,10 @@
 
 **Purpose**: Field name migration in existing code, validation, cleanup
 
-- [ ] T023 Rename `name` → `title` in existing Goal and Milestone references across `src/types/goals.ts` (Sprint 2 code), `src/hooks/useGoals.ts`, `src/api/goals.ts`, and any Dashboard components that reference goal.name or milestone.name
-- [ ] T024 Update DashboardPage goal references in `src/pages/DashboardPage.tsx` — change goal.name → goal.title and milestone.name → milestone.title (same pattern as Sprint 3 habit.name → habit.title fix)
-- [ ] T025 Run `tsc -b` to verify zero TypeScript errors across entire project
-- [ ] T026 Run `npx eslint .` to verify zero lint errors
+- [x] T023 Rename `name` → `title` in existing Goal and Milestone references across `src/types/goals.ts` (Sprint 2 code), `src/hooks/useGoals.ts`, `src/api/goals.ts`, and any Dashboard components that reference goal.name or milestone.name
+- [x] T024 Update DashboardPage goal references in `src/pages/DashboardPage.tsx` — change goal.name → goal.title and milestone.name → milestone.title (same pattern as Sprint 3 habit.name → habit.title fix)
+- [x] T025 Run `tsc -b` to verify zero TypeScript errors across entire project
+- [x] T026 Run `npx eslint .` to verify zero lint errors
 - [ ] T027 Run quickstart.md validation — manually walk through all 11 verification sections in `specs/004-goals-page/quickstart.md`
 
 ---
