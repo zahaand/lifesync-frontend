@@ -15,9 +15,9 @@
 
 **Purpose**: New types, API layer, and shared hooks — all user stories depend on these
 
-- [ ] T001 [P] Define UserProfile, UpdateUserRequest, UpdateTelegramRequest types and Zod schemas (updateUsernameSchema, updateTelegramSchema) in src/types/users.ts
-- [ ] T002 [P] Implement API functions (getCurrentUser, updateUser, updateTelegram, deleteAccount) in src/api/users.ts per contracts/profile-api.md
-- [ ] T003 Add setUser(user: User) action to authStore in src/stores/authStore.ts — updates only user field without replacing tokens
+- [x] T001 [P] Define UserProfile, UpdateUserRequest, UpdateTelegramRequest types and Zod schemas (updateUsernameSchema, updateTelegramSchema) in src/types/users.ts
+- [x] T002 [P] Implement API functions (getCurrentUser, updateUser, updateTelegram, deleteAccount) in src/api/users.ts per contracts/profile-api.md
+- [x] T003 Add setUser(user: User) action to authStore in src/stores/authStore.ts — updates only user field without replacing tokens
 
 ---
 
@@ -27,9 +27,9 @@
 
 **Critical**: No component work can begin until this phase is complete
 
-- [ ] T004 Implement useCurrentUser, useUpdateUsername, useUpdateTelegram, useDeleteAccount hooks in src/hooks/useUsers.ts — useCurrentUser with query key ['users', 'me'] and staleTime 5min; useUpdateUsername invalidates ['users', 'me'] AND calls authStore.setUser(); useUpdateTelegram invalidates ['users', 'me']; useDeleteAccount calls authStore.clearAuth() + queryClient.clear() + navigate('/login')
-- [ ] T005 Add /profile route to src/App.tsx inside ProtectedRoute + Layout (import ProfilePage)
-- [ ] T006 Refactor Layout sidebar in src/components/shared/Layout.tsx — convert static nav items to NavLink components with active-link highlighting (FR-015), add Profile nav item with User icon linking to /profile, add Habits and Goals nav items
+- [x] T004 Implement useCurrentUser, useUpdateUsername, useUpdateTelegram, useDeleteAccount hooks in src/hooks/useUsers.ts — useCurrentUser with query key ['users', 'me'] and staleTime 5min; useUpdateUsername invalidates ['users', 'me'] AND calls authStore.setUser(); useUpdateTelegram invalidates ['users', 'me']; useDeleteAccount calls authStore.clearAuth() + queryClient.clear() + navigate('/login')
+- [x] T005 Add /profile route to src/App.tsx inside ProtectedRoute + Layout (import ProfilePage)
+- [x] T006 Refactor Layout sidebar in src/components/shared/Layout.tsx — convert static nav items to NavLink components with active-link highlighting (FR-015), add Profile nav item with User icon linking to /profile, add Habits and Goals nav items
 
 **Checkpoint**: Foundation ready — types, API, hooks, route, and sidebar all in place
 
@@ -41,8 +41,8 @@
 
 **Independent Test**: Navigate to /profile, see current username and email, change username to a valid value, click Save, see success toast, verify sidebar updates immediately
 
-- [ ] T007 [P] [US1] Create AccountCard component in src/components/profile/AccountCard.tsx — displays username (editable Input with RHF + updateUsernameSchema) and email (read-only text), Save and Cancel buttons. Save calls useUpdateUsername mutation. Cancel reverts to original value. Show skeleton placeholder while useCurrentUser is loading (FR-014). Handle 409 conflict error (retain attempted value, show error toast)
-- [ ] T008 [P] [US1] Create ProfilePage in src/pages/ProfilePage.tsx — single-column layout (max-w-[720px] mx-auto), renders AccountCard, TelegramCard, StatsCard, DangerZoneCard. Uses useCurrentUser for profile data. Pass profile data to child cards as props
+- [x] T007 [P] [US1] Create AccountCard component in src/components/profile/AccountCard.tsx — displays username (editable Input with RHF + updateUsernameSchema) and email (read-only text), Save and Cancel buttons. Save calls useUpdateUsername mutation. Cancel reverts to original value. Show skeleton placeholder while useCurrentUser is loading (FR-014). Handle 409 conflict error (retain attempted value, show error toast)
+- [x] T008 [P] [US1] Create ProfilePage in src/pages/ProfilePage.tsx — single-column layout (max-w-[720px] mx-auto), renders AccountCard, TelegramCard, StatsCard, DangerZoneCard. Uses useCurrentUser for profile data. Pass profile data to child cards as props
 
 **Checkpoint**: US1 complete — username edit works independently, sidebar reflects changes
 
@@ -54,7 +54,7 @@
 
 **Independent Test**: Log in, navigate to Dashboard, see greeting with displayName (if set) or username. Throttle network — greeting shows username immediately, upgrades to displayName when query resolves
 
-- [ ] T009 [US2] Update DashboardPage greeting in src/pages/DashboardPage.tsx — import useCurrentUser, compute greeting name as: useCurrentUser().data?.displayName (if non-null/non-empty) ?? authStore.user?.username. No loading spinner for greeting — authStore username is the immediate fallback (FR-011, research R6)
+- [x] T009 [US2] Update DashboardPage greeting in src/pages/DashboardPage.tsx — import useCurrentUser, compute greeting name as: useCurrentUser().data?.displayName (if non-null/non-empty) ?? authStore.user?.username. No loading spinner for greeting — authStore username is the immediate fallback (FR-011, research R6)
 
 **Checkpoint**: US2 complete — Dashboard greeting shows displayName or username
 
@@ -66,7 +66,7 @@
 
 **Independent Test**: Enter a numeric chat ID, click Save, see success toast and persisted value. Enter non-numeric text, see inline validation error
 
-- [ ] T010 [US3] Create TelegramCard component in src/components/profile/TelegramCard.tsx — Input for telegramChatId with RHF + updateTelegramSchema (digits only, /^\d+$/), Save button calls useUpdateTelegram mutation. Show current value if already linked (FR-006). Show skeleton placeholder while loading (FR-014). Success/error toast on mutation result
+- [x] T010 [US3] Create TelegramCard component in src/components/profile/TelegramCard.tsx — Input for telegramChatId with RHF + updateTelegramSchema (digits only, /^\d+$/), Save button calls useUpdateTelegram mutation. Show current value if already linked (FR-006). Show skeleton placeholder while loading (FR-014). Success/error toast on mutation result
 
 **Checkpoint**: US3 complete — Telegram linking works independently
 
@@ -78,7 +78,7 @@
 
 **Independent Test**: Navigate to /profile, verify stats match Dashboard values. Open /profile directly in new tab — see skeletons, then loaded data
 
-- [ ] T011 [US4] Create StatsCard component in src/components/profile/StatsCard.tsx — displays active habits count, best streak (days + habit name), active goals count, completed goals count. Uses useHabits() and useGoalsSummary() hooks which auto-fetch if cold. Show skeleton placeholders while loading. Show 0 for empty counts, "—" for no streak (FR-007)
+- [x] T011 [US4] Create StatsCard component in src/components/profile/StatsCard.tsx — displays active habits count, best streak (days + habit name), active goals count, completed goals count. Uses useHabits() and useGoalsSummary() hooks which auto-fetch if cold. Show skeleton placeholders while loading. Show 0 for empty counts, "—" for no streak (FR-007)
 
 **Checkpoint**: US4 complete — Stats display works independently
 
@@ -90,8 +90,8 @@
 
 **Independent Test**: Click "Delete account", type username in confirmation Dialog, confirm, verify redirect to /login and localStorage cleared
 
-- [ ] T012 [P] [US5] Create DeleteAccountDialog component in src/components/profile/DeleteAccountDialog.tsx — shadcn Dialog (not AlertDialog) with Input. User must type exact username to enable Confirm button. Confirm calls useDeleteAccount mutation. Cancel closes dialog. Red destructive styling for Confirm button (FR-008, FR-009)
-- [ ] T013 [P] [US5] Create DangerZoneCard component in src/components/profile/DangerZoneCard.tsx ��� red accent card with "Delete account" button that opens DeleteAccountDialog. Pass username as prop for confirmation matching (FR-008)
+- [x] T012 [P] [US5] Create DeleteAccountDialog component in src/components/profile/DeleteAccountDialog.tsx — shadcn Dialog (not AlertDialog) with Input. User must type exact username to enable Confirm button. Confirm calls useDeleteAccount mutation. Cancel closes dialog. Red destructive styling for Confirm button (FR-008, FR-009)
+- [x] T013 [P] [US5] Create DangerZoneCard component in src/components/profile/DangerZoneCard.tsx ��� red accent card with "Delete account" button that opens DeleteAccountDialog. Pass username as prop for confirmation matching (FR-008)
 
 **Checkpoint**: US5 complete — account deletion flow works end-to-end
 
@@ -101,10 +101,10 @@
 
 **Purpose**: Integration, validation, and final cleanup
 
-- [ ] T014 Wire all cards into ProfilePage in src/pages/ProfilePage.tsx — ensure card order: Account, Telegram, Stats, Danger Zone. Verify all cards receive correct props from useCurrentUser
-- [ ] T015 Run tsc -b — zero TypeScript errors
-- [ ] T016 Run eslint . — zero warnings or errors
-- [ ] T017 Verify quickstart.md scenarios manually against running app (npm run dev)
+- [x] T014 Wire all cards into ProfilePage in src/pages/ProfilePage.tsx — ensure card order: Account, Telegram, Stats, Danger Zone. Verify all cards receive correct props from useCurrentUser
+- [x] T015 Run tsc -b — zero TypeScript errors
+- [x] T016 Run eslint . — zero warnings or errors
+- [ ] T017 Verify quickstart.md scenarios manually against running app (npm run dev) scenarios manually against running app (npm run dev)
 
 ---
 
