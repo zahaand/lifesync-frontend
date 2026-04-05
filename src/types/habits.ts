@@ -47,6 +47,11 @@ export type CreateHabitRequest = {
   reminderTime?: string
 }
 
+export type CompleteHabitRequest = {
+  date: string
+  note?: string
+}
+
 export type UpdateHabitRequest = {
   title?: string
   description?: string

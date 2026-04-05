@@ -34,7 +34,8 @@ export const habitsApi = {
   },
 
   completeHabit: async (habitId: string): Promise<HabitLog> => {
-    const res = await apiClient.post(`/habits/${habitId}/complete`)
+    const today = new Date().toISOString().split('T')[0]
+    const res = await apiClient.post<HabitLog>(`/habits/${habitId}/complete`, { date: today })
     return res.data
   },
 
