@@ -300,7 +300,7 @@ function GoalsCard() {
               {/* Name + progress % */}
               <div className="flex items-center justify-between">
                 <span className="text-[13px] font-medium text-[#2C2C2A]">
-                  {goal.name}
+                  {goal.title}
                 </span>
                 <span
                   className={`text-[13px] font-semibold ${goal.status === 'COMPLETED' ? 'text-[#3B6D11]' : 'text-[#534AB7]'}`}
@@ -347,7 +347,7 @@ function GoalsCard() {
                       <span
                         className={`text-[11px] ${ms.completed ? 'text-[#9E9B94] line-through' : 'text-[#666360]'}`}
                       >
-                        {ms.name}
+                        {ms.title}
                       </span>
                     </div>
                   ))}
