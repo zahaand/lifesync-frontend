@@ -174,7 +174,7 @@ A user wants to permanently remove a goal they no longer need. They click the de
 - **FR-015**: The create goal modal MUST include fields for: title (required, 1-200 characters), description (optional), and target date (optional).
 - **FR-016**: The edit goal modal MUST present the same fields as create, pre-populated with current values, plus a status selector (Active / Completed).
 - **FR-017**: System MUST provide filter tabs (All / Active / Completed) for client-side filtering of the goals list.
-- **FR-018**: When the selected goal is no longer visible after a filter change or deletion, the detail panel MUST clear.
+- **FR-018**: When a filter tab changes or a goal is deleted, the detail panel MUST clear only if the currently selected goal is not present in the resulting filtered list. If the selected goal remains visible after the filter change, it stays selected.
 - **FR-019**: System MUST allow permanent deletion of goals, preceded by a confirmation dialog.
 - **FR-020**: Successful create, edit, delete, progress update, milestone, and habit-link operations MUST show a success notification.
 - **FR-021**: Failed operations MUST show an error notification.
