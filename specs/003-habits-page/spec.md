@@ -37,7 +37,7 @@ A user wants to build a new habit. They click "+ New habit" to open a creation f
 
 1. **Given** the user is on the Habits page, **When** they click "+ New habit", **Then** a modal opens with fields for name, description, frequency selector, and reminder time.
 2. **Given** the create modal is open, **When** the user enters a valid name and selects "DAILY" frequency and submits, **Then** the modal closes, a success notification appears, and the new habit appears in the active habits list.
-3. **Given** the create modal is open with frequency set to "WEEKLY", **When** the user views the form, **Then** day-of-week checkboxes (MON through SUN) become visible for selection.
+3. **Given** the create modal is open with frequency set to "CUSTOM", **When** the user views the form, **Then** day-of-week checkboxes (MON through SUN) become visible and at least one must be selected to submit.
 4. **Given** the create modal is open, **When** the user submits with an empty name, **Then** the form shows a validation error and does not submit.
 5. **Given** the create modal is open, **When** the user enters a name exceeding 200 characters, **Then** the form shows a validation error indicating the maximum length.
 
@@ -72,7 +72,8 @@ A user with many habits wants to quickly find specific ones. They can use filter
 1. **Given** a user has both active and archived habits, **When** they select the "Active" filter tab, **Then** only active habits are displayed.
 2. **Given** a user has both active and archived habits, **When** they select the "Archived" filter tab, **Then** only archived habits are displayed.
 3. **Given** the "All" tab is selected, **When** the user types "Run" in the search input, **Then** only habits whose name contains "Run" (case-insensitive) are displayed.
-4. **Given** the user has searched for "xyz" with no matches, **When** they view the page, **Then** an empty state is shown indicating no habits match the search.
+4. **Given** the "Active" tab is selected and search contains "Run", **When** the user switches to the "All" tab, **Then** the search input still contains "Run" and results show all habits (active and archived) matching "Run".
+5. **Given** the user has searched for "xyz" with no matches, **When** they view the page, **Then** an empty state is shown indicating no habits match the search.
 
 ---
 
@@ -95,21 +96,6 @@ A user wants to manage the lifecycle of their habits. They can archive an active
 
 ---
 
-### User Story 6 - View Habit Completion History (Priority: P3)
-
-A user wants to review when they completed a specific habit in the past. They can open a detail view that shows a paginated log of completion entries with dates and timestamps.
-
-**Why this priority**: Historical data provides motivation and insight but is not essential for daily habit tracking.
-
-**Independent Test**: Can be tested by opening the detail view for a habit with logged completions and verifying the log entries display correctly with pagination.
-
-**Acceptance Scenarios**:
-
-1. **Given** a habit with 15 completion logs, **When** the user opens the habit detail view, **Then** they see a paginated list of log entries showing date and completion time.
-2. **Given** the detail view is open, **When** more entries exist beyond the current page, **Then** the user can navigate to the next page of entries.
-
----
-
 ### Edge Cases
 
 - What happens when a user has zero habits? The page shows an empty state encouraging them to create their first habit.
@@ -122,16 +108,16 @@ A user wants to review when they completed a specific habit in the past. They ca
 
 ### Functional Requirements
 
-- **FR-001**: System MUST display a Habits page at the /habits route showing all user habits organized into active and archived sections.
+- **FR-001**: System MUST display a Habits page at the /habits route showing all user habits organized into active and archived sections. The single habits query returns both active and archived habits; the frontend separates them client-side by status.
 - **FR-002**: System MUST display a page header with title "Habits" and subtitle showing the count of active and archived habits.
 - **FR-003**: System MUST provide a "+ New habit" button in the header that opens a creation modal.
 - **FR-004**: System MUST allow users to mark a habit as completed for the current day via a checkbox, with immediate visual feedback (optimistic update).
 - **FR-005**: System MUST allow users to unmark a previously completed habit, with immediate visual feedback (optimistic update).
-- **FR-006**: Each habit row MUST display: checkbox, habit name (with line-through styling if completed today), frequency pill (DAILY/WEEKLY/CUSTOM), status text ("Completed today" or "Not done yet"), streak badge, edit button, and archive/restore button.
+- **FR-006**: Each habit row MUST display: checkbox, habit name (with line-through styling if completed today), frequency pill (DAILY/WEEKLY/CUSTOM), status text ("Completed today" or "Not done yet"), streak badge, edit button, and archive/restore button. The completion checkbox MUST be disabled for archived habits.
 - **FR-007**: Archived habit rows MUST additionally display a delete button.
 - **FR-008**: System MUST provide filter tabs (All / Active / Archived) for client-side filtering of the habit list.
-- **FR-009**: System MUST provide a search input that filters habits by name on the client side (case-insensitive).
-- **FR-010**: The create habit modal MUST include fields for: name (required, 1–200 characters), description (optional), frequency (DAILY/WEEKLY/CUSTOM), target days of week (visible for WEEKLY/CUSTOM), and reminder time (optional).
+- **FR-009**: System MUST provide a search input that filters habits by name on the client side (case-insensitive). Search and filter tabs use AND logic (both apply simultaneously). The search query MUST persist when switching filter tabs.
+- **FR-010**: The create habit modal MUST include fields for: name (required, 1–200 characters), description (optional), frequency (DAILY/WEEKLY/CUSTOM), target days of week (visible only for CUSTOM frequency, required with minimum 1 day selected; omitted from request for DAILY/WEEKLY), and reminder time (optional, HH:mm format).
 - **FR-011**: The create habit form MUST validate that name is between 1 and 200 characters before submission.
 - **FR-012**: The edit habit modal MUST present the same fields as create, pre-populated with the habit's current values.
 - **FR-013**: System MUST allow archiving an active habit, which sets it to inactive and moves it to the archived section.
@@ -141,7 +127,7 @@ A user wants to review when they completed a specific habit in the past. They ca
 - **FR-017**: Failed operations MUST show an error notification.
 - **FR-018**: Section headers MUST display the count of habits in that section (e.g., "ACTIVE — 5").
 - **FR-019**: The archived section MUST be hidden when there are no archived habits.
-- **FR-020**: System SHOULD display a habit completion history view showing paginated log entries with date and time (P3, optional).
+- ~~**FR-020**~~: *(Deferred)* Habit completion history view — explicitly out of scope for Sprint 3, planned for a future sprint.
 
 ### Key Entities
 
@@ -160,12 +146,22 @@ A user wants to review when they completed a specific habit in the past. They ca
 - **SC-005**: Users can complete the full habit lifecycle (create, track daily, archive, restore, delete) without encountering dead ends or unclear states.
 - **SC-006**: The page loads and displays all habits within 2 seconds on a standard connection.
 
+## Clarifications
+
+### Session 2026-04-05
+
+- Q: Does GET /habits return both active and archived habits, or only active by default? → A: Returns both active and archived in a single response; frontend splits client-side by status.
+- Q: Can archived habits be marked as completed today, or is the checkbox disabled? → A: Checkbox is disabled for archived habits.
+- Q: Do search and filter tabs combine (AND logic), and does the search query persist across tab switches? → A: AND logic; search query persists across tab switches.
+- Q: How should targetDaysOfWeek and reminderTime be handled per frequency? → A: DAILY/WEEKLY: omit targetDaysOfWeek from request (backend ignores it). CUSTOM: targetDaysOfWeek is required, minimum 1 day. reminderTime: optional, HH:mm string format (e.g. "07:30"). Frontend shows day-of-week checkboxes only for CUSTOM frequency.
+- Q: Is the habit completion history view (P3) in scope for Sprint 3? → A: Explicitly deferred to a future sprint. Do not plan or implement in Sprint 3.
+
 ## Assumptions
 
 - Users are authenticated and authorized before accessing the Habits page (handled by existing auth from Sprint 1).
 - The backend already supports all required endpoints (GET/POST/PATCH/DELETE for habits and completion toggling from Sprint 2, plus new POST create, PATCH update, DELETE endpoints).
 - The Habit entity on the backend includes fields for description, targetDaysOfWeek, and reminderTime (needed for create/edit but not yet exposed in Sprint 2's read-only type).
 - Search filtering is case-insensitive substring matching on the habit name field.
-- The habit detail / completion history view (P3) may be deferred to a future sprint if time is constrained.
+- The habit detail / completion history view (P3) is explicitly deferred to a future sprint and is out of scope for Sprint 3.
 - Streak count is calculated server-side and returned as part of the habit data.
 - The archived section only appears when there are archived habits — no empty section placeholder is needed.
