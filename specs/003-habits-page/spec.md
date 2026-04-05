@@ -108,7 +108,7 @@ A user wants to manage the lifecycle of their habits. They can archive an active
 
 ### Functional Requirements
 
-- **FR-001**: System MUST display a Habits page at the /habits route showing all user habits organized into active and archived sections. The single habits query returns both active and archived habits; the frontend separates them client-side by status.
+- **FR-001**: System MUST display a Habits page at the /habits route showing all user habits organized into active and archived sections. The single habits query returns both active and archived habits (up to 100); the frontend separates them client-side by `isActive` field. Pagination UI beyond 100 habits is out of scope for MVP.
 - **FR-002**: System MUST display a page header with title "Habits" and subtitle showing the count of active and archived habits.
 - **FR-003**: System MUST provide a "+ New habit" button in the header that opens a creation modal.
 - **FR-004**: System MUST allow users to mark a habit as completed for the current day via a checkbox, with immediate visual feedback (optimistic update).
@@ -119,9 +119,9 @@ A user wants to manage the lifecycle of their habits. They can archive an active
 - **FR-009**: System MUST provide a search input that filters habits by name on the client side (case-insensitive). Search and filter tabs use AND logic (both apply simultaneously). The search query MUST persist when switching filter tabs.
 - **FR-010**: The create habit modal MUST include fields for: name (required, 1–200 characters), description (optional), frequency (DAILY/WEEKLY/CUSTOM), target days of week (visible only for CUSTOM frequency, required with minimum 1 day selected; omitted from request for DAILY/WEEKLY), and reminder time (optional, HH:mm format).
 - **FR-011**: The create habit form MUST validate that name is between 1 and 200 characters before submission.
-- **FR-012**: The edit habit modal MUST present the same fields as create, pre-populated with the habit's current values.
-- **FR-013**: System MUST allow archiving an active habit, which sets it to inactive and moves it to the archived section.
-- **FR-014**: System MUST allow restoring an archived habit, which sets it back to active.
+- **FR-012**: The edit habit modal MUST present the same fields as create, pre-populated with the habit's current values. The edit button MUST be available for both active and archived habits.
+- **FR-013**: System MUST allow archiving an active habit by setting `isActive` to `false`, which moves it to the archived section. Section placement rule: `isActive=true` → Active section, `isActive=false` → Archived section.
+- **FR-014**: System MUST allow restoring an archived habit by setting `isActive` to `true`, which moves it back to the active section.
 - **FR-015**: System MUST allow permanent deletion of archived habits only, preceded by a confirmation dialog.
 - **FR-016**: Successful create, edit, archive, restore, and delete operations MUST show a success notification.
 - **FR-017**: Failed operations MUST show an error notification.
@@ -131,7 +131,7 @@ A user wants to manage the lifecycle of their habits. They can archive an active
 
 ### Key Entities
 
-- **Habit**: Represents a recurring behavior the user wants to track. Key attributes: name, description, frequency (daily/weekly/custom), active status, target days of week, reminder time, current streak count, today's completion state.
+- **Habit**: Represents a recurring behavior the user wants to track. Key attributes: name, description, frequency (daily/weekly/custom), `isActive` boolean (true=active, false=archived), target days of week, reminder time, current streak count, today's completion state. Note: The `HabitStatus` type includes a `PAUSED` value which is reserved for future use and not addressed in Sprint 3. Section placement is determined solely by `isActive`.
 - **Habit Log**: Represents a single completion event for a habit. Key attributes: completion date and time, associated habit.
 - **Day of Week**: Represents target days for weekly/custom frequency habits (Monday through Sunday).
 
@@ -155,6 +155,9 @@ A user wants to manage the lifecycle of their habits. They can archive an active
 - Q: Do search and filter tabs combine (AND logic), and does the search query persist across tab switches? → A: AND logic; search query persists across tab switches.
 - Q: How should targetDaysOfWeek and reminderTime be handled per frequency? → A: DAILY/WEEKLY: omit targetDaysOfWeek from request (backend ignores it). CUSTOM: targetDaysOfWeek is required, minimum 1 day. reminderTime: optional, HH:mm string format (e.g. "07:30"). Frontend shows day-of-week checkboxes only for CUSTOM frequency.
 - Q: Is the habit completion history view (P3) in scope for Sprint 3? → A: Explicitly deferred to a future sprint. Do not plan or implement in Sprint 3.
+- Q: How is section placement determined — `status` field or `isActive` field? → A: `isActive` boolean is authoritative. `isActive=true` → Active section, `isActive=false` → Archived section. The `PAUSED` value in `HabitStatus` is reserved for future use and not handled in Sprint 3.
+- Q: Can archived habits be edited? → A: Yes. The edit button is available on archived habit rows. Users can modify name, description, frequency, etc. while a habit is archived.
+- Q: What about >100 habits? → A: The habits list fetches up to 100 habits (size=100). If a user has more, only the first 100 are shown. Pagination UI is out of scope for MVP.
 
 ## Assumptions
 

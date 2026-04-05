@@ -31,9 +31,11 @@ New fields to add (returned by backend, not yet typed):
 
 `'DAILY' | 'WEEKLY' | 'CUSTOM'`
 
-### HabitStatus (unchanged)
+### HabitStatus (unchanged — PAUSED reserved for future use)
 
 `'ACTIVE' | 'PAUSED' | 'ARCHIVED'`
+
+> **Note**: Sprint 3 does not handle `PAUSED` status. Section placement is determined by `isActive` boolean, not `status`. The `PAUSED` value is reserved for a future sprint. If the backend returns a habit with status `PAUSED`, the frontend treats it based on its `isActive` value.
 
 ### HabitLog (unchanged)
 
