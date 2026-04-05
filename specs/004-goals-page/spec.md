@@ -158,10 +158,10 @@ A user wants to permanently remove a goal they no longer need. They click the de
 ### Functional Requirements
 
 - **FR-001**: System MUST display a Goals page at the /goals route with a master-detail layout: scrollable goal cards list on the left, goal detail panel on the right.
-- **FR-002**: System MUST display a page header with title "Goals" and subtitle showing the count of active and completed goals ("N active · M completed").
+- **FR-002**: System MUST display a page header with title "Goals" and subtitle showing the count of active and completed goals ("N active · M completed"). When the user has no goals, subtitle shows "0 active · 0 completed".
 - **FR-003**: System MUST provide a "+ New goal" button in the header that opens a creation modal.
 - **FR-004**: Each goal card MUST display: goal title, progress percentage (purple if active, green if completed), progress bar, deadline (or "No deadline"), status badge (Active / Completed), and footer with linked habits count and milestones progress ("N of M milestones done").
-- **FR-005**: Clicking a goal card MUST select it (highlighted with purple border) and display its full detail in the right panel.
+- **FR-005**: Clicking a goal card MUST select it (highlighted with purple border) and display its full detail in the right panel. While goal detail is loading (GET /goals/{id}), the right panel MUST show a skeleton placeholder.
 - **FR-006**: The detail panel MUST display: goal title, description, edit button, delete button, progress section, milestones section, and linked habits section.
 - **FR-007**: The progress section MUST display a large progress percentage, a progress bar, a number input (0-100), and an "Update" button that persists the new value. The progress input MUST remain editable on completed goals but changing the value does NOT reactivate the goal — reactivation requires explicit status change via the edit modal.
 - **FR-008**: Setting progress to 100 MUST automatically change the goal's status to COMPLETED. Reducing progress below 100 on a completed goal MUST NOT change its status back to ACTIVE.
@@ -210,6 +210,7 @@ A user wants to permanently remove a goal they no longer need. They click the de
 - GET /goals list does NOT include linkedHabitIds. A separate GET /goals/{id} detail endpoint returns the full goal including linkedHabitIds. Linked habit details (names, streaks) are resolved by cross-referencing with the habits list cache (useAllHabits).
 - The goals list fetches up to 100 goals (pagination beyond 100 is out of scope for MVP).
 - Goal progress and milestone completion are independent — completing all milestones does not auto-update progress, and updating progress does not auto-complete milestones.
+- When adding a new milestone, sortOrder is not sent by the frontend. Backend assigns sortOrder automatically (append to end).
 - Filter tabs use client-side filtering on the already-fetched goals list.
 - The detail panel shows a placeholder "Select a goal to view details" when no goal is selected (no auto-selection on load).
 - Streak badge reuses the same design tokens as Sprint 3 Habits page.

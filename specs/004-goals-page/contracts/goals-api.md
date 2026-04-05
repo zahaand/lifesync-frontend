@@ -30,14 +30,14 @@ Fetch full goal detail including linkedHabitIds.
 ```json
 {
   "id": "uuid",
-  "name": "Learn TypeScript",
+  "title": "Learn TypeScript",
   "description": "Master TS for frontend development",
   "progress": 65,
   "targetDate": "2026-06-15",
   "status": "ACTIVE",
   "milestones": [
-    { "id": "uuid", "name": "Complete TS handbook", "completed": true },
-    { "id": "uuid", "name": "Build a project", "completed": false }
+    { "id": "uuid", "title": "Complete TS handbook", "completed": true },
+    { "id": "uuid", "title": "Build a project", "completed": false }
   ],
   "linkedHabitIds": ["habit-uuid-1", "habit-uuid-2"],
   "createdAt": "2026-04-01T10:00:00Z"

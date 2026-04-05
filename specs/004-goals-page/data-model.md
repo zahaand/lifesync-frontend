@@ -11,7 +11,7 @@ Current fields from `src/types/goals.ts`:
 | Field       | Type             | Notes               |
 |-------------|------------------|----------------------|
 | id          | string           | UUID                 |
-| name        | string           | Goal title           |
+| title       | string           | Goal title           |
 | progress    | number           | 0-100                |
 | targetDate  | string \| null   | YYYY-MM-DD or null   |
 | status      | GoalStatus       | ACTIVE / COMPLETED   |
@@ -41,7 +41,7 @@ Used for the response from GET /goals/{id}. Contains all Goal fields plus `linke
 | Field     | Type    | Notes              |
 |-----------|---------|---------------------|
 | id        | string  | UUID                |
-| name      | string  | Milestone title     |
+| title     | string  | Milestone title     |
 | completed | boolean | Completion status   |
 
 > **Note**: Milestones are ordered by their position in the array (server returns them in sortOrder). The frontend does not manage sortOrder directly — new milestones are appended by the backend.
