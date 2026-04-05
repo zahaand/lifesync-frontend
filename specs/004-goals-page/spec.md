@@ -5,6 +5,16 @@
 **Status**: Draft  
 **Input**: User description: "Sprint 4: Goals page — full goal management"
 
+## Clarifications
+
+### Session 2026-04-05
+
+- Q: Does GET /goals return all milestones inline or are they capped? → A: GET /goals returns ALL milestones inline with no cap. The 3-milestone limit in Sprint 2 Dashboard was frontend-only. Detail panel reads milestones from list cache — no separate GET /goals/{id}/milestones call for initial load. Separate POST/PATCH/DELETE mutations still needed for add/toggle/delete with cache invalidation.
+- Q: How are linked habits fetched — dedicated endpoint or cross-reference? → A: GET /goals list does NOT include linkedHabitIds. GET /goals/{id} (detail endpoint) returns linkedHabitIds array. On goal selection, call GET /goals/{id} to get full detail; cross-reference linkedHabitIds with useAllHabits() cache to get habit names and streaks. Requires useGoalDetail(goalId) hook — one call per selection, cached by React Query.
+- Q: Can reducing progress below 100 reactivate a COMPLETED goal? → A: No. Progress input updates the number only. Reactivating a completed goal requires explicit status change via the edit modal's status selector. This prevents accidental reactivation.
+- Q: Should the right panel auto-select the first goal or show a placeholder on load? → A: Show placeholder text "Select a goal to view details" — no goal auto-selected on page load.
+- Q: Is mobile/responsive layout in scope for Sprint 4? → A: Out of scope. Master-detail layout targets desktop/tablet widths only. No responsive breakpoints or single-column mobile navigation.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - View Goals and Track Progress (Priority: P1)
@@ -140,6 +150,8 @@ A user wants to permanently remove a goal they no longer need. They click the de
 - What happens when all milestones are completed? The milestones section shows all items checked; progress is not automatically updated (progress is managed independently).
 - What happens when the selected goal disappears from the filtered list after a filter change? The detail panel clears.
 - What happens when setting progress to 100 on an already-completed goal? No status change occurs (already COMPLETED).
+- What happens when a user reduces progress on a COMPLETED goal to below 100? The progress value updates but the status remains COMPLETED. Reactivation requires explicit status change via the edit modal.
+- What happens on initial page load? The right panel shows a placeholder "Select a goal to view details" — no goal is auto-selected.
 
 ## Requirements *(mandatory)*
 
@@ -151,8 +163,8 @@ A user wants to permanently remove a goal they no longer need. They click the de
 - **FR-004**: Each goal card MUST display: goal title, progress percentage (purple if active, green if completed), progress bar, deadline (or "No deadline"), status badge (Active / Completed), and footer with linked habits count and milestones progress ("N of M milestones done").
 - **FR-005**: Clicking a goal card MUST select it (highlighted with purple border) and display its full detail in the right panel.
 - **FR-006**: The detail panel MUST display: goal title, description, edit button, delete button, progress section, milestones section, and linked habits section.
-- **FR-007**: The progress section MUST display a large progress percentage, a progress bar, a number input (0-100), and an "Update" button that persists the new value.
-- **FR-008**: Setting progress to 100 MUST automatically change the goal's status to COMPLETED.
+- **FR-007**: The progress section MUST display a large progress percentage, a progress bar, a number input (0-100), and an "Update" button that persists the new value. The progress input MUST remain editable on completed goals but changing the value does NOT reactivate the goal — reactivation requires explicit status change via the edit modal.
+- **FR-008**: Setting progress to 100 MUST automatically change the goal's status to COMPLETED. Reducing progress below 100 on a completed goal MUST NOT change its status back to ACTIVE.
 - **FR-009**: The milestones section MUST display milestones as an ordered checklist with completion toggles (checkboxes).
 - **FR-010**: Users MUST be able to add a new milestone via a text input and "Add" button. Empty submissions MUST be prevented.
 - **FR-011**: Users MUST be able to delete individual milestones via a remove button on each row.
@@ -167,6 +179,9 @@ A user wants to permanently remove a goal they no longer need. They click the de
 - **FR-020**: Successful create, edit, delete, progress update, milestone, and habit-link operations MUST show a success notification.
 - **FR-021**: Failed operations MUST show an error notification.
 - **FR-022**: The goals list MUST show an empty state when no goals exist, encouraging the user to create their first goal.
+- **FR-023**: When no goal is selected (initial page load), the detail panel MUST show a placeholder message "Select a goal to view details".
+- **FR-024**: The detail panel MUST load full goal data (including linkedHabitIds) via a dedicated detail query when a goal is selected. Linked habit details (names, streaks) MUST be resolved by cross-referencing with the habits list cache.
+- **FR-025**: The master-detail layout is designed for desktop/tablet widths. Mobile-specific responsive layout is explicitly out of scope for Sprint 4.
 
 ### Key Entities
 
@@ -191,10 +206,11 @@ A user wants to permanently remove a goal they no longer need. They click the de
 - Users are authenticated and authorized before accessing the Goals page (handled by existing auth from Sprint 1).
 - The backend supports all required endpoints (GET/POST/PATCH/DELETE for goals, milestones, progress, and habit links).
 - The Goal entity on the backend includes a description field (may need to be added to the existing frontend type from Sprint 2).
-- Milestones are returned inline within the Goal response from GET /goals (no separate query needed — no N+1 problem).
-- Linked habits require fetching habit details (names, streaks) from the habits endpoint since the goal-habit link only stores IDs.
+- Milestones are returned inline within the Goal response from GET /goals with no cap (all milestones included). The 3-milestone limit in Sprint 2 Dashboard was a frontend display choice. No separate milestones query needed for reading.
+- GET /goals list does NOT include linkedHabitIds. A separate GET /goals/{id} detail endpoint returns the full goal including linkedHabitIds. Linked habit details (names, streaks) are resolved by cross-referencing with the habits list cache (useAllHabits).
 - The goals list fetches up to 100 goals (pagination beyond 100 is out of scope for MVP).
 - Goal progress and milestone completion are independent — completing all milestones does not auto-update progress, and updating progress does not auto-complete milestones.
 - Filter tabs use client-side filtering on the already-fetched goals list.
-- The detail panel shows a placeholder/empty state when no goal is selected.
+- The detail panel shows a placeholder "Select a goal to view details" when no goal is selected (no auto-selection on load).
 - Streak badge reuses the same design tokens as Sprint 3 Habits page.
+- Mobile/responsive layout is out of scope for Sprint 4. Master-detail layout targets desktop/tablet only.
