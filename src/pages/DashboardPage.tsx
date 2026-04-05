@@ -49,7 +49,7 @@ function StatsRow() {
   for (const h of habits) {
     if (h.currentStreak > bestStreakValue) {
       bestStreakValue = h.currentStreak
-      bestStreakName = h.name
+      bestStreakName = h.title
     }
   }
 
@@ -206,8 +206,8 @@ function HabitsCard() {
                 }
                 aria-label={
                   habit.completedToday
-                    ? `Mark ${habit.name} as incomplete`
-                    : `Mark ${habit.name} as complete`
+                    ? `Mark ${habit.title} as incomplete`
+                    : `Mark ${habit.title} as complete`
                 }
                 className="h-[22px] w-[22px] rounded-full border-[#C7C4BB] data-[state=checked]:border-[#534AB7] data-[state=checked]:bg-[#534AB7]"
               />
@@ -215,7 +215,7 @@ function HabitsCard() {
                 <div
                   className={`text-[13px] font-medium ${habit.completedToday ? 'text-[#9E9B94] line-through' : 'text-[#2C2C2A]'}`}
                 >
-                  {habit.name}
+                  {habit.title}
                 </div>
                 <div className="mt-1 flex items-center gap-2">
                   <Badge

@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Toaster } from '@/components/ui/sonner'
 import LoginPage from '@/pages/LoginPage'
 import DashboardPage from '@/pages/DashboardPage'
+import HabitsPage from '@/pages/HabitsPage'
 import ProtectedRoute from '@/components/shared/ProtectedRoute'
 import Layout from '@/components/shared/Layout'
 import { useAuthStore } from '@/stores/authStore'
@@ -58,6 +59,7 @@ function App() {
             <Route element={<ProtectedRoute />}>
               <Route element={<Layout />}>
                 <Route path="/dashboard" element={<DashboardPage />} />
+                <Route path="/habits" element={<HabitsPage />} />
               </Route>
             </Route>
             <Route path="*" element={<Navigate to="/login" replace />} />

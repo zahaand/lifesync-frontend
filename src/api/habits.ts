@@ -1,5 +1,11 @@
 import { apiClient } from '@/api/client'
-import type { HabitPageResponse, HabitLog } from '@/types/habits'
+import type {
+  HabitPageResponse,
+  HabitLog,
+  Habit,
+  CreateHabitRequest,
+  UpdateHabitRequest,
+} from '@/types/habits'
 
 type GetHabitsParams = {
   status?: string
@@ -13,8 +19,23 @@ export const habitsApi = {
     return res.data
   },
 
+  createHabit: async (data: CreateHabitRequest): Promise<Habit> => {
+    const res = await apiClient.post('/habits', data)
+    return res.data
+  },
+
+  updateHabit: async (id: string, data: UpdateHabitRequest): Promise<Habit> => {
+    const res = await apiClient.patch(`/habits/${id}`, data)
+    return res.data
+  },
+
+  deleteHabit: async (id: string): Promise<void> => {
+    await apiClient.delete(`/habits/${id}`)
+  },
+
   completeHabit: async (habitId: string): Promise<HabitLog> => {
-    const res = await apiClient.post(`/habits/${habitId}/complete`)
+    const today = new Date().toISOString().split('T')[0]
+    const res = await apiClient.post<HabitLog>(`/habits/${habitId}/complete`, { date: today })
     return res.data
   },
 
