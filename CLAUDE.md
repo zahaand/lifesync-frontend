@@ -27,9 +27,9 @@ npm test && npm run lint
 TypeScript 5.9, React 19.2, Node 20+: Follow standard conventions
 
 ## Recent Changes
+- 005-profile-page: Added TypeScript 5.9, React 19.2 + React Router v7, TanStack React Query v5, Axios, React Hook Form + Zod, shadcn/ui (Nova preset) + Radix, Lucide React, Sonner
 - 004-goals-page: Added TypeScript 5.9, React 19.2 + React Router v7, TanStack React Query v5, Axios, React Hook Form + Zod, shadcn/ui (Nova preset) + Radix, Lucide React, Sonner
 - 003-habits-page: Added TypeScript 5.9, React 19.2 + React Router v7, TanStack React Query v5, Axios, Zustand, React Hook Form + Zod, shadcn/ui (Nova preset) + Radix, Lucide React, Sonner
-- 002-dashboard-page: Added Sonner (toast notifications), shadcn/ui Skeleton, Dialog, Checkbox, Progress, Badge components
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->

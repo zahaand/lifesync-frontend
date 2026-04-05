@@ -19,6 +19,7 @@ import GoalProgress from '@/components/shared/GoalProgress'
 import { useAuthStore } from '@/stores/authStore'
 import { useHabits, useCompleteHabit, useUncompleteHabit } from '@/hooks/useHabits'
 import { useGoalsSummary } from '@/hooks/useGoals'
+import { useCurrentUser } from '@/hooks/useUsers'
 
 function getGreeting(): string {
   const hour = new Date().getHours()
@@ -363,11 +364,14 @@ function GoalsCard() {
 
 export default function DashboardPage() {
   const user = useAuthStore((s) => s.user)
+  const { data: currentUser } = useCurrentUser()
   const [modalOpen, setModalOpen] = useState(false)
 
   const greeting = getGreeting()
-  const username = user?.username
-  const greetingText = username ? `${greeting}, ${username}` : greeting
+  const username = user?.username ?? ''
+  const displayName = currentUser?.displayName || ''
+  const name = displayName || username
+  const greetingText = name ? `${greeting}, ${name}` : greeting
 
   return (
     <div>
