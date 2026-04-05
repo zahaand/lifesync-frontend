@@ -6,6 +6,7 @@ import LoginPage from '@/pages/LoginPage'
 import DashboardPage from '@/pages/DashboardPage'
 import HabitsPage from '@/pages/HabitsPage'
 import GoalsPage from '@/pages/GoalsPage'
+import ProfilePage from '@/pages/ProfilePage'
 import ProtectedRoute from '@/components/shared/ProtectedRoute'
 import Layout from '@/components/shared/Layout'
 import { useAuthStore } from '@/stores/authStore'
@@ -62,6 +63,7 @@ function App() {
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/habits" element={<HabitsPage />} />
                 <Route path="/goals" element={<GoalsPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
               </Route>
             </Route>
             <Route path="*" element={<Navigate to="/login" replace />} />
