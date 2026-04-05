@@ -27,7 +27,7 @@ A user navigates to the Habits page to see all their habits organized by status.
 
 ### User Story 2 - Create a New Habit (Priority: P1)
 
-A user wants to build a new habit. They click "+ New habit" to open a creation form where they specify the habit name, optional description, frequency (daily, weekly, or custom), target days of the week (for weekly/custom frequency), and an optional reminder time. After submitting, the new habit appears in their active habits list.
+A user wants to build a new habit. They click "+ New habit" to open a creation form where they specify the habit name, optional description, frequency (daily, weekly, or custom), target days of the week (for custom frequency only), and an optional reminder time. After submitting, the new habit appears in their active habits list.
 
 **Why this priority**: Creating habits is essential for the page to have any content — without creation, users have an empty page with no value.
 

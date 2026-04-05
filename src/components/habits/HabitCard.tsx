@@ -1,4 +1,5 @@
 import { Pencil, Archive, RotateCcw, Trash2 } from 'lucide-react'
+import { Card } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Button } from '@/components/ui/button'
 import type { Habit } from '@/types/habits'
@@ -33,8 +34,8 @@ export default function HabitCard({
   }
 
   return (
-    <div
-      className={`flex items-center gap-3 px-4 py-3 border rounded-xl mb-2 ${
+    <Card
+      className={`flex items-center gap-3 px-4 py-3 rounded-xl mb-2 shadow-none ${
         isArchived
           ? 'opacity-60 bg-[#F5F4F0] border-[#E8E6DF]'
           : 'bg-white border-[#E8E6DF]'
@@ -115,6 +116,6 @@ export default function HabitCard({
           </>
         )}
       </div>
-    </div>
+    </Card>
   )
 }

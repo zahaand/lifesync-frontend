@@ -40,7 +40,7 @@ const habitFormSchema = z
     targetDaysOfWeek: z.array(z.enum([
       'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY',
     ] as const)).optional(),
-    reminderTime: z.string().optional(),
+    reminderTime: z.string().regex(/^\d{2}:\d{2}$/, 'Time must be in HH:mm format').optional().or(z.literal('')),
   })
   .refine(
     (data) => {

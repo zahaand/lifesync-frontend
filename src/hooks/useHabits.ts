@@ -40,7 +40,6 @@ export function useUpdateHabit() {
       habitsApi.updateHabit(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['habits'] })
-      toast.success('Habit updated')
     },
     onError: () => {
       toast.error('Failed to update habit')

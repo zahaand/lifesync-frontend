@@ -81,7 +81,7 @@ export default function HabitsPage() {
     if (!editingHabit) return
     updateHabit.mutate(
       { id: editingHabit.id, data },
-      { onSuccess: () => setEditingHabit(null) },
+      { onSuccess: () => { setEditingHabit(null); toast.success('Habit updated') } },
     )
   }
 
