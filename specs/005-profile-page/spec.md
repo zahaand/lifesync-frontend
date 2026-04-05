@@ -43,17 +43,17 @@ The Dashboard greeting currently uses the username from authStore. After this up
 
 ### User Story 3 - Link Telegram (Priority: P2)
 
-A user wants to link their Telegram account for notifications. In the Telegram card, they enter their Telegram user ID and save it. If already linked, the current ID is displayed and can be updated.
+A user wants to link their Telegram account for notifications. In the Telegram card, they enter their Telegram chat ID and save it. If already linked, the current ID is displayed and can be updated.
 
 **Why this priority**: Telegram integration is an optional enhancement — the app is fully functional without it. It's a simple form but adds cross-platform notification capability.
 
-**Independent Test**: Enter a Telegram user ID in the input, click Save, see success toast and persisted value.
+**Independent Test**: Enter a Telegram chat ID in the input, click Save, see success toast and persisted value.
 
 **Acceptance Scenarios**:
 
 1. **Given** the user has no Telegram linked, **When** they view the Telegram card, **Then** they see an empty input with a placeholder and a Save button.
-2. **Given** the user enters a Telegram user ID and clicks Save, **Then** the ID is persisted via PUT /users/me/telegram and a success toast appears.
-3. **Given** the user already has a Telegram ID linked, **When** they view the Telegram card, **Then** the input shows the current ID and they can update it.
+2. **Given** the user enters a Telegram chat ID and clicks Save, **Then** the ID is persisted via PUT /users/me/telegram and a success toast appears.
+3. **Given** the user already has a Telegram chat ID linked, **When** they view the Telegram card, **Then** the input shows the current ID and they can update it.
 
 ---
 
@@ -92,7 +92,7 @@ A user wants to permanently delete their account. They click a delete button in 
 ### Edge Cases
 
 - What happens when the username update fails (409 conflict — username taken)? An error toast is shown with the server error message. The input retains the attempted value so the user can correct it.
-- What happens when the Telegram ID format is invalid? The backend validates — a 400 error results in an error toast.
+- What happens when the Telegram chat ID format is invalid? The backend validates — a 400 error results in an error toast.
 - What happens when DELETE /users/me fails? An error toast is shown and the user remains on the profile page.
 - What happens when GET /users/me fails on Dashboard? The greeting falls back to authStore username — no error shown for the greeting (graceful degradation).
 - What happens when stats caches are empty (new user, no habits/goals)? Stats show 0 for all counts, "—" for best streak.
@@ -104,13 +104,13 @@ A user wants to permanently delete their account. They click a delete button in 
 - **FR-001**: System MUST display a Profile page at the /profile route with a single-column layout (max-width 720px, centered) containing: Account card, Telegram card, Stats card, and Danger Zone card.
 - **FR-002**: The Account card MUST display the user's current username (editable) and email (read-only).
 - **FR-003**: Username editing MUST validate against the pattern `^[a-z0-9_-]+$` with 3-32 character length, matching backend rules.
-- **FR-004**: The Account card MUST provide Save and Cancel buttons. Save submits PATCH /users/me. Cancel reverts to the original value.
-- **FR-005**: The Telegram card MUST provide an input for Telegram user ID and a Save button. Save submits PUT /users/me/telegram.
-- **FR-006**: If a Telegram ID is already linked, the input MUST display the current value for editing.
-- **FR-007**: The Stats card MUST display 4 read-only metrics: active habits count, best streak (days + habit name), active goals count, completed goals count. Data MUST come from existing React Query caches (useHabits, useGoalsSummary).
-- **FR-008**: The Danger Zone card MUST provide a "Delete account" button that opens a confirmation dialog.
-- **FR-009**: The delete confirmation dialog MUST require the user to type their exact username before the Confirm button is enabled.
-- **FR-010**: On successful account deletion, the system MUST clear auth state (authStore) and redirect to /login.
+- **FR-004**: The Account card MUST provide Save and Cancel buttons. Save submits PATCH /users/me, invalidates the `['users', 'me']` query cache, AND updates `authStore.user` so sidebar/greeting reflect the change immediately. Cancel reverts to the original value.
+- **FR-005**: The Telegram card MUST provide an input for Telegram chat ID (field: `telegramChatId`, numeric string validated with `/^\d+$/`) and a Save button. Save submits PUT /users/me/telegram.
+- **FR-006**: If a Telegram chat ID is already linked, the input MUST display the current value for editing.
+- **FR-007**: The Stats card MUST display 4 read-only metrics: active habits count, best streak (days + habit name), active goals count, completed goals count. Data MUST come from existing React Query hooks (useHabits, useGoalsSummary) which auto-fetch if cache is cold. Skeleton placeholders MUST be shown while loading.
+- **FR-008**: The Danger Zone card MUST provide a "Delete account" button that opens a confirmation Dialog (shadcn Dialog with Input, not AlertDialog).
+- **FR-009**: The delete confirmation Dialog MUST include an Input where the user types their exact username. The Confirm button MUST remain disabled until the typed value matches.
+- **FR-010**: On successful account deletion, the system MUST clear auth state (authStore), clear React Query cache, and redirect to /login.
 - **FR-011**: The Dashboard greeting MUST use displayName from GET /users/me if available, otherwise fall back to username from authStore.
 - **FR-012**: All successful mutations (username update, Telegram update, account deletion) MUST show a success toast notification.
 - **FR-013**: All failed mutations MUST show an error toast notification.
@@ -118,9 +118,9 @@ A user wants to permanently delete their account. They click a delete button in 
 
 ### Key Entities
 
-- **UserProfile**: Represents the current user's profile. Key attributes: id, email, username, displayName, telegramUserId. Extends the auth User type with telegramUserId.
+- **UserProfile**: Represents the current user's profile. Key attributes: id, email, username, displayName, telegramChatId. Extends the auth User type with telegramChatId.
 - **UpdateUserRequest**: Partial update for user fields. Key attributes: username (optional).
-- **UpdateTelegramRequest**: Telegram linking request. Key attributes: telegramUserId.
+- **UpdateTelegramRequest**: Telegram linking request. Key attributes: telegramChatId.
 
 ## Success Criteria *(mandatory)*
 
@@ -131,12 +131,22 @@ A user wants to permanently delete their account. They click a delete button in 
 - **SC-003**: Account deletion completes and redirects within 3 seconds of confirmation.
 - **SC-004**: 100% of profile mutations (username, Telegram, delete) provide clear success or error feedback.
 
+## Clarifications
+
+### Session 2026-04-05
+
+- Q: Should PATCH /users/me update both React Query cache AND authStore.user, or only one? → A: Both — invalidate ['users', 'me'] query AND update authStore.user so sidebar/greeting reflect changes immediately.
+- Q: Should the delete confirmation use AlertDialog (simple confirm) or Dialog with Input requiring username? → A: Dialog with Input — user must type their exact username to enable the Confirm button.
+- Q: What is the backend field name for the Telegram integration, and what validation applies? → A: Field is `telegramChatId` (not telegramUserId). Numeric string, validated with `/^\d+$/`. Value is `null` when not linked. No "Remove" action in Sprint 5.
+- Q: Should the Stats card trigger fetches if habits/goals caches are cold (direct navigation to /profile)? → A: Yes — reuse hooks normally, they auto-fetch if cache is cold. Show skeleton placeholders while loading.
+- Q: Should the Dashboard greeting update immediately after a username change on /profile? → A: Updates on next Dashboard visit — authStore already synced from PATCH (Q1), no extra refetch or polling needed.
+
 ## Assumptions
 
 - Users are authenticated before accessing /profile (handled by ProtectedRoute from Sprint 1).
-- The backend GET /users/me endpoint returns all profile fields including telegramUserId and displayName.
-- The existing auth User type (src/types/auth.ts) already includes id, email, username, displayName. The profile extends this with telegramUserId.
+- The backend GET /users/me endpoint returns all profile fields including telegramChatId and displayName.
+- The existing auth User type (src/types/auth.ts) already includes id, email, username, displayName. The profile extends this with telegramChatId.
 - The username validation pattern (`^[a-z0-9_-]+$`, 3-32 chars) matches the existing register schema in src/types/auth.ts.
-- Stats data reuses existing hooks (useHabits for habits, useGoalsSummary for goals) — no new API calls for stats.
+- Stats data reuses existing hooks (useHabits for habits, useGoalsSummary for goals) — hooks auto-fetch if cache is cold (e.g., direct navigation to /profile).
 - The Danger Zone card uses a red visual accent to signal destructive intent, consistent with the design language.
 - displayName is not editable on the Profile page in Sprint 5 (it may come from a future social login or admin setting).
