@@ -71,7 +71,10 @@ src/
 │   └── DashboardPage.tsx      # MODIFY: smart greeting with useCurrentUser
 ├── components/
 │   └── shared/
-│       └── Layout.tsx         # MODIFY: add /profile nav link, update sidebar
+│       └── Layout.tsx         # MODIFY: add /profile nav link with active state,
+│                              #   convert static nav items to NavLink with active highlight
+├── stores/
+│   └── authStore.ts           # MODIFY: add setUser(user: User) action
 └── App.tsx                    # MODIFY: add /profile route
 ```
 
@@ -83,7 +86,7 @@ src/
 
 Username mutations must update both `['users', 'me']` query cache AND `authStore.user` so the sidebar greeting and Layout user display reflect changes immediately without a page reload. The `onSuccess` callback of the mutation handles both:
 1. `queryClient.invalidateQueries({ queryKey: ['users', 'me'] })`
-2. `useAuthStore.getState().setTokens(...)` with updated user object
+2. `useAuthStore.getState().setUser(updatedUser)` — a new action that updates only the user without replacing tokens
 
 ### 2. useCurrentUser Hook
 

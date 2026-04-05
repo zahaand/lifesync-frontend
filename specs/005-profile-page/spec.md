@@ -115,6 +115,7 @@ A user wants to permanently delete their account. They click a delete button in 
 - **FR-012**: All successful mutations (username update, Telegram update, account deletion) MUST show a success toast notification.
 - **FR-013**: All failed mutations MUST show an error toast notification.
 - **FR-014**: While the user profile is loading on the Profile page, skeleton placeholders MUST be shown in the Account and Telegram cards.
+- **FR-015**: The Layout sidebar MUST include a Profile nav item linking to /profile. The current page's nav item MUST be visually highlighted with an active style (purple accent, bg highlight). When the user is on /profile, the Profile nav item MUST show active state, matching the pattern of other nav items (Dashboard, Habits, Goals).
 
 ### Key Entities
 
@@ -150,3 +151,4 @@ A user wants to permanently delete their account. They click a delete button in 
 - Stats data reuses existing hooks (useHabits for habits, useGoalsSummary for goals) — hooks auto-fetch if cache is cold (e.g., direct navigation to /profile).
 - The Danger Zone card uses a red visual accent to signal destructive intent, consistent with the design language.
 - displayName is not editable on the Profile page in Sprint 5 (it may come from a future social login or admin setting).
+- authStore requires a new `setUser(user: User)` action in addition to `setTokens()`. The PATCH /users/me mutation calls `setUser()` in `onSuccess` to update the persisted user without replacing the tokens.

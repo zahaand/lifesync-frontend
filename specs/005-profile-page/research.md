@@ -21,7 +21,7 @@
 
 **Rationale**: React Query invalidation triggers a background refetch but doesn't guarantee instant UI update for components reading from authStore (Layout sidebar, Dashboard greeting fallback). Updating authStore synchronously in the `onSuccess` callback ensures all consumers see the new username immediately.
 
-**Implementation**: The mutation's `onSuccess` receives the updated user profile from the server response. Construct a partial `User` update and call `useAuthStore.getState()` to update in-place. Since authStore persists to localStorage, the change survives page reloads.
+**Implementation**: The mutation's `onSuccess` receives the updated user profile from the server response. Call `useAuthStore.getState().setUser(updatedUser)` — a new action added to authStore that updates only the `user` field without replacing tokens. Since authStore persists `user` to localStorage, the change survives page reloads.
 
 **Alternatives considered**:
 - Only invalidate React Query, subscribe Layout/Dashboard to `['users', 'me']` — would require refactoring Layout to use useCurrentUser instead of authStore, breaking the established pattern from Sprint 1.
