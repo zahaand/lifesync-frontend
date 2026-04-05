@@ -368,8 +368,9 @@ export default function DashboardPage() {
   const [modalOpen, setModalOpen] = useState(false)
 
   const greeting = getGreeting()
-  const displayName = currentUser?.displayName
-  const name = displayName || user?.username || ''
+  const username = user?.username ?? ''
+  const displayName = currentUser?.displayName || ''
+  const name = displayName || username
   const greetingText = name ? `${greeting}, ${name}` : greeting
 
   return (

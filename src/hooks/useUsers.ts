@@ -14,7 +14,7 @@ export function useCurrentUser() {
   })
 }
 
-export function useUpdateUsername() {
+export function useUpdateProfile() {
   const queryClient = useQueryClient()
 
   return useMutation({
@@ -28,15 +28,10 @@ export function useUpdateUsername() {
         displayName: profile.displayName,
       }
       useAuthStore.getState().setUser(user)
-      toast.success('Username updated')
+      toast.success('Profile updated')
     },
-    onError: (error) => {
-      const axiosError = error as { response?: { status?: number; data?: { message?: string } } }
-      if (axiosError.response?.status === 409) {
-        toast.error(axiosError.response.data?.message ?? 'Username is already taken')
-      } else {
-        toast.error('Failed to update username')
-      }
+    onError: () => {
+      toast.error('Failed to update profile')
     },
   })
 }

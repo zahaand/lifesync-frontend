@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -6,8 +7,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
-import { updateUsernameSchema } from '@/types/users'
-import { useUpdateUsername } from '@/hooks/useUsers'
+import { updateProfileSchema } from '@/types/users'
+import { useUpdateProfile } from '@/hooks/useUsers'
 import type { UserProfile } from '@/types/users'
 
 type AccountCardProps = {
@@ -15,27 +16,36 @@ type AccountCardProps = {
   isLoading: boolean
 }
 
-type UsernameFormValues = z.infer<typeof updateUsernameSchema>
+type ProfileFormValues = z.infer<typeof updateProfileSchema>
 
 export default function AccountCard({ profile, isLoading }: AccountCardProps) {
-  const updateUsername = useUpdateUsername()
+  const updateProfile = useUpdateProfile()
+
+  const form = useForm<ProfileFormValues>({
+    resolver: zodResolver(updateProfileSchema),
+    defaultValues: { displayName: '' },
+  })
 
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors, isDirty },
-  } = useForm<UsernameFormValues>({
-    resolver: zodResolver(updateUsernameSchema),
-    values: profile ? { username: profile.username } : undefined,
-  })
+  } = form
 
-  const onSubmit = (data: UsernameFormValues) => {
-    updateUsername.mutate(
-      { username: data.username },
+  useEffect(() => {
+    if (profile) {
+      reset({ displayName: profile.displayName ?? '' })
+    }
+  }, [profile, reset])
+
+  const onSubmit = (data: ProfileFormValues) => {
+    const displayName = data.displayName.trim() || null
+    updateProfile.mutate(
+      { displayName },
       {
         onSuccess: () => {
-          reset({ username: data.username })
+          reset({ displayName: displayName ?? '' })
         },
       },
     )
@@ -43,7 +53,7 @@ export default function AccountCard({ profile, isLoading }: AccountCardProps) {
 
   const handleCancel = () => {
     if (profile) {
-      reset({ username: profile.username })
+      reset({ displayName: profile.displayName ?? '' })
     }
   }
 
@@ -83,14 +93,28 @@ export default function AccountCard({ profile, isLoading }: AccountCardProps) {
               </Label>
               <Input
                 id="username"
-                {...register('username')}
+                value={profile?.username ?? ''}
+                disabled
+                className="h-9 border-[#C7C4BB] rounded-lg bg-[#F5F4F0] text-[#9E9B94]"
+              />
+              <p className="text-[11px] text-[#9E9B94]">Username cannot be changed</p>
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="displayName" className="text-[13px] text-[#2C2C2A]">
+                Display name
+              </Label>
+              <Input
+                id="displayName"
+                placeholder="e.g. Alice Johnson"
+                {...register('displayName')}
                 className="h-9 border-[#C7C4BB] rounded-lg"
               />
-              {errors.username ? (
-                <p className="text-[12px] text-red-500">{errors.username.message}</p>
+              {errors.displayName ? (
+                <p className="text-[12px] text-red-500">{errors.displayName.message}</p>
               ) : (
                 <p className="text-[11px] text-[#9E9B94]">
-                  3–32 characters: letters, digits, _ and -
+                  Used in greetings — leave empty to use your username
                 </p>
               )}
             </div>
@@ -121,9 +145,9 @@ export default function AccountCard({ profile, isLoading }: AccountCardProps) {
               <Button
                 type="submit"
                 className="rounded-lg bg-[#534AB7] px-4 py-2 text-[13px] font-medium text-[#EEEDFE]"
-                disabled={!isDirty || updateUsername.isPending}
+                disabled={!isDirty || updateProfile.isPending}
               >
-                {updateUsername.isPending ? 'Saving...' : 'Save changes'}
+                {updateProfile.isPending ? 'Saving...' : 'Save changes'}
               </Button>
             </div>
           </form>

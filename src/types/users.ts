@@ -8,7 +8,7 @@ export type UserProfile = User & {
 }
 
 export type UpdateUserRequest = {
-  username?: string
+  displayName?: string | null
 }
 
 export type UpdateTelegramRequest = {
@@ -17,12 +17,8 @@ export type UpdateTelegramRequest = {
 
 // --- Zod Schemas ---
 
-export const updateUsernameSchema = z.object({
-  username: z
-    .string()
-    .min(3, 'Username must be at least 3 characters')
-    .max(32, 'Username must be at most 32 characters')
-    .regex(/^[a-z0-9_-]+$/, 'Only lowercase letters, numbers, hyphens, and underscores'),
+export const updateProfileSchema = z.object({
+  displayName: z.string().max(100, 'Display name must be at most 100 characters'),
 })
 
 export const updateTelegramSchema = z.object({
