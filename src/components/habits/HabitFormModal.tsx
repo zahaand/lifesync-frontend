@@ -34,7 +34,7 @@ const FREQUENCIES: { value: HabitFrequency; label: string }[] = [
 
 const habitFormSchema = z
   .object({
-    name: z.string().min(1, 'Name is required').max(200, 'Name must be 200 characters or less'),
+    title: z.string().min(1, 'Name is required').max(200, 'Name must be 200 characters or less'),
     description: z.string().optional(),
     frequency: z.enum(['DAILY', 'WEEKLY', 'CUSTOM'] as const),
     targetDaysOfWeek: z.array(z.enum([
@@ -81,7 +81,7 @@ export default function HabitFormModal({
   } = useForm<HabitFormValues>({
     resolver: zodResolver(habitFormSchema),
     defaultValues: {
-      name: '',
+      title: '',
       description: '',
       frequency: 'DAILY',
       targetDaysOfWeek: [],
@@ -96,7 +96,7 @@ export default function HabitFormModal({
     if (open) {
       if (mode === 'edit' && habit) {
         reset({
-          name: habit.name,
+          title: habit.title,
           description: habit.description ?? '',
           frequency: habit.frequency,
           targetDaysOfWeek: habit.targetDaysOfWeek ?? [],
@@ -104,7 +104,7 @@ export default function HabitFormModal({
         })
       } else {
         reset({
-          name: '',
+          title: '',
           description: '',
           frequency: 'DAILY',
           targetDaysOfWeek: [],
@@ -129,7 +129,7 @@ export default function HabitFormModal({
 
   const handleFormSubmit = (values: HabitFormValues) => {
     const payload: CreateHabitRequest = {
-      name: values.name,
+      title: values.title,
       frequency: values.frequency,
     }
     if (values.description) {
@@ -157,15 +157,15 @@ export default function HabitFormModal({
           <div className="space-y-4 px-5 py-5">
             {/* Name */}
             <div className="space-y-1.5">
-              <Label htmlFor="name" className="text-[13px]">Name</Label>
+              <Label htmlFor="title" className="text-[13px]">Name</Label>
               <Input
-                id="name"
-                {...register('name')}
+                id="title"
+                {...register('title')}
                 placeholder="e.g. Morning Run"
                 className="h-9 border-[#C7C4BB] rounded-lg"
               />
-              {errors.name && (
-                <p className="text-[12px] text-red-500">{errors.name.message}</p>
+              {errors.title && (
+                <p className="text-[12px] text-red-500">{errors.title.message}</p>
               )}
             </div>
 

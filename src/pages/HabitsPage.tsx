@@ -49,8 +49,8 @@ export default function HabitsPage() {
 
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase()
-        visibleActive = visibleActive.filter((h) => h.name.toLowerCase().includes(q))
-        visibleArchived = visibleArchived.filter((h) => h.name.toLowerCase().includes(q))
+        visibleActive = visibleActive.filter((h) => h.title.toLowerCase().includes(q))
+        visibleArchived = visibleArchived.filter((h) => h.title.toLowerCase().includes(q))
       }
 
       return {
@@ -226,7 +226,7 @@ export default function HabitsPage() {
       <HabitDeleteDialog
         open={deletingHabit !== null}
         onOpenChange={(open) => { if (!open) setDeletingHabit(null) }}
-        habitName={deletingHabit?.name ?? ''}
+        habitName={deletingHabit?.title ?? ''}
         onConfirm={handleDeleteConfirm}
       />
     </div>

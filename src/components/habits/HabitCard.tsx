@@ -58,7 +58,7 @@ export default function HabitCard({
               : 'text-[#2C2C2A]'
           }`}
         >
-          {habit.name}
+          {habit.title}
         </p>
         <div className="flex items-center gap-2 mt-1">
           <span className="bg-[#F5F4F0] text-[#666360] text-[10px] px-2 py-0.5 rounded-full">

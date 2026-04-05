@@ -13,7 +13,7 @@ export type DayOfWeek =
 
 export type Habit = {
   id: string
-  name: string
+  title: string
   description: string | null
   frequency: HabitFrequency
   status: HabitStatus
@@ -40,7 +40,7 @@ export type HabitPageResponse = {
 }
 
 export type CreateHabitRequest = {
-  name: string
+  title: string
   description?: string
   frequency: HabitFrequency
   targetDaysOfWeek?: DayOfWeek[]
@@ -48,7 +48,7 @@ export type CreateHabitRequest = {
 }
 
 export type UpdateHabitRequest = {
-  name?: string
+  title?: string
   description?: string
   frequency?: HabitFrequency
   targetDaysOfWeek?: DayOfWeek[]
