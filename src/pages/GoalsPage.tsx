@@ -8,10 +8,12 @@ import GoalEmptyState from '@/components/goals/GoalEmptyState'
 import GoalFilters, { type GoalFilterTab } from '@/components/goals/GoalFilters'
 import GoalFormModal from '@/components/goals/GoalFormModal'
 import GoalDeleteDialog from '@/components/goals/GoalDeleteDialog'
+import { useQueryClient } from '@tanstack/react-query'
 import { useAllGoals } from '@/hooks/useGoals'
-import type { Goal } from '@/types/goals'
+import type { Goal, GoalDetail as GoalDetailType } from '@/types/goals'
 
 export default function GoalsPage() {
+  const queryClient = useQueryClient()
   const { data, isLoading } = useAllGoals()
   const allGoals = useMemo(() => data?.content ?? [], [data])
 
@@ -87,14 +89,18 @@ export default function GoalsPage() {
           </div>
         ) : (
           <div className="space-y-3">
-            {filteredGoals.map((goal) => (
-              <GoalCard
-                key={goal.id}
-                goal={goal}
-                isSelected={goal.id === effectiveSelectedId}
-                onClick={() => setSelectedGoalId(goal.id)}
-              />
-            ))}
+            {filteredGoals.map((goal) => {
+              const cached = queryClient.getQueryData<GoalDetailType>(['goals', goal.id])
+              return (
+                <GoalCard
+                  key={goal.id}
+                  goal={goal}
+                  isSelected={goal.id === effectiveSelectedId}
+                  linkedHabitsCount={cached?.linkedHabitIds?.length}
+                  onClick={() => setSelectedGoalId(goal.id)}
+                />
+              )
+            })}
           </div>
         )}
       </div>

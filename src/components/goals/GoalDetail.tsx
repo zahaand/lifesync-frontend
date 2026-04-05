@@ -64,8 +64,8 @@ export default function GoalDetail({ goalId, listGoal, onEdit, onDelete }: GoalD
         </div>
       </div>
 
-      {/* Progress */}
-      <GoalProgressSection goal={goal} />
+      {/* Progress — key forces remount to reset input on goal switch */}
+      <GoalProgressSection key={`${goal.id}-${goal.progress}`} goal={goal} />
 
       {/* Milestones */}
       <GoalMilestones goalId={goal.id} milestones={goal.milestones} />

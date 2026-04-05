@@ -5,6 +5,7 @@ import type { Goal } from '@/types/goals'
 type GoalCardProps = {
   goal: Goal
   isSelected: boolean
+  linkedHabitsCount?: number
   onClick: () => void
 }
 
@@ -17,7 +18,7 @@ function formatDeadline(targetDate: string | null) {
   })
 }
 
-export default function GoalCard({ goal, isSelected, onClick }: GoalCardProps) {
+export default function GoalCard({ goal, isSelected, linkedHabitsCount, onClick }: GoalCardProps) {
   const isCompleted = goal.status === 'COMPLETED'
   const progressColor = isCompleted ? '#3B6D11' : '#534AB7'
   const clamped = Math.max(0, Math.min(100, goal.progress))
@@ -63,7 +64,16 @@ export default function GoalCard({ goal, isSelected, onClick }: GoalCardProps) {
 
       {/* Footer */}
       <div className="flex justify-between text-[11px] text-[#9E9B94]">
-        <span>{goal.milestones.length > 0 ? `${completedMilestones} of ${goal.milestones.length} milestones done` : ''}</span>
+        <span>
+          {linkedHabitsCount !== undefined
+            ? `${linkedHabitsCount} ${linkedHabitsCount === 1 ? 'habit' : 'habits'} linked`
+            : ''}
+        </span>
+        <span>
+          {goal.milestones.length > 0
+            ? `${completedMilestones} of ${goal.milestones.length} milestones done`
+            : 'No milestones'}
+        </span>
       </div>
     </Card>
   )
