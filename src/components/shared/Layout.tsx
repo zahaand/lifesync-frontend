@@ -41,7 +41,7 @@ function UserChip({ onNavClick }: { onNavClick?: () => void }) {
 
   const displayName = profile?.displayName || profile?.username || authUser?.username || ''
   const email = profile?.email || authUser?.email || ''
-  const initials = getInitials(profile?.displayName, profile?.username || authUser?.username)
+  const initials = getInitials(profile?.displayName ?? undefined, profile?.username ?? authUser?.username)
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -124,6 +124,10 @@ function SidebarContent({
       <div className="p-2">
         <UserChip onNavClick={onNavClick} />
       </div>
+
+      <span className="px-3 pb-3 text-[11px] text-muted-foreground/50 select-none">
+        v{__APP_VERSION__}
+      </span>
     </>
   )
 }
