@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, it, expect, vi } from 'vitest'
+import { TooltipProvider } from '@/components/ui/tooltip'
 import HabitCard from '@/components/habits/HabitCard'
 import type { Habit } from '@/types/habits'
 
@@ -32,9 +33,17 @@ const defaultProps = {
   onHistory: noop,
 }
 
+function renderCard(props = defaultProps) {
+  return render(
+    <TooltipProvider>
+      <HabitCard {...props} />
+    </TooltipProvider>,
+  )
+}
+
 describe('HabitCard', () => {
   it('renders title and streak badge', () => {
-    render(<HabitCard {...defaultProps} />)
+    renderCard()
 
     expect(screen.getByText('Morning Run')).toBeInTheDocument()
     expect(screen.getByText(/5 day streak/)).toBeInTheDocument()
@@ -43,7 +52,7 @@ describe('HabitCard', () => {
   it('triggers onComplete when checkbox clicked', async () => {
     const onComplete = vi.fn()
     const user = userEvent.setup()
-    render(<HabitCard {...defaultProps} onComplete={onComplete} />)
+    renderCard({ ...defaultProps, onComplete })
 
     const checkbox = screen.getByRole('checkbox')
     await user.click(checkbox)
@@ -53,7 +62,7 @@ describe('HabitCard', () => {
 
   it('shows line-through when completed', () => {
     const completedHabit = { ...baseHabit, completedToday: true, todayLogId: 'log-1' }
-    render(<HabitCard {...defaultProps} habit={completedHabit} />)
+    renderCard({ ...defaultProps, habit: completedHabit })
 
     const title = screen.getByText('Morning Run')
     expect(title).toHaveClass('line-through')
