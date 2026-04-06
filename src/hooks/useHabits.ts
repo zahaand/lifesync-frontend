@@ -100,8 +100,9 @@ export function useCompleteHabit() {
       }
       toast.error('Failed to complete habit', { duration: 3000 })
     },
-    onSettled: () => {
+    onSettled: (_data, _error, habitId) => {
       queryClient.invalidateQueries({ queryKey: ['habits'] })
+      queryClient.invalidateQueries({ queryKey: ['habits', habitId, 'logs'] })
     },
   })
 }
@@ -145,8 +146,9 @@ export function useUncompleteHabit() {
       }
       toast.error('Failed to uncomplete habit', { duration: 3000 })
     },
-    onSettled: () => {
+    onSettled: (_data, _error, { habitId }) => {
       queryClient.invalidateQueries({ queryKey: ['habits'] })
+      queryClient.invalidateQueries({ queryKey: ['habits', habitId, 'logs'] })
     },
   })
 }
