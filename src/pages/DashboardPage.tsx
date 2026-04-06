@@ -376,7 +376,7 @@ export default function DashboardPage() {
   return (
     <div>
       {/* Top bar */}
-      <div className="mb-6 flex items-start justify-between">
+      <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="text-[20px] font-semibold text-[#2C2C2A]">
             {greetingText}
