@@ -1,105 +1,373 @@
-# LifeSync Frontend
+🇷🇺 Описание на русском ниже / 🇬🇧 Russian description below
 
-Habit tracking and goal management application built with React, TypeScript, and Vite.
+# LifeSync Frontend v1.0.0
 
-Приложение для трекинга привычек и управления целями на React, TypeScript и Vite.
+B2C habit and goal tracking web application. Built with React 19 and TypeScript 5.9 using a strict layered architecture with server state isolation.
 
-## Tech Stack / Стек технологий
+46 unit tests | 22 E2E tests | 7 sprints | full mobile support
 
-- **TypeScript 5.9**, **React 19.2**, **Vite 8**
-- **React Router v7** — routing
-- **TanStack React Query v5** — server state management
-- **Zustand** — client state (auth store)
-- **Axios** — HTTP client
-- **shadcn/ui + Radix** — UI components (Nova preset)
-- **Tailwind CSS v4** — styling
-- **Lucide React** — icons
-- **Sonner** — toast notifications
-- **React Hook Form + Zod** — form handling and validation
+## Methodology
 
-## Prerequisites / Требования
+Built using Spec-Driven Development (SDD) via Spec Kit and Claude Code.
 
-- **Node.js** 20+
-- **npm** 10+
-- Backend running at `http://localhost:8080/api/v1`
+Each feature goes through a structured SDD cycle:
 
-## Getting Started / Запуск
+- **Specify** — natural language feature spec with user stories and acceptance criteria
+- **Clarify** — structured Q&A to resolve ambiguities before planning
+- **Plan** — architecture plan with constitution compliance check
+- **Checklist** — pre-implementation quality review
+- **Tasks** — dependency-ordered task list with phase grouping
+- **Implement** — code generation following the task list
+- **Analyze** — post-implementation review against spec and constitution
+
+The project was developed over 7 sprints, each following this full cycle.
+
+## Architecture
+
+The application follows a strict layered architecture with clear separation of concerns:
+
+```
+  ┌─────────┐     ┌─────────┐     ┌─────────┐
+  │  pages  │────▶│  hooks  │────▶│   api   │
+  └─────────┘     └─────────┘     └─────────┘
+       │
+       ▼
+  ┌─────────┐
+  │ stores  │
+  └─────────┘
+
+  components — render only, no business logic
+```
+
+**Constitution** — 5 principles enforced across all sprints:
+
+1. **API isolation** — all HTTP calls in `src/api/` via Axios client
+2. **Server state** — all remote data via React Query
+3. **Component-logic separation** — logic in hooks, components render only
+4. **Type safety** — strict TypeScript, no `any` types
+5. **Design system fidelity** — shadcn/ui only, no raw HTML elements
+
+## Key Technical Highlights
+
+### Responsive Design (Mobile-First)
+
+Full mobile adaptation across all pages, tested down to 375px. On mobile, the sidebar is replaced with a hamburger menu that opens a Sheet overlay from the left. GoalsPage uses a master-detail toggle — the list fills the screen, tapping a goal replaces it with full-width detail and a back button. HabitCard action buttons collapse into a DropdownMenu on mobile. HabitHistoryDrawer opens as a Sheet from the right. DashboardPage stats switch to a 2-column grid, and card sections stack vertically. The `useIsMobile` hook drives layout decisions via `matchMedia`.
+
+### Optimistic Updates
+
+Habit completion uses React Query optimistic updates — the checkbox toggles immediately and the streak badge updates without waiting for the server. If the request fails, the UI rolls back to the previous state and a toast notification alerts the user.
+
+### Smart Authentication
+
+JWT-based authentication with access and refresh tokens. Access token is stored in Zustand memory state, refresh token in `localStorage` via `zustand/persist`. The Axios response interceptor detects 401 errors and silently refreshes the token using a mutex pattern to prevent concurrent refresh requests. On refresh failure, the user is redirected to the login page.
+
+### Habit History Drawer
+
+Paginated completion log for each habit (TD-002). Uses `useInfiniteQuery` to fetch `GET /habits/{id}/logs` with server-side pagination. Each log entry displays the completion date and time extracted from the `createdAt` timestamp. The drawer includes skeleton loading states, error handling with retry, and a "Load more" button for pagination.
+
+### Smart Greeting
+
+The dashboard greeting uses `displayName` from the user profile when available, falling back to `username`. The time-of-day greeting (Good morning / Good afternoon / Good evening) is determined client-side based on the current hour.
+
+### Testing
+
+Unit and component tests use Vitest with happy-dom, Testing Library for rendering, and MSW 2.x for API mocking. E2E tests use Playwright with Chromium across 5 spec files (auth, habits, goals, profile, mobile) covering 22 test cases. Each spec file registers a fresh user in `beforeAll` and deletes it in `afterAll`. All interactive elements use `data-testid` attributes for selector stability across UI redesigns.
+
+## Features
+
+- **Sprint 1: Authentication** — login, registration, JWT token management, protected routes, silent refresh
+- **Sprint 2: Dashboard** — time-of-day greeting, stats row, today's habits widget, active goals widget
+- **Sprint 3: Habits** — CRUD, daily/weekly frequency, completion tracking, streaks, archive/restore, filters, search
+- **Sprint 4: Goals** — CRUD, milestones, progress tracking, habit linking, master-detail layout, status filters
+- **Sprint 5: Profile** — account settings, display name, Telegram linking, stats card, danger zone with account deletion
+- **Sprint 6: Mobile adaptation** — responsive layout for all pages, hamburger + Sheet sidebar, Goals master-detail toggle, HabitCard DropdownMenu, habit completion history drawer (TD-002)
+- **Sprint 7: Pre-release** — unit tests, E2E tests, data-testid strategy, documentation, build verification
+
+## Screenshots
+
+| Desktop | Mobile |
+|---------|--------|
+|         |        |
+|         |        |
+
+## Technology Stack
+
+| Concern | Technology |
+|---|---|
+| Language | TypeScript 5.9 |
+| Framework | React 19 |
+| Build | Vite 8 |
+| Routing | React Router v7 |
+| Server State | TanStack React Query v5 |
+| Client State | Zustand |
+| HTTP Client | Axios |
+| UI Components | shadcn/ui + Radix UI |
+| Styling | Tailwind CSS v4 |
+| Icons | Lucide React |
+| Notifications | Sonner |
+| Forms | React Hook Form + Zod |
+| Unit Tests | Vitest + Testing Library + MSW 2.x |
+| E2E Tests | Playwright (Chromium) |
+| Methodology | Spec-Driven Development (SDD) |
+
+## Local Setup
+
+### Prerequisites
+
+- Node.js 20+
+- npm 10+
+- LifeSync Backend running at `http://localhost:8080`
+
+### Install and Run
 
 ```bash
-# Clone and install / Клонирование и установка
-git clone <repo-url>
+git clone https://github.com/zahaand/lifesync-frontend.git
 cd lifesync-frontend
 npm install
 
-# Environment / Переменные окружения
 cp .env.example .env.local
-# Edit .env.local if needed (default: http://localhost:8080/api/v1)
+# Edit .env.local if the backend is not at the default address
 
-# Development / Разработка
 npm run dev
 # Open http://localhost:5173
 ```
 
-## Scripts / Команды
-
-| Command / Команда | Description / Описание |
-|---|---|
-| `npm run dev` | Start dev server / Запуск dev-сервера |
-| `npm run build` | TypeScript check + production build / Проверка TS + продакшн сборка |
-| `npm run preview` | Preview production build / Предпросмотр продакшн сборки |
-| `npm run lint` | Run ESLint / Запуск ESLint |
-| `npm test` | Run unit tests (Vitest) / Запуск юнит-тестов |
-| `npm run test:watch` | Run tests in watch mode / Тесты в режиме наблюдения |
-| `npm run test:coverage` | Run tests with coverage / Тесты с покрытием |
-| `npm run test:e2e` | Run E2E tests (Playwright) / Запуск E2E-тестов |
-
-## Project Structure / Структура проекта
-
-```
-src/
-├── api/            # API client and endpoint functions
-├── components/
-│   ├── ui/         # shadcn/ui components (auto-generated)
-│   ├── shared/     # Layout, ProtectedRoute, GoalProgress
-│   ├── habits/     # HabitCard, HabitFormModal, HabitHistoryDrawer, etc.
-│   ├── goals/      # GoalCard, GoalDetail, GoalFormModal, etc.
-│   └── profile/    # AccountCard, StatsCard, TelegramCard, etc.
-├── hooks/          # React Query hooks (useHabits, useGoals, useAuth, etc.)
-├── pages/          # Route pages (LoginPage, DashboardPage, etc.)
-├── stores/         # Zustand stores (authStore)
-├── test/           # Test setup, MSW handlers, test utilities
-├── types/          # TypeScript type definitions
-└── lib/            # Utility functions
-tests/
-└── e2e/            # Playwright E2E tests
-```
-
-## Testing / Тестирование
-
-### Unit Tests / Юнит-тесты
-
-Uses **Vitest** + **Testing Library** + **MSW** for mocking API calls.
-
-Использует **Vitest** + **Testing Library** + **MSW** для мокирования API-вызовов.
-
-```bash
-npm test              # Run all unit tests / Запуск всех тестов
-npm run test:coverage # Coverage report / Отчёт о покрытии
-```
-
-### E2E Tests / E2E-тесты
-
-Uses **Playwright** with Chromium. Requires running backend.
-
-Использует **Playwright** с Chromium. Требует запущенный бэкенд.
-
-```bash
-npx playwright install chromium   # First time / Первый запуск
-npm run test:e2e                  # Run E2E tests / Запуск E2E-тестов
-```
-
-## Environment Variables / Переменные окружения
+### Environment Variables
 
 | Variable | Default | Description |
 |---|---|---|
 | `VITE_API_BASE_URL` | `http://localhost:8080/api/v1` | Backend API base URL |
+
+## Running Tests
+
+### Unit and Component Tests
+
+Vitest with happy-dom environment, Testing Library for component rendering, and MSW 2.x for intercepting API calls. 9 test files, 46 test cases.
+
+```bash
+npm test                # Run all tests
+npm run test:coverage   # Run with coverage report
+npm run test:watch      # Run in watch mode
+```
+
+### E2E Tests
+
+Playwright with Chromium. Requires the backend to be running at `http://localhost:8080`. 5 spec files, 22 test cases covering authentication, habits, goals, profile, and mobile layouts.
+
+```bash
+npx playwright install chromium   # First-time setup
+npm run test:e2e                  # Run all E2E tests
+npx playwright test --ui          # Run with UI mode for debugging
+```
+
+## Project Structure
+
+```
+src/
+├── api/            # Axios client and endpoint functions (auth, habits, goals, users, habitLogs)
+├── components/
+│   ├── ui/         # shadcn/ui primitives (Button, Card, Sheet, Dialog, DropdownMenu, etc.)
+│   ├── shared/     # Layout, ProtectedRoute, GoalProgress
+│   ├── habits/     # HabitCard, HabitFormModal, HabitHistoryDrawer, HabitFilters
+│   ├── goals/      # GoalCard, GoalDetail, GoalFormModal, GoalMilestones, GoalLinkedHabits
+│   └── profile/    # AccountCard, StatsCard, TelegramCard, DangerZoneCard
+├── hooks/          # React Query hooks and utilities (useHabits, useGoals, useAuth, useIsMobile)
+├── pages/          # Route pages (LoginPage, DashboardPage, HabitsPage, GoalsPage, ProfilePage)
+├── stores/         # Zustand stores (authStore — tokens, user state)
+├── test/           # Test setup, MSW handlers, test utilities
+├── types/          # TypeScript type definitions (auth, habits, goals, users, habitLogs)
+└── lib/            # Utility functions (cn)
+tests/
+└── e2e/            # Playwright E2E tests (auth, habits, goals, profile, mobile)
+```
+
+## Related
+
+- [LifeSync Backend](https://github.com/zahaand/lifesync-backend) — Java 21, Spring Boot 3.5, PostgreSQL 16, Apache Kafka
+
+---
+
+# LifeSync Frontend v1.0.0
+
+B2C веб-приложение для трекинга привычек и целей. Построено на React 19 и TypeScript 5.9 со строгой слоистой архитектурой и изоляцией серверного состояния.
+
+46 юнит-тестов | 22 E2E-теста | 7 спринтов | полная мобильная поддержка
+
+## Методология
+
+Разработано с использованием Spec-Driven Development (SDD) через Spec Kit и Claude Code.
+
+Каждая фича проходит структурированный SDD-цикл:
+
+- **Specify** — спецификация фичи на естественном языке с пользовательскими историями и критериями приёмки
+- **Clarify** — структурированные вопросы-ответы для устранения неоднозначностей перед планированием
+- **Plan** — архитектурный план с проверкой соответствия конституции
+- **Checklist** — проверка качества перед реализацией
+- **Tasks** — упорядоченный по зависимостям список задач с группировкой по фазам
+- **Implement** — генерация кода по списку задач
+- **Analyze** — пост-имплементационный обзор против спецификации и конституции
+
+Проект разработан за 7 спринтов, каждый из которых прошёл полный цикл.
+
+## Архитектура
+
+Приложение следует строгой слоистой архитектуре с чётким разделением ответственности:
+
+```
+  ┌─────────┐     ┌─────────┐     ┌─────────┐
+  │  pages  │────▶│  hooks  │────▶│   api   │
+  └─────────┘     └─────────┘     └─────────┘
+       │
+       ▼
+  ┌─────────┐
+  │ stores  │
+  └─────────┘
+
+  components — только рендеринг, без бизнес-логики
+```
+
+**Конституция** — 5 принципов, соблюдаемых во всех спринтах:
+
+1. **Изоляция API** — все HTTP-вызовы в `src/api/` через Axios-клиент
+2. **Серверное состояние** — все удалённые данные через React Query
+3. **Разделение компонентов и логики** — логика в хуках, компоненты только рендерят
+4. **Типобезопасность** — строгий TypeScript, никаких `any`
+5. **Верность дизайн-системе** — только shadcn/ui, никаких сырых HTML-элементов
+
+## Ключевые технические решения
+
+### Адаптивный дизайн (Mobile-First)
+
+Полная мобильная адаптация всех страниц, протестировано до 375px. На мобильных боковая панель заменяется hamburger-меню, открывающим Sheet-overlay слева. GoalsPage использует переключение master-detail — список занимает весь экран, нажатие на цель заменяет его полноэкранной детальной страницей с кнопкой «Назад». Кнопки действий HabitCard сворачиваются в DropdownMenu на мобильных. HabitHistoryDrawer открывается как Sheet справа. Статистика DashboardPage переключается на 2-колоночную сетку, карточки располагаются вертикально. Хук `useIsMobile` управляет решениями о раскладке через `matchMedia`.
+
+### Оптимистичные обновления
+
+Выполнение привычки использует оптимистичные обновления React Query — чекбокс переключается мгновенно, бейдж серии обновляется без ожидания ответа сервера. При ошибке запроса UI откатывается к предыдущему состоянию, и toast-уведомление оповещает пользователя.
+
+### Умная аутентификация
+
+JWT-аутентификация с access- и refresh-токенами. Access-токен хранится в памяти Zustand, refresh-токен — в `localStorage` через `zustand/persist`. Axios-перехватчик ответов обнаруживает ошибки 401 и бесшумно обновляет токен с использованием мьютекс-паттерна для предотвращения конкурентных запросов на обновление. При неудаче обновления пользователь перенаправляется на страницу входа.
+
+### Drawer истории привычек
+
+Пагинированный лог выполнений для каждой привычки (TD-002). Использует `useInfiniteQuery` для получения `GET /habits/{id}/logs` с серверной пагинацией. Каждая запись лога отображает дату выполнения и время, извлечённое из поля `createdAt`. Drawer включает skeleton-состояния загрузки, обработку ошибок с повторной попыткой и кнопку «Загрузить ещё» для пагинации.
+
+### Умное приветствие
+
+Приветствие на дашборде использует `displayName` из профиля пользователя, если доступно, с фоллбэком на `username`. Приветствие по времени суток (Доброе утро / Добрый день / Добрый вечер) определяется на клиенте по текущему часу.
+
+### Тестирование
+
+Юнит- и компонентные тесты используют Vitest с happy-dom, Testing Library для рендеринга и MSW 2.x для мокирования API. E2E-тесты используют Playwright с Chromium — 5 файлов спецификаций (auth, habits, goals, profile, mobile), 22 тест-кейса. Каждый файл регистрирует нового пользователя в `beforeAll` и удаляет в `afterAll`. Все интерактивные элементы используют атрибуты `data-testid` для стабильности селекторов при редизайне UI.
+
+## Возможности
+
+- **Спринт 1: Аутентификация** — логин, регистрация, управление JWT-токенами, защищённые маршруты, бесшумное обновление
+- **Спринт 2: Dashboard** — приветствие по времени суток, строка статистики, виджет привычек дня, виджет активных целей
+- **Спринт 3: Привычки** — CRUD, ежедневная/еженедельная частота, трекинг выполнения, серии, архив/восстановление, фильтры, поиск
+- **Спринт 4: Цели** — CRUD, вехи, отслеживание прогресса, привязка привычек, master-detail раскладка, фильтры по статусу
+- **Спринт 5: Профиль** — настройки аккаунта, отображаемое имя, привязка Telegram, карточка статистики, danger zone с удалением аккаунта
+- **Спринт 6: Мобильная адаптация** — адаптивная раскладка для всех страниц, hamburger + Sheet sidebar, Goals master-detail переключение, HabitCard DropdownMenu, drawer истории выполнений привычек (TD-002)
+- **Спринт 7: Предрелиз** — юнит-тесты, E2E-тесты, стратегия data-testid, документация, проверка сборки
+
+## Скриншоты
+
+| Десктоп | Мобильный |
+|---------|-----------|
+|         |           |
+|         |           |
+
+## Стек технологий
+
+| Область | Технология |
+|---|---|
+| Язык | TypeScript 5.9 |
+| Фреймворк | React 19 |
+| Сборка | Vite 8 |
+| Маршрутизация | React Router v7 |
+| Серверное состояние | TanStack React Query v5 |
+| Клиентское состояние | Zustand |
+| HTTP-клиент | Axios |
+| UI-компоненты | shadcn/ui + Radix UI |
+| Стили | Tailwind CSS v4 |
+| Иконки | Lucide React |
+| Уведомления | Sonner |
+| Формы | React Hook Form + Zod |
+| Юнит-тесты | Vitest + Testing Library + MSW 2.x |
+| E2E-тесты | Playwright (Chromium) |
+| Методология | Spec-Driven Development (SDD) |
+
+## Локальная установка
+
+### Требования
+
+- Node.js 20+
+- npm 10+
+- LifeSync Backend запущен на `http://localhost:8080`
+
+### Установка и запуск
+
+```bash
+git clone https://github.com/zahaand/lifesync-frontend.git
+cd lifesync-frontend
+npm install
+
+cp .env.example .env.local
+# Отредактируйте .env.local, если бэкенд не по адресу по умолчанию
+
+npm run dev
+# Откройте http://localhost:5173
+```
+
+### Переменные окружения
+
+| Переменная | По умолчанию | Описание |
+|---|---|---|
+| `VITE_API_BASE_URL` | `http://localhost:8080/api/v1` | Базовый URL бэкенд API |
+
+## Запуск тестов
+
+### Юнит- и компонентные тесты
+
+Vitest с окружением happy-dom, Testing Library для рендеринга компонентов, MSW 2.x для перехвата API-вызовов. 9 файлов тестов, 46 тест-кейсов.
+
+```bash
+npm test                # Запуск всех тестов
+npm run test:coverage   # Запуск с отчётом о покрытии
+npm run test:watch      # Запуск в режиме наблюдения
+```
+
+### E2E-тесты
+
+Playwright с Chromium. Требуется запущенный бэкенд на `http://localhost:8080`. 5 файлов спецификаций, 22 тест-кейса: аутентификация, привычки, цели, профиль, мобильные раскладки.
+
+```bash
+npx playwright install chromium   # Первоначальная установка
+npm run test:e2e                  # Запуск всех E2E-тестов
+npx playwright test --ui          # Запуск с UI-режимом для отладки
+```
+
+## Структура проекта
+
+```
+src/
+├── api/            # Axios-клиент и функции эндпоинтов (auth, habits, goals, users, habitLogs)
+├── components/
+│   ├── ui/         # shadcn/ui примитивы (Button, Card, Sheet, Dialog, DropdownMenu и др.)
+│   ├── shared/     # Layout, ProtectedRoute, GoalProgress
+│   ├── habits/     # HabitCard, HabitFormModal, HabitHistoryDrawer, HabitFilters
+│   ├── goals/      # GoalCard, GoalDetail, GoalFormModal, GoalMilestones, GoalLinkedHabits
+│   └── profile/    # AccountCard, StatsCard, TelegramCard, DangerZoneCard
+├── hooks/          # React Query хуки и утилиты (useHabits, useGoals, useAuth, useIsMobile)
+├── pages/          # Страницы маршрутов (LoginPage, DashboardPage, HabitsPage, GoalsPage, ProfilePage)
+├── stores/         # Zustand-хранилища (authStore — токены, состояние пользователя)
+├── test/           # Настройка тестов, MSW-обработчики, тестовые утилиты
+├── types/          # TypeScript-определения типов (auth, habits, goals, users, habitLogs)
+└── lib/            # Утилиты (cn)
+tests/
+└── e2e/            # Playwright E2E-тесты (auth, habits, goals, profile, mobile)
+```
+
+## Связанные проекты
+
+- [LifeSync Backend](https://github.com/zahaand/lifesync-backend) — Java 21, Spring Boot 3.5, PostgreSQL 16, Apache Kafka
