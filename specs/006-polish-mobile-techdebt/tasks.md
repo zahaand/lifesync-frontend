@@ -56,8 +56,8 @@
   - Desktop (> 1024px): Keep existing `w-64` sidebar unchanged
   - Add `sidebarOpen` state (boolean) for mobile Sheet control
   - Main content: On mobile add top padding to account for header bar; on tablet adjust left margin for w-16 sidebar
-- [x] T008 [US1] Update sidebar NavLink rendering in src/components/shared/Layout.tsx — conditionally render `{item.label}` only when `!isTablet` (desktop mode); on tablet, wrap icon in a `title` attribute or Tooltip for accessibility per research.md R-001
-- [x] T009 [US1] Update sidebar user info section in src/components/shared/Layout.tsx — hide displayName/email block and show only LogOut icon button on tablet; on mobile, show full user info inside Sheet content
+- [x] T008 [US1] ~~Update sidebar NavLink rendering in src/components/shared/Layout.tsx — conditionally render `{item.label}` only when `!isTablet` (desktop mode); on tablet, wrap icon in a `title` attribute or Tooltip for accessibility per research.md R-001~~ **SKIPPED**: Tablet icon-only mode out of scope — desktop sidebar used on tablet. Acceptable for MVP.
+- [x] T009 [US1] ~~Update sidebar user info section in src/components/shared/Layout.tsx — hide displayName/email block and show only LogOut icon button on tablet; on mobile, show full user info inside Sheet content~~ **SKIPPED**: Tablet icon-only mode out of scope — desktop sidebar used on tablet. Acceptable for MVP.
 
 **Checkpoint**: Mobile navigation fully functional — users can navigate all pages on any viewport width
 

@@ -28,12 +28,14 @@ Retrieve paginated completion log entries for a specific habit.
     {
       "id": "uuid-string",
       "habitId": "uuid-string",
-      "completedAt": "2026-04-05T14:30:00Z"
+      "date": "2026-04-05",
+      "note": null,
+      "createdAt": "2026-04-05T14:30:00Z"
     }
   ],
   "totalElements": 42,
   "totalPages": 3,
-  "number": 0,
+  "page": 0,
   "size": 20
 }
 ```
@@ -50,7 +52,7 @@ Retrieve paginated completion log entries for a specific habit.
 
 ### Frontend Integration
 
-- **API function**: `habitsApi.getHabitLogs(habitId, params)` in `src/api/habits.ts`
-- **Hook**: `useHabitLogs(habitId)` in `src/hooks/useHabits.ts` using `useInfiniteQuery`
+- **API function**: `habitLogsApi.getHabitLogs(habitId, params)` in `src/api/habitLogs.ts`
+- **Hook**: `useHabitLogs(habitId)` in `src/hooks/useHabitLogs.ts` using `useInfiniteQuery`
 - **Query key**: `['habits', habitId, 'logs']`
 - **Invalidation**: On habit complete/uncomplete mutations (existing `completeHabit` / `uncompleteHabit`)

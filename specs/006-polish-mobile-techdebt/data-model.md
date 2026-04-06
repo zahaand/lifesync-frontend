@@ -9,11 +9,13 @@
 Already defined in `src/types/habits.ts`. No modifications needed.
 
 ### HabitLog
-Already defined in `src/types/habits.ts`:
+Defined in `src/types/habitLogs.ts`:
 ```
-id: string
-habitId: string
-completedAt: string (ISO 8601)
+id: string                    — UUID, used as logId
+habitId: string               — UUID of the parent habit
+date: string                  — YYYY-MM-DD, completion date
+note: string | null           — optional note (nullable)
+createdAt: string             — ISO 8601 timestamp, used for HH:mm time display
 ```
 Used by the history drawer to display individual completion entries.
 
@@ -26,7 +28,7 @@ Paginated response for habit completion logs. Mirrors the existing `HabitPageRes
 content: HabitLog[]        — array of log entries for the requested page
 totalElements: number      — total number of log entries across all pages
 totalPages: number         — total number of pages
-number: number             — current page index (0-based)
+page: number               — current page index (0-based)
 size: number               — page size (default: 20)
 ```
 
