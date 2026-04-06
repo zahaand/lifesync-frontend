@@ -5,11 +5,21 @@
 **Status**: Draft  
 **Input**: User description: "Sprint 6: Polish — mobile responsive layout for all pages + tech debt TD-002 (habit completion history drawer)"
 
+## Clarifications
+
+### Session 2026-04-06
+
+- Q: Where exactly is the hamburger menu button placed on mobile? → A: Top-left corner of the header bar (standard mobile pattern).
+- Q: What triggers opening the habit history drawer? → A: Only a dedicated "History" button on the habit card (not the habit name).
+- Q: What format for log entry display — date only, date+time, or relative? → A: Date + time (e.g., "Apr 5, 2026 at 14:30").
+- Q: Goals mobile back button style + post-delete behavior? → A: Icon button (← arrow) with "Back" label; auto-return to goals list after deletion.
+- Q: Confirm breakpoints — md/lg Tailwind defaults? → A: Yes. Mobile: < 768px (below md), Tablet: 768–1024px (md to lg), Desktop: > 1024px (lg+).
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Mobile Navigation (Priority: P1)
 
-A user opens the application on a mobile phone. The sidebar is hidden to maximize screen space. A hamburger menu button is visible in the header. Tapping the hamburger opens the sidebar as an overlay drawer that slides in from the left. The user taps a navigation item and the sidebar closes, navigating to the selected page. Tapping outside the overlay or pressing a close button dismisses it.
+A user opens the application on a mobile phone. The sidebar is hidden to maximize screen space. A hamburger menu button is visible in the top-left corner of the header. Tapping the hamburger opens the sidebar as an overlay drawer that slides in from the left. The user taps a navigation item and the sidebar closes, navigating to the selected page. Tapping outside the overlay or pressing a close button dismisses it.
 
 On a tablet (768–1024px), the sidebar is permanently visible but collapsed to show only icons. Hovering or tapping an icon reveals the label.
 
@@ -19,7 +29,7 @@ On a tablet (768–1024px), the sidebar is permanently visible but collapsed to 
 
 **Acceptance Scenarios**:
 
-1. **Given** the user is on a screen narrower than 768px, **When** the page loads, **Then** the sidebar is hidden and a hamburger menu button is visible in the header area.
+1. **Given** the user is on a screen narrower than 768px, **When** the page loads, **Then** the sidebar is hidden and a hamburger menu button is visible in the top-left corner of the header.
 2. **Given** the sidebar is hidden on mobile, **When** the user taps the hamburger button, **Then** the sidebar slides in as an overlay drawer from the left.
 3. **Given** the sidebar overlay is open, **When** the user taps a navigation link, **Then** the page navigates to the selected route and the sidebar overlay closes.
 4. **Given** the sidebar overlay is open, **When** the user taps outside the overlay or taps a close button, **Then** the overlay closes.
@@ -29,15 +39,15 @@ On a tablet (768–1024px), the sidebar is permanently visible but collapsed to 
 
 ### User Story 2 - Habit Completion History Drawer (Priority: P1)
 
-A user on the Habits page wants to review the completion history of a specific habit. They click on the habit name or a dedicated "History" button on a habit card. A side panel (drawer) slides open from the right displaying a chronological list of completion log entries for that habit. Each entry shows the date and the time when the habit was marked as completed. The list is paginated — the user can load more entries by clicking a "Load more" button at the bottom. If there are no log entries, a friendly empty state message is displayed.
+A user on the Habits page wants to review the completion history of a specific habit. They click a dedicated "History" button on the habit card. A side panel (drawer) slides open from the right displaying a chronological list of completion log entries for that habit. Each entry shows the date and time in "MMM D, YYYY at HH:mm" format (e.g., "Apr 5, 2026 at 14:30"). The list is paginated — the user can load more entries by clicking a "Load more" button at the bottom. If there are no log entries, a friendly empty state message is displayed.
 
 **Why this priority**: This is the sole new feature (TD-002) in this sprint and delivers user value by providing visibility into habit tracking history — a frequently requested insight.
 
-**Independent Test**: Can be fully tested by navigating to the Habits page, clicking on a habit's name or History button, and verifying the drawer opens with correct log entries and pagination.
+**Independent Test**: Can be fully tested by navigating to the Habits page, clicking a habit's "History" button, and verifying the drawer opens with correct log entries and pagination.
 
 **Acceptance Scenarios**:
 
-1. **Given** the user is on the Habits page, **When** they click a habit name or its "History" button, **Then** a side panel drawer slides open from the right.
+1. **Given** the user is on the Habits page, **When** they click a habit's "History" button, **Then** a side panel drawer slides open from the right.
 2. **Given** the history drawer is open, **When** log entries exist for the habit, **Then** the drawer displays a chronological list of entries showing date and completion timestamp.
 3. **Given** the history drawer shows a partial list, **When** the user clicks "Load more", **Then** the next page of log entries loads and appends below the existing entries.
 4. **Given** no more pages remain, **When** all entries are loaded, **Then** the "Load more" button is no longer shown.
@@ -64,7 +74,7 @@ A user opens the Dashboard page on a mobile device. The stats row, which normall
 
 ### User Story 4 - Goals Page Mobile Layout (Priority: P2)
 
-A user opens the Goals page on a mobile device. Instead of seeing the master-detail split layout, they see a list of all their goals. Tapping on a goal navigates to a full-screen detail view. A back button allows them to return to the goal list. On tablet and desktop, the existing side-by-side layout is preserved.
+A user opens the Goals page on a mobile device. Instead of seeing the master-detail split layout, they see a list of all their goals. Tapping on a goal navigates to a full-screen detail view. A back button (← arrow icon with "Back" label) allows them to return to the goal list. If the user deletes the goal from the detail view, they are automatically returned to the goals list. On tablet and desktop, the existing side-by-side layout is preserved.
 
 **Why this priority**: The Goals page master-detail layout is completely broken on narrow screens — the two columns would be too compressed to use.
 
@@ -74,8 +84,9 @@ A user opens the Goals page on a mobile device. Instead of seeing the master-det
 
 1. **Given** the user is on the Goals page on a screen narrower than 768px, **When** the page loads, **Then** only the goals list is displayed (full width, single column).
 2. **Given** the user is viewing the goals list on mobile, **When** they tap a goal, **Then** the detail view takes over the full screen.
-3. **Given** the user is viewing a goal detail on mobile, **When** they tap the back button, **Then** they return to the goals list.
-4. **Given** the user is on a tablet or wider screen, **When** the page loads, **Then** the master-detail side-by-side layout is preserved.
+3. **Given** the user is viewing a goal detail on mobile, **When** they tap the back button (← icon + "Back" label), **Then** they return to the goals list.
+4. **Given** the user is viewing a goal detail on mobile, **When** they delete the goal, **Then** they are automatically returned to the goals list.
+5. **Given** the user is on a tablet or wider screen, **When** the page loads, **Then** the master-detail side-by-side layout is preserved.
 
 ---
 
@@ -125,13 +136,13 @@ A user views their Profile page on mobile. The layout remains single-column with
 - **FR-001**: System MUST display a hamburger menu button on screens narrower than 768px that opens the sidebar as an overlay drawer.
 - **FR-002**: System MUST collapse the sidebar to icon-only mode on screens between 768px and 1024px.
 - **FR-003**: System MUST close the sidebar overlay when a navigation link is tapped or when the user taps outside the overlay.
-- **FR-004**: System MUST provide a side panel (drawer) showing habit completion history when the user clicks a habit name or "History" button.
-- **FR-005**: The history drawer MUST display log entries with date and completion timestamp in chronological order (most recent first).
+- **FR-004**: System MUST provide a side panel (drawer) showing habit completion history when the user clicks a dedicated "History" button on the habit card.
+- **FR-005**: The history drawer MUST display log entries with date and time (e.g., "Apr 5, 2026 at 14:30") in chronological order (most recent first).
 - **FR-006**: The history drawer MUST support pagination with a "Load more" button that appends additional entries.
 - **FR-007**: The history drawer MUST show an empty state message when no log entries exist.
 - **FR-008**: System MUST reflow the Dashboard stats row to a 2-column grid on screens narrower than 768px.
 - **FR-009**: System MUST stack Dashboard card columns into a single column on screens narrower than 768px.
-- **FR-010**: System MUST display the Goals page as a single-column list on screens narrower than 768px, with tap-to-view-detail and back navigation.
+- **FR-010**: System MUST display the Goals page as a single-column list on screens narrower than 768px, with tap-to-view-detail, a back button (← icon + "Back" label), and auto-return to list after goal deletion.
 - **FR-011**: System MUST enable horizontal scrolling for Habits page filter tabs when they overflow on mobile.
 - **FR-012**: System MUST stack or collapse habit card action buttons on mobile to prevent overflow.
 - **FR-013**: System MUST adjust Profile page padding for comfortable mobile interaction.
@@ -162,3 +173,4 @@ A user views their Profile page on mobile. The layout remains single-column with
 - The existing desktop layouts for all pages are complete and functional (Sprints 1–5 merged).
 - Touch interactions follow platform conventions (swipe to close drawers, tap targets per mobile accessibility guidelines).
 - No new pages or routes are introduced — only existing pages receive responsive adjustments plus the new history drawer overlay.
+- Breakpoints: Mobile < 768px, Tablet 768–1024px, Desktop > 1024px (aligned with Tailwind md/lg defaults).
