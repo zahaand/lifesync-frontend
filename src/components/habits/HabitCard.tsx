@@ -45,7 +45,7 @@ export default function HabitCard({
 
   return (
     <Card
-      className={`flex items-center gap-3 rounded-xl px-4 py-3 mb-2 shadow-none ${
+      className={`group flex items-start gap-3 rounded-xl px-4 py-3 mb-2 shadow-none ${
         isArchived
           ? 'opacity-60 bg-[#F5F4F0] border-[#E8E6DF]'
           : 'bg-white border-[#E8E6DF]'
@@ -55,14 +55,14 @@ export default function HabitCard({
         checked={habit.completedToday}
         onCheckedChange={handleCheckedChange}
         disabled={isArchived}
-        className={`h-5 w-5 rounded-full border-[#C7C4BB] ${
+        className={`mt-0.5 h-5 w-5 shrink-0 self-center rounded-full border-[#C7C4BB] ${
           isArchived ? 'opacity-40' : ''
         } data-[state=checked]:bg-[#534AB7] data-[state=checked]:border-[#534AB7]`}
       />
 
       <div className="min-w-0 flex-1">
         <p
-          className={`truncate text-[13px] font-medium ${
+          className={`truncate text-[13px] font-medium text-left ${
             habit.completedToday
               ? 'text-[#9E9B94] line-through'
               : 'text-[#2C2C2A]'
@@ -70,21 +70,20 @@ export default function HabitCard({
         >
           {habit.title}
         </p>
-        <div className="mt-1 flex items-center gap-2">
+        <div className="mt-1 flex flex-wrap items-center gap-2">
           <span className="rounded-full bg-[#F5F4F0] px-2 py-0.5 text-[10px] text-[#666360]">
             {habit.frequency}
           </span>
-          <span className="text-[11px] text-[#9E9B94]">
-            {habit.completedToday ? 'Completed today' : 'Not done yet'}
-          </span>
+          {habit.currentStreak > 0 && (
+            <span className="whitespace-nowrap rounded-full bg-[#FAEEDA] px-2.5 py-0.5 text-[11px] font-medium text-[#854F0B]">
+              {'🔥'} {habit.currentStreak} day streak
+            </span>
+          )}
         </div>
+        <p className="mt-1 text-[11px] text-[#9E9B94] text-left">
+          {habit.completedToday ? 'Completed today' : 'Not done yet'}
+        </p>
       </div>
-
-      {habit.currentStreak > 0 && (
-        <span className="whitespace-nowrap rounded-full bg-[#FAEEDA] px-2.5 py-1 text-[11px] font-medium text-[#854F0B]">
-          {'🔥'} {habit.currentStreak} day streak
-        </span>
-      )}
 
       {/* Mobile: DropdownMenu */}
       {isMobile ? (
@@ -93,7 +92,7 @@ export default function HabitCard({
             <Button
               variant="ghost"
               size="icon"
-              className="h-8 w-8 shrink-0"
+              className="h-8 w-8 shrink-0 self-center"
             >
               <MoreHorizontal className="h-4 w-4 text-[#666360]" />
             </Button>
@@ -130,8 +129,8 @@ export default function HabitCard({
           </DropdownMenuContent>
         </DropdownMenu>
       ) : (
-        /* Desktop: inline icon buttons */
-        <div className="flex gap-1">
+        /* Desktop: inline icon buttons, visible on hover */
+        <div className="flex gap-1 self-center opacity-0 transition-opacity group-hover:opacity-100">
           <Button
             variant="outline"
             size="icon"
