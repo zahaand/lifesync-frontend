@@ -43,6 +43,7 @@ function RegisterForm({onSuccess}: { onSuccess: () => void }) {
                 </Label>
                 <Input
                     id="register-email"
+                    data-testid="email-input"
                     type="email"
                     placeholder="alice@example.com"
                     className={`h-[36px] rounded-lg border-[#C7C4BB] px-3 text-[13px] text-[#2C2C2A] placeholder:text-[#9E9B94] focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] ${values.email ? 'bg-[#F5F4F0]' : 'bg-white'}`}
@@ -59,6 +60,7 @@ function RegisterForm({onSuccess}: { onSuccess: () => void }) {
                 </Label>
                 <Input
                     id="register-username"
+                    data-testid="username-input"
                     type="text"
                     placeholder="alice-dev"
                     className={`h-[36px] rounded-lg border-[#C7C4BB] px-3 text-[13px] text-[#2C2C2A] placeholder:text-[#9E9B94] focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] ${values.username ? 'bg-[#F5F4F0]' : 'bg-white'}`}
@@ -77,6 +79,7 @@ function RegisterForm({onSuccess}: { onSuccess: () => void }) {
                 </Label>
                 <Input
                     id="register-password"
+                    data-testid="register-password-input"
                     type="password"
                     placeholder="Minimum 8 characters"
                     className={`h-[36px] rounded-lg border-[#C7C4BB] px-3 text-[13px] text-[#2C2C2A] placeholder:text-[#9E9B94] focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] ${values.password ? 'bg-[#F5F4F0]' : 'bg-white'}`}
@@ -89,6 +92,7 @@ function RegisterForm({onSuccess}: { onSuccess: () => void }) {
 
             <Button
                 type="submit"
+                data-testid="submit-button"
                 disabled={mutation.isPending}
                 className="mt-2 h-[38px] w-full rounded-lg bg-[#534AB7] text-[13px] font-medium text-[#EEEDFE] hover:bg-[#3C3489]"
             >
@@ -137,6 +141,7 @@ function LoginForm() {
                 </Label>
                 <Input
                     id="login-identifier"
+                    data-testid="identifier-input"
                     type="text"
                     placeholder="alice@example.com"
                     className={`h-[36px] rounded-lg border-[#C7C4BB] px-3 text-[13px] text-[#2C2C2A] placeholder:text-[#9E9B94] focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] ${values.identifier ? 'bg-[#F5F4F0]' : 'bg-white'}`}
@@ -155,6 +160,7 @@ function LoginForm() {
                 </Label>
                 <Input
                     id="login-password"
+                    data-testid="password-input"
                     type="password"
                     placeholder="••••••••"
                     className={`h-[36px] rounded-lg border-[#C7C4BB] px-3 text-[13px] text-[#2C2C2A] placeholder:text-[#9E9B94] focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] ${values.password ? 'bg-[#F5F4F0]' : 'bg-white'}`}
@@ -167,6 +173,7 @@ function LoginForm() {
 
             <Button
                 type="submit"
+                data-testid="submit-button"
                 disabled={mutation.isPending}
                 className="mt-2 h-[38px] w-full rounded-lg bg-[#534AB7] text-[13px] font-medium text-[#EEEDFE] hover:bg-[#3C3489]"
             >
@@ -234,6 +241,7 @@ export default function LoginPage() {
                     <Button
                         type="button"
                         variant="ghost"
+                        data-testid="sign-in-tab"
                         onClick={() => handleTabChange('signin')}
                         className={`h-full rounded-none border-0 text-[13px] font-medium transition-colors ${
                             activeTab === 'signin'
@@ -246,6 +254,7 @@ export default function LoginPage() {
                     <Button
                         type="button"
                         variant="ghost"
+                        data-testid="sign-up-tab"
                         onClick={() => handleTabChange('signup')}
                         className={`h-full rounded-none border-0 text-[13px] font-medium transition-colors ${
                             activeTab === 'signup'

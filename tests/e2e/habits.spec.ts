@@ -20,9 +20,9 @@ test.afterAll(async () => {
 
 async function login(page: import('@playwright/test').Page) {
   await page.goto('/login')
-  await page.getByLabel(/email or username/i).fill(user.email)
-  await page.getByLabel(/password/i).fill(user.password)
-  await page.getByRole('button', { name: /sign in/i }).filter({ has: page.locator('[type="submit"]') }).click()
+  await page.getByTestId('identifier-input').fill(user.email)
+  await page.getByTestId('password-input').fill(user.password)
+  await page.getByTestId('submit-button').click()
   await expect(page).toHaveURL(/dashboard/, { timeout: 10000 })
 }
 
@@ -36,10 +36,9 @@ test('create a DAILY habit', async ({ page }) => {
   await login(page)
   await page.goto('/habits')
 
-  await page.getByRole('button', { name: /new habit|add habit|\+/i }).click()
-  await page.getByLabel(/title/i).fill('E2E Daily Habit')
-  // Select DAILY frequency if there's a selector
-  await page.getByRole('button', { name: /save|create/i }).click()
+  await page.getByTestId('new-habit-button').click()
+  await page.getByTestId('habit-title-input').fill('E2E Daily Habit')
+  await page.getByTestId('habit-submit-button').click()
 
   await expect(page.getByText('E2E Daily Habit')).toBeVisible({ timeout: 10000 })
 })
@@ -53,7 +52,7 @@ test('complete a habit', async ({ page }) => {
   const checkbox = page.locator('[role="checkbox"]').first()
   await checkbox.click()
 
-  await expect(page.getByText(/completed today/i).first()).toBeVisible({ timeout: 5000 })
+  await expect(page.getByText('Done today').first()).toBeVisible({ timeout: 5000 })
 })
 
 test('archive and restore habit', async ({ page }) => {

@@ -48,6 +48,7 @@ function UserChip({ onNavClick }: { onNavClick?: () => void }) {
       <DropdownMenuTrigger asChild>
         <button
           type="button"
+          data-testid="user-chip"
           className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left hover:bg-sidebar-accent"
         >
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#EEF2FF] text-xs font-semibold text-[#534AB7]">

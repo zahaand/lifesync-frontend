@@ -21,9 +21,9 @@ test.afterAll(async () => {
 
 async function login(page: import('@playwright/test').Page) {
   await page.goto('/login')
-  await page.getByLabel(/email or username/i).fill(user.email)
-  await page.getByLabel(/password/i).fill(user.password)
-  await page.getByRole('button', { name: /sign in/i }).filter({ has: page.locator('[type="submit"]') }).click()
+  await page.getByTestId('identifier-input').fill(user.email)
+  await page.getByTestId('password-input').fill(user.password)
+  await page.getByTestId('submit-button').click()
   await expect(page).toHaveURL(/dashboard/, { timeout: 10000 })
 }
 
@@ -63,16 +63,16 @@ test('goals: tap goal shows detail, back returns to list', async ({ page }) => {
 
   // First create a goal
   await page.goto('/goals')
-  await page.getByRole('button', { name: /new goal|add goal|\+/i }).click()
-  await page.getByLabel(/title/i).fill('Mobile Goal Test')
-  await page.getByRole('button', { name: /save|create/i }).click()
+  await page.getByTestId('new-goal-button').click()
+  await page.getByTestId('goal-title-input').fill('Mobile Goal Test')
+  await page.getByTestId('goal-submit-button').click()
   await expect(page.getByText('Mobile Goal Test')).toBeVisible({ timeout: 10000 })
 
   // Tap goal card to see detail
   await page.getByText('Mobile Goal Test').click()
 
   // Back button should be visible on mobile
-  const backButton = page.getByText(/← goals/i)
+  const backButton = page.getByTestId('goals-back-button')
   await expect(backButton).toBeVisible({ timeout: 5000 })
 
   // Click back to return to list

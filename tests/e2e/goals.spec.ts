@@ -20,9 +20,9 @@ test.afterAll(async () => {
 
 async function login(page: import('@playwright/test').Page) {
   await page.goto('/login')
-  await page.getByLabel(/email or username/i).fill(user.email)
-  await page.getByLabel(/password/i).fill(user.password)
-  await page.getByRole('button', { name: /sign in/i }).filter({ has: page.locator('[type="submit"]') }).click()
+  await page.getByTestId('identifier-input').fill(user.email)
+  await page.getByTestId('password-input').fill(user.password)
+  await page.getByTestId('submit-button').click()
   await expect(page).toHaveURL(/dashboard/, { timeout: 10000 })
 }
 
@@ -36,15 +36,15 @@ test('create a goal', async ({ page }) => {
   await login(page)
   await page.goto('/goals')
 
-  await page.getByRole('button', { name: /new goal|add goal|\+/i }).click()
-  await page.getByLabel(/title/i).fill('E2E Test Goal')
+  await page.getByTestId('new-goal-button').click()
+  await page.getByTestId('goal-title-input').fill('E2E Test Goal')
 
   const descField = page.getByLabel(/description/i)
   if (await descField.isVisible()) {
     await descField.fill('Created by E2E test')
   }
 
-  await page.getByRole('button', { name: /save|create/i }).click()
+  await page.getByTestId('goal-submit-button').click()
 
   await expect(page.getByText('E2E Test Goal')).toBeVisible({ timeout: 10000 })
 })
@@ -78,7 +78,7 @@ test('delete goal', async ({ page }) => {
 
   await page.getByText('E2E Test Goal').click()
 
-  const deleteButton = page.getByRole('button', { name: /delete/i })
+  const deleteButton = page.getByTestId('goal-delete-button')
   await deleteButton.click()
 
   // Confirm deletion in dialog
@@ -87,5 +87,5 @@ test('delete goal', async ({ page }) => {
     await confirmButton.click()
   }
 
-  await expect(page.getByText('E2E Test Goal')).not.toBeVisible({ timeout: 10000 })
+  await expect(page.getByText('E2E Test Goal').first()).not.toBeVisible({ timeout: 10000 })
 })

@@ -147,6 +147,7 @@ export default function HabitsPage() {
           </p>
         </div>
         <Button
+          data-testid="new-habit-button"
           onClick={() => setCreateModalOpen(true)}
           className="bg-[#534AB7] text-[#EEEDFE] text-[13px] font-medium px-4 py-2 rounded-lg"
         >

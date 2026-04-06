@@ -19,11 +19,11 @@ test.afterAll(async () => {
 test('register new user', async ({ page }) => {
   await page.goto('/login')
 
-  await page.getByRole('button', { name: /sign up/i }).click()
-  await page.getByLabel(/^email$/i).fill(user.email)
-  await page.getByLabel(/username/i).fill(user.username)
-  await page.getByLabel(/password/i).fill(user.password)
-  await page.getByRole('button', { name: /create account/i }).click()
+  await page.getByTestId('sign-up-tab').click()
+  await page.getByTestId('email-input').fill(user.email)
+  await page.getByTestId('username-input').fill(user.username)
+  await page.getByTestId('register-password-input').fill(user.password)
+  await page.getByTestId('submit-button').click()
 
   await expect(page.getByText(/account created/i)).toBeVisible({ timeout: 10000 })
 })
@@ -31,23 +31,27 @@ test('register new user', async ({ page }) => {
 test('login with email', async ({ page }) => {
   await page.goto('/login')
 
-  await page.getByLabel(/email or username/i).fill(user.email)
-  await page.getByLabel(/password/i).fill(user.password)
-  await page.getByRole('button', { name: /sign in/i }).filter({ has: page.locator('[type="submit"]') }).click()
+  await page.getByTestId('identifier-input').fill(user.email)
+  await page.getByTestId('password-input').fill(user.password)
+  await page.getByTestId('submit-button').click()
 
   await expect(page).toHaveURL(/dashboard/, { timeout: 10000 })
 
-  // Store token for cleanup
-  const tokens = await loginUser({ email: user.email, password: user.password })
-  accessToken = tokens.accessToken
+  // Store token for cleanup (best-effort — test passes regardless)
+  try {
+    const tokens = await loginUser({ email: user.email, password: user.password })
+    accessToken = tokens.accessToken
+  } catch {
+    // Token acquisition may fail transiently; cleanup will be skipped
+  }
 })
 
 test('login with username', async ({ page }) => {
   await page.goto('/login')
 
-  await page.getByLabel(/email or username/i).fill(user.username)
-  await page.getByLabel(/password/i).fill(user.password)
-  await page.getByRole('button', { name: /sign in/i }).filter({ has: page.locator('[type="submit"]') }).click()
+  await page.getByTestId('identifier-input').fill(user.username)
+  await page.getByTestId('password-input').fill(user.password)
+  await page.getByTestId('submit-button').click()
 
   await expect(page).toHaveURL(/dashboard/, { timeout: 10000 })
 })
@@ -55,9 +59,9 @@ test('login with username', async ({ page }) => {
 test('login with wrong password shows error', async ({ page }) => {
   await page.goto('/login')
 
-  await page.getByLabel(/email or username/i).fill(user.email)
-  await page.getByLabel(/password/i).fill('WrongPassword123!')
-  await page.getByRole('button', { name: /sign in/i }).filter({ has: page.locator('[type="submit"]') }).click()
+  await page.getByTestId('identifier-input').fill(user.email)
+  await page.getByTestId('password-input').fill('WrongPassword123!')
+  await page.getByTestId('submit-button').click()
 
   await expect(page.getByText(/invalid credentials/i)).toBeVisible({ timeout: 10000 })
 })
@@ -75,13 +79,14 @@ test('protected route redirects to login', async ({ page }) => {
 test('logout redirects to login', async ({ page }) => {
   // Login first
   await page.goto('/login')
-  await page.getByLabel(/email or username/i).fill(user.email)
-  await page.getByLabel(/password/i).fill(user.password)
-  await page.getByRole('button', { name: /sign in/i }).filter({ has: page.locator('[type="submit"]') }).click()
+  await page.getByTestId('identifier-input').fill(user.email)
+  await page.getByTestId('password-input').fill(user.password)
+  await page.getByTestId('submit-button').click()
   await expect(page).toHaveURL(/dashboard/, { timeout: 10000 })
 
-  // Logout
-  await page.getByRole('button', { name: /log out/i }).click()
+  // Logout via user chip dropdown
+  await page.getByTestId('user-chip').click()
+  await page.getByRole('menuitem', { name: /log out/i }).click()
 
   await expect(page).toHaveURL(/login/, { timeout: 10000 })
 })

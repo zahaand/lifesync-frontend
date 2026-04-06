@@ -20,9 +20,9 @@ test.afterAll(async () => {
 
 async function login(page: import('@playwright/test').Page) {
   await page.goto('/login')
-  await page.getByLabel(/email or username/i).fill(user.email)
-  await page.getByLabel(/password/i).fill(user.password)
-  await page.getByRole('button', { name: /sign in/i }).filter({ has: page.locator('[type="submit"]') }).click()
+  await page.getByTestId('identifier-input').fill(user.email)
+  await page.getByTestId('password-input').fill(user.password)
+  await page.getByTestId('submit-button').click()
   await expect(page).toHaveURL(/dashboard/, { timeout: 10000 })
 }
 

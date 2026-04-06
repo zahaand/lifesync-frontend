@@ -132,6 +132,7 @@ export default function GoalFormModal({ open, onOpenChange, mode, goal }: GoalFo
             <div>
               <Label className="mb-1.5 text-[13px]">Title</Label>
               <Input
+                data-testid="goal-title-input"
                 {...register('title')}
                 className="h-9 rounded-lg border-[#C7C4BB]"
                 placeholder="Goal title"
@@ -192,6 +193,7 @@ export default function GoalFormModal({ open, onOpenChange, mode, goal }: GoalFo
             </Button>
             <Button
               type="submit"
+              data-testid="goal-submit-button"
               className="rounded-lg bg-[#534AB7] px-4 py-2 text-[13px] text-[#EEEDFE]"
               disabled={isPending}
             >

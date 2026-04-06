@@ -54,6 +54,7 @@ export default function GoalDetail({ goalId, listGoal, onEdit, onDelete }: GoalD
             <Pencil className="size-4 text-[#666360]" />
           </Button>
           <Button
+            data-testid="goal-delete-button"
             variant="outline"
             size="icon"
             className="h-8 w-8 rounded-lg border-[#FCA5A5]"

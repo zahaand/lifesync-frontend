@@ -70,6 +70,7 @@ export default function GoalsPage() {
               </p>
             </div>
             <Button
+              data-testid="new-goal-button"
               className="rounded-lg bg-[#534AB7] px-4 py-2 text-[13px] font-medium text-[#EEEDFE]"
               onClick={() => setCreateModalOpen(true)}
             >
@@ -119,6 +120,7 @@ export default function GoalsPage() {
           {/* Mobile back button */}
           {isMobile && effectiveSelectedId && (
             <Button
+              data-testid="goals-back-button"
               variant="ghost"
               className="mb-3 flex items-center gap-1 px-0 text-sm text-[#534AB7] hover:text-[#534AB7]"
               onClick={() => setSelectedGoalId(null)}

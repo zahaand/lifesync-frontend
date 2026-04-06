@@ -160,6 +160,7 @@ export default function HabitFormModal({
               <Label htmlFor="title" className="text-[13px]">Name</Label>
               <Input
                 id="title"
+                data-testid="habit-title-input"
                 {...register('title')}
                 placeholder="e.g. Morning Run"
                 className="h-9 border-[#C7C4BB] rounded-lg"
@@ -257,6 +258,7 @@ export default function HabitFormModal({
             </Button>
             <Button
               type="submit"
+              data-testid="habit-submit-button"
               disabled={isPending}
               className="bg-[#534AB7] text-[#EEEDFE] text-[13px]"
             >
