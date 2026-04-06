@@ -5,11 +5,21 @@
 **Status**: Draft  
 **Input**: User description: "Sprint 7: Pre-release — full audit, testing, and documentation"
 
+## Clarifications
+
+### Session 2026-04-06
+
+- Q: E2E test data strategy — fresh user per run, pre-existing account, or per spec file? → A: Fresh user per spec file — each `.spec.ts` creates its own user (register) and deletes it (DELETE /users/me) in afterAll for full isolation between test files.
+- Q: MSW handler scope — happy paths only, or include error states? → A: Happy paths + error states — MSW mocks success AND error responses (401, 400, 404, network error) for tested endpoints.
+- Q: Postman collection — update existing in place or create new? → A: Update in place — reorganize the existing collection (ID: 24414635-48166e11-cb1a-40dc-af79-58717bc2bfee), adding folders and missing requests directly.
+- Q: README screenshots — actual captures, mockups, or skip? → A: Skip screenshots for now — add placeholder text "Screenshots coming soon", capture after release.
+- Q: CI workflow — add GitHub Actions in Sprint 7 or defer? → A: Defer CI to deploy stage — no `.github/workflows/` in Sprint 7.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Unit & Component Test Suite (Priority: P1)
 
-A developer sets up and runs automated unit and component tests for the LifeSync frontend. They install Vitest with jsdom, Testing Library, and MSW for API mocking. MSW handlers simulate all backend endpoints (Auth, Habits, Goals, Users) so tests never call the real backend. The developer writes hook tests covering login/logout/token-refresh, habit CRUD with optimistic updates, goal CRUD with progress tracking, user profile updates, and habit log pagination. They also write component tests for LoginPage (form validation, submission, error display), HabitCard (checkbox toggle, streak badge, action menu), GoalCard (progress bar, status badge, selection), and HabitFormModal (form fields, frequency toggle, CUSTOM day picker). Running `vitest --coverage` produces a report showing 70%+ coverage for hooks and key components.
+A developer sets up and runs automated unit and component tests for the LifeSync frontend. They install Vitest with jsdom, Testing Library, and MSW for API mocking. MSW handlers simulate backend endpoints used by tested hooks/components — both success responses and error states (401, 400, 404, network errors) — so tests never call the real backend. The developer writes hook tests covering login/logout/token-refresh, habit CRUD with optimistic updates, goal CRUD with progress tracking, user profile updates, and habit log pagination. They also write component tests for LoginPage (form validation, submission, error display), HabitCard (checkbox toggle, streak badge, action menu), GoalCard (progress bar, status badge, selection), and HabitFormModal (form fields, frequency toggle, CUSTOM day picker). Running `vitest --coverage` produces a report showing 70%+ coverage for hooks and key components.
 
 **Why this priority**: Automated tests are the foundation of release confidence — without them, no other pre-release activity (E2E, documentation) can confirm the application works correctly. Hook tests catch regression in business logic; component tests catch rendering and interaction bugs.
 
@@ -27,7 +37,7 @@ A developer sets up and runs automated unit and component tests for the LifeSync
 
 ### User Story 2 - E2E Test Suite (Priority: P1)
 
-A developer sets up Playwright and writes end-to-end tests that exercise real user flows through the application running in a browser. Tests cover authentication (register, login by email, login by username, wrong password error, logout, protected route redirect), habits (create DAILY/CUSTOM, complete, edit, archive, restore, delete, filter, search), goals (create, view detail, update progress, milestones, complete, delete), profile (update display name, link Telegram), and mobile navigation (hamburger menu, sidebar overlay, goals list/detail toggle). All E2E tests run against `http://localhost:5173` with the backend at `http://localhost:8080`.
+A developer sets up Playwright and writes end-to-end tests that exercise real user flows through the application running in a browser. Each spec file creates its own fresh user (register at start, DELETE /users/me in afterAll) for full isolation — no shared test accounts or pre-existing data dependencies. Tests cover authentication (register, login by email, login by username, wrong password error, logout, protected route redirect), habits (create DAILY/CUSTOM, complete, edit, archive, restore, delete, filter, search), goals (create, view detail, update progress, milestones, complete, delete), profile (update display name, link Telegram), and mobile navigation (hamburger menu, sidebar overlay, goals list/detail toggle). All E2E tests run against `http://localhost:5173` with the backend at `http://localhost:8080`.
 
 **Why this priority**: E2E tests validate that the full application works as users experience it — they catch integration issues between frontend, routing, and backend that unit tests cannot detect. Essential for release sign-off.
 
@@ -66,7 +76,7 @@ A QA engineer or developer opens the LifeSync Postman collection and finds all A
 
 ### User Story 4 - README Documentation (Priority: P2)
 
-A new developer (or external reviewer) visits the lifesync-frontend GitHub repository and reads the README.md. They find a clear bilingual (English + Russian) overview of the project: what LifeSync is, the feature set delivered across Sprints 1-6, the tech stack, 2-3 screenshots of key screens, local setup instructions (prerequisites, install, env config, run commands), a directory structure overview with brief descriptions, and the 5 architecture principles from the constitution. The README links to the companion lifesync-backend repository. The English section appears first, followed by the equivalent Russian section.
+A new developer (or external reviewer) visits the lifesync-frontend GitHub repository and reads the README.md. They find a clear bilingual (English + Russian) overview of the project: what LifeSync is, the feature set delivered across Sprints 1-6, the tech stack, a "Screenshots coming soon" placeholder (actual captures deferred to post-release), local setup instructions (prerequisites, install, env config, run commands), a directory structure overview with brief descriptions, and the 5 architecture principles from the constitution. The README links to the companion lifesync-backend repository. The English section appears first, followed by the equivalent Russian section.
 
 **Why this priority**: README is the first thing anyone sees when visiting the repository. A clear README with setup instructions reduces onboarding friction and demonstrates project maturity for pre-release.
 
@@ -105,7 +115,7 @@ A developer performs final pre-release checks on the codebase. They verify that 
 
 - What happens when MSW handlers are not properly configured for a test? The test should fail with a clear "unhandled request" error from MSW, not silently pass or hang.
 - What happens when Playwright tests run without the backend? Tests should fail fast with a connection refused error, not hang waiting for responses.
-- What happens when the developer runs E2E tests on a database with pre-existing data? Tests should either use a clean test database or create/clean up their own test data to avoid interference.
+- What happens when the developer runs E2E tests on a database with pre-existing data? Each spec file creates its own isolated user and cleans up via DELETE /users/me in afterAll, so pre-existing data does not interfere.
 - What happens when `npm run build` produces warnings from dependencies (not application code)? Dependency warnings are acceptable and do not block release; only application-level errors block.
 - What happens when the Postman collection is imported into a different workspace? Environment variables (baseUrl, token) should be parameterized so the collection works in any workspace.
 
@@ -114,15 +124,15 @@ A developer performs final pre-release checks on the codebase. They verify that 
 ### Functional Requirements
 
 - **FR-001**: The project MUST include a Vitest configuration (`vitest.config.ts`) with jsdom environment and Testing Library + jest-dom setup in `src/test/setup.ts`.
-- **FR-002**: MSW handlers MUST simulate all backend API endpoints (Auth, Habits, Goals, Users) used by the application, returning realistic mock data.
+- **FR-002**: MSW handlers MUST simulate backend API endpoints used by tested hooks/components, returning both success responses and error states (401 unauthorized, 400 bad request, 404 not found, network errors).
 - **FR-003**: Unit tests MUST cover hooks: `useAuth` (login, logout, refresh), `useHabits` (list, complete with optimistic update + rollback), `useGoals` (list, detail, progress update), `useUsers` (current user, profile update), `useHabitLogs` (pagination).
 - **FR-004**: Component tests MUST cover: LoginPage (form validation, submit, error), HabitCard (checkbox, streak, action menu), GoalCard (progress, status, selection), HabitFormModal (fields, frequency, CUSTOM days).
 - **FR-005**: Test coverage for `src/hooks/` and tested components MUST be >= 70% line coverage.
 - **FR-006**: Playwright MUST be configured with `baseURL: http://localhost:5173`, chromium browser, and 30-second timeout.
-- **FR-007**: E2E tests MUST cover: authentication flows (register, login email, login username, wrong password, logout, protected redirect), habit CRUD flows, goal CRUD flows, profile updates, and mobile navigation at 375px viewport.
+- **FR-007**: E2E tests MUST cover: authentication flows (register, login email, login username, wrong password, logout, protected redirect), habit CRUD flows, goal CRUD flows, profile updates, and mobile navigation at 375px viewport. Each spec file MUST create a fresh user (register) and delete it (DELETE /users/me) in afterAll for full test isolation.
 - **FR-008**: The Postman collection MUST be reorganized into 5 folders (Auth, Users, Habits, Goals, Admin) with all requests moved from root level.
 - **FR-009**: The Postman collection MUST include missing requests: Archive Habit, Restore Habit, List Goals by status, Delete Account, Login by username, and negative tests (CUSTOM habit without days — 400, progress > 100 — 400).
-- **FR-010**: README.md MUST contain bilingual (English + Russian) sections covering: project overview, features by sprint, tech stack, screenshots, local setup, project structure, architecture principles, and link to backend repo.
+- **FR-010**: README.md MUST contain bilingual (English + Russian) sections covering: project overview, features by sprint, tech stack, screenshots placeholder ("Screenshots coming soon" — actual captures deferred to post-release), local setup, project structure, architecture principles, and link to backend repo.
 - **FR-011**: The `.env.example` file MUST list all required environment variables with placeholder values and descriptive comments.
 - **FR-012**: The `.gitignore` file MUST include `.env.local`.
 - **FR-013**: `npm run build` MUST complete with zero errors and zero application-level warnings.
@@ -160,6 +170,6 @@ A developer performs final pre-release checks on the codebase. They verify that 
 - MSW 2.x is used (not 1.x) — handler setup follows the `http.get()` / `http.post()` pattern, not the legacy `rest.get()` pattern.
 - Playwright tests run in headless chromium by default; headed mode is used only for debugging.
 - The lifesync-backend GitHub repository exists and can be linked from the README.
-- Screenshots for README will be captured manually or from existing design mockups — no automated screenshot generation needed.
+- Screenshots for README are deferred to post-release — README uses "Screenshots coming soon" placeholder.
 - Pre-existing ESLint warnings (React Hook Form + React Compiler incompatibility in GoalFormModal, HabitFormModal, LoginPage) are known and acceptable for release.
 - No new features or code changes are introduced in Sprint 7 — only tests, documentation, and verification.
