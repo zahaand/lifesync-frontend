@@ -8,6 +8,7 @@ import HabitEmptyState from '@/components/habits/HabitEmptyState'
 import HabitFormModal from '@/components/habits/HabitFormModal'
 import HabitFilters from '@/components/habits/HabitFilters'
 import HabitDeleteDialog from '@/components/habits/HabitDeleteDialog'
+import HabitHistoryDrawer from '@/components/habits/HabitHistoryDrawer'
 import {
   useAllHabits,
   useCompleteHabit,
@@ -31,6 +32,16 @@ export default function HabitsPage() {
   const [deletingHabit, setDeletingHabit] = useState<Habit | null>(null)
   const [filterTab, setFilterTab] = useState<'ALL' | 'ACTIVE' | 'ARCHIVED'>('ALL')
   const [searchQuery, setSearchQuery] = useState('')
+  const [historyHabitId, setHistoryHabitId] = useState<string | null>(null)
+  const [historyDrawerOpen, setHistoryDrawerOpen] = useState(false)
+
+  const allHabits = habitsData?.content ?? []
+  const historyHabit = allHabits.find((h) => h.id === historyHabitId)
+
+  const handleHistory = (habitId: string) => {
+    setHistoryHabitId(habitId)
+    setHistoryDrawerOpen(true)
+  }
 
   const { activeHabits, archivedHabits, filteredActive, filteredArchived, hasAnyHabits, hasFilteredResults } =
     useMemo(() => {
@@ -108,7 +119,7 @@ export default function HabitsPage() {
 
   if (isLoading) {
     return (
-      <div className="p-8">
+      <div className="px-4 py-4 md:p-8">
         <div className="flex justify-between items-center mb-6">
           <div>
             <Skeleton className="h-6 w-24 mb-2" />
@@ -126,7 +137,7 @@ export default function HabitsPage() {
   }
 
   return (
-    <div className="p-8">
+    <div className="px-4 py-4 md:p-8">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div>
@@ -175,6 +186,7 @@ export default function HabitsPage() {
                   onArchive={handleArchive}
                   onRestore={handleRestore}
                   onDelete={setDeletingHabit}
+                  onHistory={handleHistory}
                 />
               ))}
             </div>
@@ -196,6 +208,7 @@ export default function HabitsPage() {
                   onArchive={handleArchive}
                   onRestore={handleRestore}
                   onDelete={setDeletingHabit}
+                  onHistory={handleHistory}
                 />
               ))}
             </div>
@@ -228,6 +241,14 @@ export default function HabitsPage() {
         onOpenChange={(open) => { if (!open) setDeletingHabit(null) }}
         habitName={deletingHabit?.title ?? ''}
         onConfirm={handleDeleteConfirm}
+      />
+
+      {/* History drawer */}
+      <HabitHistoryDrawer
+        habitId={historyHabitId}
+        habitTitle={historyHabit?.title ?? ''}
+        open={historyDrawerOpen}
+        onOpenChange={setHistoryDrawerOpen}
       />
     </div>
   )

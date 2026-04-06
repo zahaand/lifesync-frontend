@@ -24,14 +24,14 @@ export default function HabitFilters({
   onSearchChange,
 }: HabitFiltersProps) {
   return (
-    <div className="flex items-center gap-3 mb-5">
+    <div className="flex items-center gap-3 mb-5 overflow-x-auto">
       {TABS.map((tab) => (
         <Button
           key={tab.value}
           variant="outline"
           size="sm"
           onClick={() => onFilterChange(tab.value)}
-          className={`text-[12px] px-3 py-1.5 rounded-full h-auto ${
+          className={`shrink-0 text-[12px] px-3 py-1.5 rounded-full h-auto ${
             activeFilter === tab.value
               ? 'bg-[#EEEDFE] text-[#3C3489] border-[#AFA9EC] font-medium'
               : 'bg-transparent text-[#666360] border-[#E8E6DF]'

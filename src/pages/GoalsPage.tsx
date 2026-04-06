@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { Plus } from 'lucide-react'
+import { Plus, ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import GoalCard from '@/components/goals/GoalCard'
@@ -10,11 +10,13 @@ import GoalFormModal from '@/components/goals/GoalFormModal'
 import GoalDeleteDialog from '@/components/goals/GoalDeleteDialog'
 import { useQueryClient } from '@tanstack/react-query'
 import { useAllGoals } from '@/hooks/useGoals'
+import useIsMobile from '@/hooks/useIsMobile'
 import type { Goal, GoalDetail as GoalDetailType } from '@/types/goals'
 
 export default function GoalsPage() {
   const queryClient = useQueryClient()
   const { data, isLoading } = useAllGoals()
+  const isMobile = useIsMobile()
   const allGoals = useMemo(() => data?.content ?? [], [data])
 
   const [selectedGoalId, setSelectedGoalId] = useState<string | null>(null)
@@ -50,74 +52,94 @@ export default function GoalsPage() {
     setDeleteDialogOpen(false)
   }
 
+  // Mobile: show detail when goal selected, list otherwise
+  const showDetail = isMobile && effectiveSelectedId !== null
+  const showList = !isMobile || !effectiveSelectedId
+
   return (
-    <div className="grid h-[calc(100vh-0px)] grid-cols-[380px_1fr]">
+    <div className={isMobile ? 'min-h-0' : 'grid h-[calc(100vh-0px)] grid-cols-[380px_1fr]'}>
       {/* Left column: Goals list */}
-      <div className="overflow-y-auto border-r border-[#E8E6DF] p-6">
-        {/* Header */}
-        <div className="mb-5 flex items-start justify-between">
-          <div>
-            <h1 className="text-[20px] font-semibold text-[#2C2C2A]">Goals</h1>
-            <p className="mt-1 text-[13px] text-[#9E9B94]">
-              {activeCount} active · {completedCount} completed
-            </p>
+      {showList && (
+        <div className={`overflow-y-auto p-4 md:border-r md:border-[#E8E6DF] md:p-6 ${!isMobile ? '' : ''}`}>
+          {/* Header */}
+          <div className="mb-5 flex items-start justify-between">
+            <div>
+              <h1 className="text-[20px] font-semibold text-[#2C2C2A]">Goals</h1>
+              <p className="mt-1 text-[13px] text-[#9E9B94]">
+                {activeCount} active · {completedCount} completed
+              </p>
+            </div>
+            <Button
+              className="rounded-lg bg-[#534AB7] px-4 py-2 text-[13px] font-medium text-[#EEEDFE]"
+              onClick={() => setCreateModalOpen(true)}
+            >
+              <Plus className="mr-1.5 size-4" />
+              New goal
+            </Button>
           </div>
-          <Button
-            className="rounded-lg bg-[#534AB7] px-4 py-2 text-[13px] font-medium text-[#EEEDFE]"
-            onClick={() => setCreateModalOpen(true)}
-          >
-            <Plus className="mr-1.5 size-4" />
-            New goal
-          </Button>
+
+          {/* Filter tabs */}
+          <GoalFilters activeFilter={filterTab} onFilterChange={setFilterTab} />
+
+          {/* Goals list */}
+          {isLoading ? (
+            <div className="space-y-3">
+              {[1, 2, 3].map((i) => (
+                <Skeleton key={i} className="h-[120px] rounded-xl" />
+              ))}
+            </div>
+          ) : allGoals.length === 0 ? (
+            <GoalEmptyState variant="no-goals" onCreateClick={() => setCreateModalOpen(true)} />
+          ) : filteredGoals.length === 0 ? (
+            <div className="py-12 text-center text-[13px] text-[#9E9B94]">
+              No {filterTab.toLowerCase()} goals
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {filteredGoals.map((goal) => {
+                const cached = queryClient.getQueryData<GoalDetailType>(['goals', goal.id])
+                return (
+                  <GoalCard
+                    key={goal.id}
+                    goal={goal}
+                    isSelected={goal.id === effectiveSelectedId}
+                    linkedHabitsCount={cached?.linkedHabitIds?.length}
+                    onClick={() => setSelectedGoalId(goal.id)}
+                  />
+                )
+              })}
+            </div>
+          )}
         </div>
-
-        {/* Filter tabs */}
-        <GoalFilters activeFilter={filterTab} onFilterChange={setFilterTab} />
-
-        {/* Goals list */}
-        {isLoading ? (
-          <div className="space-y-3">
-            {[1, 2, 3].map((i) => (
-              <Skeleton key={i} className="h-[120px] rounded-xl" />
-            ))}
-          </div>
-        ) : allGoals.length === 0 ? (
-          <GoalEmptyState variant="no-goals" onCreateClick={() => setCreateModalOpen(true)} />
-        ) : filteredGoals.length === 0 ? (
-          <div className="py-12 text-center text-[13px] text-[#9E9B94]">
-            No {filterTab.toLowerCase()} goals
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {filteredGoals.map((goal) => {
-              const cached = queryClient.getQueryData<GoalDetailType>(['goals', goal.id])
-              return (
-                <GoalCard
-                  key={goal.id}
-                  goal={goal}
-                  isSelected={goal.id === effectiveSelectedId}
-                  linkedHabitsCount={cached?.linkedHabitIds?.length}
-                  onClick={() => setSelectedGoalId(goal.id)}
-                />
-              )
-            })}
-          </div>
-        )}
-      </div>
+      )}
 
       {/* Right panel: Goal detail */}
-      <div className="overflow-y-auto bg-[#F5F4F0] p-6">
-        {effectiveSelectedId && selectedGoal ? (
-          <GoalDetail
-            goalId={effectiveSelectedId}
-            listGoal={selectedGoal}
-            onEdit={() => setEditModalOpen(true)}
-            onDelete={() => setDeleteDialogOpen(true)}
-          />
-        ) : (
-          <GoalEmptyState variant="no-selection" />
-        )}
-      </div>
+      {(!isMobile || showDetail) && (
+        <div className={`overflow-y-auto p-4 md:bg-[#F5F4F0] md:p-6 ${isMobile ? '' : 'bg-[#F5F4F0]'}`}>
+          {/* Mobile back button */}
+          {isMobile && effectiveSelectedId && (
+            <Button
+              variant="ghost"
+              className="mb-3 flex items-center gap-1 px-0 text-sm text-[#534AB7] hover:text-[#534AB7]"
+              onClick={() => setSelectedGoalId(null)}
+            >
+              <ArrowLeft className="size-4" />
+              Goals
+            </Button>
+          )}
+
+          {effectiveSelectedId && selectedGoal ? (
+            <GoalDetail
+              goalId={effectiveSelectedId}
+              listGoal={selectedGoal}
+              onEdit={() => setEditModalOpen(true)}
+              onDelete={() => setDeleteDialogOpen(true)}
+            />
+          ) : (
+            !isMobile && <GoalEmptyState variant="no-selection" />
+          )}
+        </div>
+      )}
 
       {/* Create modal */}
       <GoalFormModal
