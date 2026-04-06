@@ -1,20 +1,9 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
 import GoalProgress from '@/components/shared/GoalProgress'
 import { useAuthStore } from '@/stores/authStore'
 import { useHabits, useCompleteHabit, useUncompleteHabit } from '@/hooks/useHabits'
@@ -365,7 +354,6 @@ function GoalsCard() {
 export default function DashboardPage() {
   const user = useAuthStore((s) => s.user)
   const { data: currentUser } = useCurrentUser()
-  const [modalOpen, setModalOpen] = useState(false)
 
   const greeting = getGreeting()
   const username = user?.username ?? ''
@@ -376,46 +364,13 @@ export default function DashboardPage() {
   return (
     <div>
       {/* Top bar */}
-      <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-[20px] font-semibold text-[#2C2C2A]">
-            {greetingText}
-          </h1>
-          <p className="mt-1 text-[13px] text-[#9E9B94]">
-            {formatDate()}
-          </p>
-        </div>
-
-        <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-          <DialogTrigger asChild>
-            <Button
-              className="rounded-lg bg-[#534AB7] px-4 py-2 text-[13px] font-medium text-[#EEEDFE]"
-            >
-              <Plus className="mr-1.5 size-4" />
-              New habit
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-[440px]">
-            <DialogHeader>
-              <DialogTitle className="text-[16px] font-semibold">Create habit</DialogTitle>
-              <DialogDescription className="sr-only">Create a new habit</DialogDescription>
-            </DialogHeader>
-            <div className="px-5 py-6 text-center text-[13px] text-[#9E9B94]">
-              Full habit creation coming soon
-            </div>
-            <DialogFooter
-              className="flex justify-end border-t border-[#E8E6DF] px-5 pb-4 pt-3"
-            >
-              <Button
-                variant="outline"
-                className="rounded-lg border-[#C7C4BB] px-4 py-2 text-[13px] text-[#666360]"
-                onClick={() => setModalOpen(false)}
-              >
-                Close
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+      <div className="mb-6">
+        <h1 className="text-[20px] font-semibold text-[#2C2C2A]">
+          {greetingText}
+        </h1>
+        <p className="mt-1 text-[13px] text-[#9E9B94]">
+          {formatDate()}
+        </p>
       </div>
 
       {/* Stats row */}

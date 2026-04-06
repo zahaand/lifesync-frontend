@@ -1,73 +1,105 @@
-# React + TypeScript + Vite
+# LifeSync Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Habit tracking and goal management application built with React, TypeScript, and Vite.
 
-Currently, two official plugins are available:
+Приложение для трекинга привычек и управления целями на React, TypeScript и Vite.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tech Stack / Стек технологий
 
-## React Compiler
+- **TypeScript 5.9**, **React 19.2**, **Vite 8**
+- **React Router v7** — routing
+- **TanStack React Query v5** — server state management
+- **Zustand** — client state (auth store)
+- **Axios** — HTTP client
+- **shadcn/ui + Radix** — UI components (Nova preset)
+- **Tailwind CSS v4** — styling
+- **Lucide React** — icons
+- **Sonner** — toast notifications
+- **React Hook Form + Zod** — form handling and validation
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Prerequisites / Требования
 
-## Expanding the ESLint configuration
+- **Node.js** 20+
+- **npm** 10+
+- Backend running at `http://localhost:8080/api/v1`
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Getting Started / Запуск
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+```bash
+# Clone and install / Клонирование и установка
+git clone <repo-url>
+cd lifesync-frontend
+npm install
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+# Environment / Переменные окружения
+cp .env.example .env.local
+# Edit .env.local if needed (default: http://localhost:8080/api/v1)
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Development / Разработка
+npm run dev
+# Open http://localhost:5173
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Scripts / Команды
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+| Command / Команда | Description / Описание |
+|---|---|
+| `npm run dev` | Start dev server / Запуск dev-сервера |
+| `npm run build` | TypeScript check + production build / Проверка TS + продакшн сборка |
+| `npm run preview` | Preview production build / Предпросмотр продакшн сборки |
+| `npm run lint` | Run ESLint / Запуск ESLint |
+| `npm test` | Run unit tests (Vitest) / Запуск юнит-тестов |
+| `npm run test:watch` | Run tests in watch mode / Тесты в режиме наблюдения |
+| `npm run test:coverage` | Run tests with coverage / Тесты с покрытием |
+| `npm run test:e2e` | Run E2E tests (Playwright) / Запуск E2E-тестов |
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Project Structure / Структура проекта
+
 ```
+src/
+├── api/            # API client and endpoint functions
+├── components/
+│   ├── ui/         # shadcn/ui components (auto-generated)
+│   ├── shared/     # Layout, ProtectedRoute, GoalProgress
+│   ├── habits/     # HabitCard, HabitFormModal, HabitHistoryDrawer, etc.
+│   ├── goals/      # GoalCard, GoalDetail, GoalFormModal, etc.
+│   └── profile/    # AccountCard, StatsCard, TelegramCard, etc.
+├── hooks/          # React Query hooks (useHabits, useGoals, useAuth, etc.)
+├── pages/          # Route pages (LoginPage, DashboardPage, etc.)
+├── stores/         # Zustand stores (authStore)
+├── test/           # Test setup, MSW handlers, test utilities
+├── types/          # TypeScript type definitions
+└── lib/            # Utility functions
+tests/
+└── e2e/            # Playwright E2E tests
+```
+
+## Testing / Тестирование
+
+### Unit Tests / Юнит-тесты
+
+Uses **Vitest** + **Testing Library** + **MSW** for mocking API calls.
+
+Использует **Vitest** + **Testing Library** + **MSW** для мокирования API-вызовов.
+
+```bash
+npm test              # Run all unit tests / Запуск всех тестов
+npm run test:coverage # Coverage report / Отчёт о покрытии
+```
+
+### E2E Tests / E2E-тесты
+
+Uses **Playwright** with Chromium. Requires running backend.
+
+Использует **Playwright** с Chromium. Требует запущенный бэкенд.
+
+```bash
+npx playwright install chromium   # First time / Первый запуск
+npm run test:e2e                  # Run E2E tests / Запуск E2E-тестов
+```
+
+## Environment Variables / Переменные окружения
+
+| Variable | Default | Description |
+|---|---|---|
+| `VITE_API_BASE_URL` | `http://localhost:8080/api/v1` | Backend API base URL |

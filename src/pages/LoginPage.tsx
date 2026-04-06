@@ -163,11 +163,6 @@ function LoginForm() {
                 {errors.password && (
                     <p className="mt-1 text-[12px] text-red-600">{errors.password.message}</p>
                 )}
-                <div className="mt-[-4px] mb-3 text-right">
-                    <Button type="button" variant="link" className="h-auto p-0 text-[12px] text-[#534AB7] hover:underline">
-                        Forgot password?
-                    </Button>
-                </div>
             </div>
 
             <Button

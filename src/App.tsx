@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Toaster } from '@/components/ui/sonner'
+import { TooltipProvider } from '@/components/ui/tooltip'
 import LoginPage from '@/pages/LoginPage'
 import DashboardPage from '@/pages/DashboardPage'
 import HabitsPage from '@/pages/HabitsPage'
@@ -53,6 +54,7 @@ function AuthRehydration({ children }: { children: React.ReactNode }) {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
       <Toaster duration={3000} />
       <BrowserRouter>
         <AuthRehydration>
@@ -70,6 +72,7 @@ function App() {
           </Routes>
         </AuthRehydration>
       </BrowserRouter>
+      </TooltipProvider>
     </QueryClientProvider>
   )
 }
