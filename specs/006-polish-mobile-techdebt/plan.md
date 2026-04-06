@@ -54,7 +54,8 @@ specs/006-polish-mobile-techdebt/
 ```text
 src/
 ├── api/
-│   └── habits.ts              # + getHabitLogs endpoint
+│   ├── habits.ts              # Existing habit API (no changes)
+│   └── habitLogs.ts           # NEW: getHabitLogs endpoint
 ├── components/
 │   ├── habits/
 │   │   ├── HabitCard.tsx       # Mobile action button adaptation
@@ -64,18 +65,19 @@ src/
 │   └── ui/
 │       └── sheet.tsx           # NEW: shadcn Sheet component (via CLI)
 ├── hooks/
-│   ├── useHabits.ts            # + useHabitLogs infinite query hook
-│   └── useMobile.ts            # NEW: useIsMobile breakpoint hook
+│   ├── useHabitLogs.ts         # NEW: useHabitLogs infinite query hook
+│   └── useIsMobile.ts          # NEW: useIsMobile breakpoint hook
 ├── pages/
 │   ├── DashboardPage.tsx       # Responsive grid adjustments
 │   ├── GoalsPage.tsx           # Mobile list/detail toggle
 │   ├── HabitsPage.tsx          # Mobile padding, filter scroll, history button
 │   └── ProfilePage.tsx         # Mobile padding adjustments
 └── types/
-    └── habits.ts               # + HabitLogPageResponse type
+    ├── habits.ts               # Existing habit types (no changes)
+    └── habitLogs.ts            # NEW: HabitLog, HabitLogPageResponse types
 ```
 
-**Structure Decision**: Existing `src/` structure fully supports this feature. No new top-level directories needed. One new component (`HabitHistoryDrawer`), one new hook (`useMobile`), one new shadcn component (`sheet`). All other changes are modifications to existing files.
+**Structure Decision**: Existing `src/` structure fully supports this feature. No new top-level directories needed. One new component (`HabitHistoryDrawer`), one new hook (`useIsMobile`), one new shadcn component (`sheet`). All other changes are modifications to existing files.
 
 ## Complexity Tracking
 

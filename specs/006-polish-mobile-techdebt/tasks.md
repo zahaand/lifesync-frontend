@@ -21,7 +21,7 @@
 
 - [x] T001 Install shadcn Sheet component: run `npx shadcn@latest add sheet` — creates src/components/ui/sheet.tsx
 - [x] T002 Install shadcn DropdownMenu component: run `npx shadcn@latest add dropdown-menu` — creates src/components/ui/dropdown-menu.tsx
-- [x] T003 [P] Create `useIsMobile` hook in src/hooks/useMobile.ts — returns `{ isMobile: boolean, isTablet: boolean }` using `window.matchMedia` for breakpoints (< 768px mobile, 768–1023px tablet) per research.md R-005
+- [x] T003 [P] Create `useIsMobile` hook in src/hooks/useIsMobile.ts — returns `boolean` using `window.matchMedia('(max-width: 767px)')` per research.md R-005
 
 **Checkpoint**: Sheet, DropdownMenu components and useIsMobile hook available for all stories
 
@@ -33,9 +33,9 @@
 
 **⚠️ CRITICAL**: US2 (History Drawer) cannot begin until this phase is complete
 
-- [x] T004 [P] Add `HabitLogPageResponse` type to src/types/habits.ts — fields: `content: HabitLog[]`, `totalElements: number`, `totalPages: number`, `number: number`, `size: number` per data-model.md
-- [x] T005 [P] Add `getHabitLogs` function to src/api/habits.ts — `GET /habits/${habitId}/logs` with params `{ page?: number, size?: number }`, returns `HabitLogPageResponse` per contracts/habit-logs-api.md
-- [x] T006 Add `useHabitLogs(habitId: string)` hook to src/hooks/useHabits.ts — use `useInfiniteQuery` with query key `['habits', habitId, 'logs']`, `getNextPageParam` from response `number < totalPages - 1`, invalidate on `completeHabit`/`uncompleteHabit` mutations per research.md R-003
+- [x] T004 [P] Add `HabitLog` and `HabitLogPageResponse` types to src/types/habitLogs.ts — fields: `content: HabitLog[]`, `totalElements: number`, `totalPages: number`, `page: number`, `size: number` per data-model.md
+- [x] T005 [P] Add `getHabitLogs` function to src/api/habitLogs.ts — `GET /habits/${habitId}/logs` with params `{ page?: number, size?: number }`, returns `HabitLogPageResponse` per contracts/habit-logs-api.md
+- [x] T006 Add `useHabitLogs(habitId: string)` hook to src/hooks/useHabitLogs.ts — use `useInfiniteQuery` with query key `['habits', habitId, 'logs']`, `getNextPageParam` from response `page < totalPages - 1`, invalidate on `completeHabit`/`uncompleteHabit` mutations per research.md R-003
 
 **Checkpoint**: API layer and data-fetching hook ready for history drawer implementation
 
@@ -50,7 +50,7 @@
 ### Implementation for User Story 1
 
 - [x] T007 [US1] Refactor src/components/shared/Layout.tsx — implement three-mode responsive sidebar:
-  - Import `Sheet`, `SheetContent`, `SheetTrigger` from src/components/ui/sheet, `Menu` icon from lucide-react, and `useIsMobile` from src/hooks/useMobile
+  - Import `Sheet`, `SheetContent`, `SheetTrigger` from src/components/ui/sheet, `Menu` icon from lucide-react, and `useIsMobile` from src/hooks/useIsMobile
   - Mobile (< 768px): Hide `<aside>`, add header bar with hamburger `<Button>` (Menu icon) in top-left, open sidebar content inside `<Sheet side="left">`; close on NavLink click via `onOpenChange`
   - Tablet (768–1024px): Render `<aside>` with `w-16` instead of `w-64`, hide nav labels (show icons only), hide user info section
   - Desktop (> 1024px): Keep existing `w-64` sidebar unchanged
@@ -120,7 +120,7 @@
 ### Implementation for User Story 4
 
 - [x] T016 [US4] Refactor src/pages/GoalsPage.tsx for mobile list/detail toggle:
-  - Import `useIsMobile` from src/hooks/useMobile.ts and `ArrowLeft` from lucide-react
+  - Import `useIsMobile` from src/hooks/useIsMobile.ts and `ArrowLeft` from lucide-react
   - On mobile (isMobile=true): conditionally render either the goals list OR the GoalDetail based on `effectiveSelectedId`
     - When `effectiveSelectedId` is null: show goals list full-width
     - When `effectiveSelectedId` is set: show GoalDetail full-screen
@@ -145,7 +145,7 @@
 
 - [x] T019 [US5] Update filter tabs in src/components/habits/HabitFilters.tsx — wrap tab container in `overflow-x-auto flex-nowrap` with `scrollbar-hide` (or `-webkit-overflow-scrolling: touch`) to enable horizontal scroll on mobile per FR-011
 - [x] T020 [US5] Refactor HabitCard action buttons in src/components/habits/HabitCard.tsx for mobile:
-  - Import `useIsMobile` from src/hooks/useMobile.ts
+  - Import `useIsMobile` from src/hooks/useIsMobile.ts
   - Import `DropdownMenu`, `DropdownMenuContent`, `DropdownMenuItem`, `DropdownMenuTrigger` from src/components/ui/dropdown-menu and `MoreHorizontal` icon from lucide-react
   - On mobile: replace individual icon buttons with a single `MoreHorizontal` ("...") icon `Button` triggering a `DropdownMenu` containing items: Edit, Archive/Restore, Delete (if archived), History
   - On desktop: keep existing inline icon buttons and add History (Clock) button from T011
@@ -224,7 +224,7 @@
 # All three can run simultaneously:
 Task T001: Install shadcn Sheet
 Task T002: Install shadcn DropdownMenu
-Task T003: Create useIsMobile hook in src/hooks/useMobile.ts
+Task T003: Create useIsMobile hook in src/hooks/useIsMobile.ts
 
 # Then in Phase 2, two can run simultaneously:
 Task T004: Add HabitLogPageResponse type in src/types/habits.ts

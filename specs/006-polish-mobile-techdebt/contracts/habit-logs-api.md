@@ -40,7 +40,7 @@ Retrieve paginated completion log entries for a specific habit.
 }
 ```
 
-**Ordering**: Entries sorted by `completedAt` descending (most recent first).
+**Ordering**: Entries sorted by `createdAt` descending (most recent first).
 
 ### Error Responses
 
