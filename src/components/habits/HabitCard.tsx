@@ -1,7 +1,14 @@
-import { Pencil, Archive, RotateCcw, Trash2 } from 'lucide-react'
+import { Pencil, Archive, RotateCcw, Trash2, Clock, MoreHorizontal } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import useIsMobile from '@/hooks/useIsMobile'
 import type { Habit } from '@/types/habits'
 
 type HabitCardProps = {
@@ -12,6 +19,7 @@ type HabitCardProps = {
   onArchive: (habitId: string) => void
   onRestore: (habitId: string) => void
   onDelete: (habit: Habit) => void
+  onHistory: (habitId: string) => void
 }
 
 export default function HabitCard({
@@ -22,7 +30,9 @@ export default function HabitCard({
   onArchive,
   onRestore,
   onDelete,
+  onHistory,
 }: HabitCardProps) {
+  const isMobile = useIsMobile()
   const isArchived = !habit.isActive
 
   const handleCheckedChange = (checked: boolean | 'indeterminate') => {
@@ -35,7 +45,7 @@ export default function HabitCard({
 
   return (
     <Card
-      className={`flex items-center gap-3 px-4 py-3 rounded-xl mb-2 shadow-none ${
+      className={`flex items-center gap-3 rounded-xl px-4 py-3 mb-2 shadow-none ${
         isArchived
           ? 'opacity-60 bg-[#F5F4F0] border-[#E8E6DF]'
           : 'bg-white border-[#E8E6DF]'
@@ -50,18 +60,18 @@ export default function HabitCard({
         } data-[state=checked]:bg-[#534AB7] data-[state=checked]:border-[#534AB7]`}
       />
 
-      <div className="flex-1 min-w-0">
+      <div className="min-w-0 flex-1">
         <p
-          className={`text-[13px] font-medium truncate ${
+          className={`truncate text-[13px] font-medium ${
             habit.completedToday
-              ? 'line-through text-[#9E9B94]'
+              ? 'text-[#9E9B94] line-through'
               : 'text-[#2C2C2A]'
           }`}
         >
           {habit.title}
         </p>
-        <div className="flex items-center gap-2 mt-1">
-          <span className="bg-[#F5F4F0] text-[#666360] text-[10px] px-2 py-0.5 rounded-full">
+        <div className="mt-1 flex items-center gap-2">
+          <span className="rounded-full bg-[#F5F4F0] px-2 py-0.5 text-[10px] text-[#666360]">
             {habit.frequency}
           </span>
           <span className="text-[11px] text-[#9E9B94]">
@@ -71,51 +81,106 @@ export default function HabitCard({
       </div>
 
       {habit.currentStreak > 0 && (
-        <span className="bg-[#FAEEDA] text-[#854F0B] text-[11px] font-medium px-2.5 py-1 rounded-full whitespace-nowrap">
+        <span className="whitespace-nowrap rounded-full bg-[#FAEEDA] px-2.5 py-1 text-[11px] font-medium text-[#854F0B]">
           {'🔥'} {habit.currentStreak} day streak
         </span>
       )}
 
-      <div className="flex gap-1">
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => onEdit(habit)}
-          className="w-7 h-7 rounded-lg border-[#E8E6DF] bg-white"
-        >
-          <Pencil className="h-3.5 w-3.5 text-[#666360]" />
-        </Button>
-
-        {habit.isActive ? (
+      {/* Mobile: DropdownMenu */}
+      {isMobile ? (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 shrink-0"
+            >
+              <MoreHorizontal className="h-4 w-4 text-[#666360]" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => onEdit(habit)}>
+              <Pencil className="mr-2 h-4 w-4" />
+              Edit
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onHistory(habit.id)}>
+              <Clock className="mr-2 h-4 w-4" />
+              History
+            </DropdownMenuItem>
+            {habit.isActive ? (
+              <DropdownMenuItem onClick={() => onArchive(habit.id)}>
+                <Archive className="mr-2 h-4 w-4" />
+                Archive
+              </DropdownMenuItem>
+            ) : (
+              <>
+                <DropdownMenuItem onClick={() => onRestore(habit.id)}>
+                  <RotateCcw className="mr-2 h-4 w-4" />
+                  Restore
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => onDelete(habit)}
+                  className="text-red-500 focus:text-red-500"
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Delete
+                </DropdownMenuItem>
+              </>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ) : (
+        /* Desktop: inline icon buttons */
+        <div className="flex gap-1">
           <Button
             variant="outline"
             size="icon"
-            onClick={() => onArchive(habit.id)}
-            className="w-7 h-7 rounded-lg border-[#E8E6DF] bg-white"
+            onClick={() => onEdit(habit)}
+            className="h-7 w-7 rounded-lg border-[#E8E6DF] bg-white"
           >
-            <Archive className="h-3.5 w-3.5 text-[#666360]" />
+            <Pencil className="h-3.5 w-3.5 text-[#666360]" />
           </Button>
-        ) : (
-          <>
+
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => onHistory(habit.id)}
+            className="h-7 w-7 rounded-lg border-[#E8E6DF] bg-white"
+          >
+            <Clock className="h-3.5 w-3.5 text-[#666360]" />
+          </Button>
+
+          {habit.isActive ? (
             <Button
               variant="outline"
               size="icon"
-              onClick={() => onRestore(habit.id)}
-              className="w-7 h-7 rounded-lg border-[#E8E6DF] bg-white"
+              onClick={() => onArchive(habit.id)}
+              className="h-7 w-7 rounded-lg border-[#E8E6DF] bg-white"
             >
-              <RotateCcw className="h-3.5 w-3.5 text-[#666360]" />
+              <Archive className="h-3.5 w-3.5 text-[#666360]" />
             </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => onDelete(habit)}
-              className="w-7 h-7 rounded-lg border-[#FCA5A5] bg-white"
-            >
-              <Trash2 className="h-3.5 w-3.5 text-red-400" />
-            </Button>
-          </>
-        )}
-      </div>
+          ) : (
+            <>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => onRestore(habit.id)}
+                className="h-7 w-7 rounded-lg border-[#E8E6DF] bg-white"
+              >
+                <RotateCcw className="h-3.5 w-3.5 text-[#666360]" />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => onDelete(habit)}
+                className="h-7 w-7 rounded-lg border-[#FCA5A5] bg-white"
+              >
+                <Trash2 className="h-3.5 w-3.5 text-red-400" />
+              </Button>
+            </>
+          )}
+        </div>
+      )}
     </Card>
   )
 }
