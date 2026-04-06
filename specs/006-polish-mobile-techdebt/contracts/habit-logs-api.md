@@ -42,10 +42,11 @@ Retrieve paginated completion log entries for a specific habit.
 
 ### Error Responses
 
-| Status | Condition                    | Body                          |
-|--------|------------------------------|-------------------------------|
-| 401    | Not authenticated            | Standard auth error           |
-| 404    | Habit not found or not owned | `{ "message": "Not found" }` |
+| Status | Condition                    | Body                          | Frontend Handling              |
+|--------|------------------------------|-------------------------------|-------------------------------|
+| 401    | Not authenticated            | Standard auth error           | Redirect to login (interceptor) |
+| 404    | Habit not found or not owned | `{ "message": "Not found" }` | Close drawer, show toast       |
+| 500    | Server error                 | `{ "message": "Internal server error" }` | Show error state with Retry button |
 
 ### Frontend Integration
 

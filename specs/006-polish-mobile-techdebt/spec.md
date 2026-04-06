@@ -137,14 +137,14 @@ A user views their Profile page on mobile. The layout remains single-column with
 - **FR-002**: System MUST collapse the sidebar to icon-only mode on screens between 768px and 1024px.
 - **FR-003**: System MUST close the sidebar overlay when a navigation link is tapped or when the user taps outside the overlay.
 - **FR-004**: System MUST provide a side panel (drawer) showing habit completion history when the user clicks a dedicated "History" button on the habit card.
-- **FR-005**: The history drawer MUST display log entries with date and time (e.g., "Apr 5, 2026 at 14:30") in chronological order (most recent first).
+- **FR-005**: The history drawer MUST display log entries with date and time (e.g., "Apr 5, 2026 at 14:30") in chronological order (most recent first). While logs are loading, the drawer MUST show skeleton placeholder rows. If loading fails, the drawer MUST show an error message with a Retry button.
 - **FR-006**: The history drawer MUST support pagination with a "Load more" button that appends additional entries.
 - **FR-007**: The history drawer MUST show an empty state message when no log entries exist.
 - **FR-008**: System MUST reflow the Dashboard stats row to a 2-column grid on screens narrower than 768px.
 - **FR-009**: System MUST stack Dashboard card columns into a single column on screens narrower than 768px.
 - **FR-010**: System MUST display the Goals page as a single-column list on screens narrower than 768px, with tap-to-view-detail, a back button (← icon + "Back" label), and auto-return to list after goal deletion.
 - **FR-011**: System MUST enable horizontal scrolling for Habits page filter tabs when they overflow on mobile.
-- **FR-012**: System MUST stack or collapse habit card action buttons on mobile to prevent overflow.
+- **FR-012**: On mobile (< 768px), HabitCard action buttons (Edit, Archive, Delete, History) MUST be grouped into a DropdownMenu triggered by a "..." (ellipsis) icon button. On desktop (>= 768px), individual icon buttons remain visible inline.
 - **FR-013**: System MUST adjust Profile page padding for comfortable mobile interaction.
 - **FR-014**: System MUST disable the "Load more" button while a page of history entries is being fetched to prevent duplicate requests.
 - **FR-015**: All pages MUST maintain full functionality on desktop (screens wider than 1024px) without regression.
@@ -168,7 +168,7 @@ A user views their Profile page on mobile. The layout remains single-column with
 ## Assumptions
 
 - Users access the application on modern mobile browsers (Safari on iOS 15+, Chrome on Android 10+) that support standard responsive layout features.
-- The backend already exposes or will expose a paginated endpoint for habit completion logs (GET /api/v1/habits/{id}/logs).
+- The backend already exposes a paginated endpoint for habit completion logs (GET /api/v1/habits/{id}/logs). Verify availability via Swagger before implementation.
 - Page size for habit log pagination defaults to 20 entries per page (industry-standard default for list views).
 - The existing desktop layouts for all pages are complete and functional (Sprints 1–5 merged).
 - Touch interactions follow platform conventions (swipe to close drawers, tap targets per mobile accessibility guidelines).
