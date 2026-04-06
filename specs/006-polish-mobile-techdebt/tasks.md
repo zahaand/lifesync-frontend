@@ -19,9 +19,9 @@
 
 **Purpose**: Install new shadcn components and create shared utilities
 
-- [ ] T001 Install shadcn Sheet component: run `npx shadcn@latest add sheet` — creates src/components/ui/sheet.tsx
-- [ ] T002 Install shadcn DropdownMenu component: run `npx shadcn@latest add dropdown-menu` — creates src/components/ui/dropdown-menu.tsx
-- [ ] T003 [P] Create `useIsMobile` hook in src/hooks/useMobile.ts — returns `{ isMobile: boolean, isTablet: boolean }` using `window.matchMedia` for breakpoints (< 768px mobile, 768–1023px tablet) per research.md R-005
+- [x] T001 Install shadcn Sheet component: run `npx shadcn@latest add sheet` — creates src/components/ui/sheet.tsx
+- [x] T002 Install shadcn DropdownMenu component: run `npx shadcn@latest add dropdown-menu` — creates src/components/ui/dropdown-menu.tsx
+- [x] T003 [P] Create `useIsMobile` hook in src/hooks/useMobile.ts — returns `{ isMobile: boolean, isTablet: boolean }` using `window.matchMedia` for breakpoints (< 768px mobile, 768–1023px tablet) per research.md R-005
 
 **Checkpoint**: Sheet, DropdownMenu components and useIsMobile hook available for all stories
 
@@ -33,9 +33,9 @@
 
 **⚠️ CRITICAL**: US2 (History Drawer) cannot begin until this phase is complete
 
-- [ ] T004 [P] Add `HabitLogPageResponse` type to src/types/habits.ts — fields: `content: HabitLog[]`, `totalElements: number`, `totalPages: number`, `number: number`, `size: number` per data-model.md
-- [ ] T005 [P] Add `getHabitLogs` function to src/api/habits.ts — `GET /habits/${habitId}/logs` with params `{ page?: number, size?: number }`, returns `HabitLogPageResponse` per contracts/habit-logs-api.md
-- [ ] T006 Add `useHabitLogs(habitId: string)` hook to src/hooks/useHabits.ts — use `useInfiniteQuery` with query key `['habits', habitId, 'logs']`, `getNextPageParam` from response `number < totalPages - 1`, invalidate on `completeHabit`/`uncompleteHabit` mutations per research.md R-003
+- [x] T004 [P] Add `HabitLogPageResponse` type to src/types/habits.ts — fields: `content: HabitLog[]`, `totalElements: number`, `totalPages: number`, `number: number`, `size: number` per data-model.md
+- [x] T005 [P] Add `getHabitLogs` function to src/api/habits.ts — `GET /habits/${habitId}/logs` with params `{ page?: number, size?: number }`, returns `HabitLogPageResponse` per contracts/habit-logs-api.md
+- [x] T006 Add `useHabitLogs(habitId: string)` hook to src/hooks/useHabits.ts — use `useInfiniteQuery` with query key `['habits', habitId, 'logs']`, `getNextPageParam` from response `number < totalPages - 1`, invalidate on `completeHabit`/`uncompleteHabit` mutations per research.md R-003
 
 **Checkpoint**: API layer and data-fetching hook ready for history drawer implementation
 
@@ -49,15 +49,15 @@
 
 ### Implementation for User Story 1
 
-- [ ] T007 [US1] Refactor src/components/shared/Layout.tsx — implement three-mode responsive sidebar:
+- [x] T007 [US1] Refactor src/components/shared/Layout.tsx — implement three-mode responsive sidebar:
   - Import `Sheet`, `SheetContent`, `SheetTrigger` from src/components/ui/sheet, `Menu` icon from lucide-react, and `useIsMobile` from src/hooks/useMobile
   - Mobile (< 768px): Hide `<aside>`, add header bar with hamburger `<Button>` (Menu icon) in top-left, open sidebar content inside `<Sheet side="left">`; close on NavLink click via `onOpenChange`
   - Tablet (768–1024px): Render `<aside>` with `w-16` instead of `w-64`, hide nav labels (show icons only), hide user info section
   - Desktop (> 1024px): Keep existing `w-64` sidebar unchanged
   - Add `sidebarOpen` state (boolean) for mobile Sheet control
   - Main content: On mobile add top padding to account for header bar; on tablet adjust left margin for w-16 sidebar
-- [ ] T008 [US1] Update sidebar NavLink rendering in src/components/shared/Layout.tsx — conditionally render `{item.label}` only when `!isTablet` (desktop mode); on tablet, wrap icon in a `title` attribute or Tooltip for accessibility per research.md R-001
-- [ ] T009 [US1] Update sidebar user info section in src/components/shared/Layout.tsx — hide displayName/email block and show only LogOut icon button on tablet; on mobile, show full user info inside Sheet content
+- [x] T008 [US1] Update sidebar NavLink rendering in src/components/shared/Layout.tsx — conditionally render `{item.label}` only when `!isTablet` (desktop mode); on tablet, wrap icon in a `title` attribute or Tooltip for accessibility per research.md R-001
+- [x] T009 [US1] Update sidebar user info section in src/components/shared/Layout.tsx — hide displayName/email block and show only LogOut icon button on tablet; on mobile, show full user info inside Sheet content
 
 **Checkpoint**: Mobile navigation fully functional — users can navigate all pages on any viewport width
 
@@ -71,7 +71,7 @@
 
 ### Implementation for User Story 2
 
-- [ ] T010 [US2] Create HabitHistoryDrawer component in src/components/habits/HabitHistoryDrawer.tsx:
+- [x] T010 [US2] Create HabitHistoryDrawer component in src/components/habits/HabitHistoryDrawer.tsx:
   - Props: `habitId: string | null`, `open: boolean`, `onOpenChange: (open: boolean) => void`
   - Use `Sheet` (side="right") from src/components/ui/sheet
   - Use `useHabitLogs(habitId)` hook from src/hooks/useHabits.ts
@@ -81,12 +81,12 @@
   - Log entries: display each as "MMM D, YYYY at HH:mm" using `toLocaleDateString`/`toLocaleTimeString` with `en-US` locale per research.md R-006
   - "Load more" `Button` at bottom: calls `fetchNextPage()`, disabled while `isFetchingNextPage` is true per FR-006/FR-014; hidden when `!hasNextPage`
   - Header: show habit title and close button
-- [ ] T011 [US2] Add "History" button to HabitCard in src/components/habits/HabitCard.tsx:
+- [x] T011 [US2] Add "History" button to HabitCard in src/components/habits/HabitCard.tsx:
   - Add `onHistory: (habitId: string) => void` callback prop
   - Add `History` icon button (Clock icon from lucide-react) to the action buttons area (desktop view)
   - Button calls `onHistory(habit.id)` on click
   - This button will also appear in the mobile DropdownMenu (handled in US5)
-- [ ] T012 [US2] Integrate HabitHistoryDrawer in src/pages/HabitsPage.tsx:
+- [x] T012 [US2] Integrate HabitHistoryDrawer in src/pages/HabitsPage.tsx:
   - Add `historyDrawerOpen` (boolean) and `historyHabitId` (string | null) state
   - Pass `onHistory` callback to each `HabitCard` that sets `historyHabitId` and opens drawer
   - Render `<HabitHistoryDrawer habitId={historyHabitId} open={historyDrawerOpen} onOpenChange={setHistoryDrawerOpen} />`
@@ -103,9 +103,9 @@
 
 ### Implementation for User Story 3
 
-- [ ] T013 [US3] Update stats row grid in src/pages/DashboardPage.tsx (StatsRow component) — the existing class `grid grid-cols-2 gap-3 md:grid-cols-4` already implements mobile-first 2-col → 4-col. Verify this is correct and adjust gap/padding if needed for mobile comfort (min 44px tap targets per SC-007)
-- [ ] T014 [US3] Update two-column card grid in src/pages/DashboardPage.tsx (DashboardPage component) — the existing class `grid grid-cols-1 gap-5 lg:grid-cols-2` already stacks on mobile. Verify correctness, adjust padding for mobile: ensure p-4 on mobile vs p-6 on desktop for main content area
-- [ ] T015 [US3] Adjust top bar layout in src/pages/DashboardPage.tsx — ensure greeting text and "New habit" button wrap gracefully on narrow screens (flex-wrap or stack vertically on mobile)
+- [x] T013 [US3] Update stats row grid in src/pages/DashboardPage.tsx (StatsRow component) — the existing class `grid grid-cols-2 gap-3 md:grid-cols-4` already implements mobile-first 2-col → 4-col. Verify this is correct and adjust gap/padding if needed for mobile comfort (min 44px tap targets per SC-007)
+- [x] T014 [US3] Update two-column card grid in src/pages/DashboardPage.tsx (DashboardPage component) — the existing class `grid grid-cols-1 gap-5 lg:grid-cols-2` already stacks on mobile. Verify correctness, adjust padding for mobile: ensure p-4 on mobile vs p-6 on desktop for main content area
+- [x] T015 [US3] Adjust top bar layout in src/pages/DashboardPage.tsx — ensure greeting text and "New habit" button wrap gracefully on narrow screens (flex-wrap or stack vertically on mobile)
 
 **Checkpoint**: Dashboard readable and usable on all viewport sizes
 
@@ -119,17 +119,17 @@
 
 ### Implementation for User Story 4
 
-- [ ] T016 [US4] Refactor src/pages/GoalsPage.tsx for mobile list/detail toggle:
+- [x] T016 [US4] Refactor src/pages/GoalsPage.tsx for mobile list/detail toggle:
   - Import `useIsMobile` from src/hooks/useMobile.ts and `ArrowLeft` from lucide-react
   - On mobile (isMobile=true): conditionally render either the goals list OR the GoalDetail based on `effectiveSelectedId`
     - When `effectiveSelectedId` is null: show goals list full-width
     - When `effectiveSelectedId` is set: show GoalDetail full-screen
   - On tablet/desktop: keep existing `grid grid-cols-[380px_1fr]` layout unchanged
   - Remove `h-[calc(100vh-0px)]` on mobile — use `min-h-0` or auto height
-- [ ] T017 [US4] Add back button to GoalDetail view on mobile in src/pages/GoalsPage.tsx:
+- [x] T017 [US4] Add back button to GoalDetail view on mobile in src/pages/GoalsPage.tsx:
   - When `isMobile` and `effectiveSelectedId` is set, render a back button above GoalDetail: `<Button variant="ghost">` with `<ArrowLeft />` icon and "Back" text label
   - Back button calls `setSelectedGoalId(null)` to return to list
-- [ ] T018 [US4] Ensure auto-return to list on goal deletion in src/pages/GoalsPage.tsx — verify `handleDeleted` already calls `setSelectedGoalId(null)` (it does) — no code change needed if logic is correct, but confirm behavior on mobile viewport
+- [x] T018 [US4] Ensure auto-return to list on goal deletion in src/pages/GoalsPage.tsx — verify `handleDeleted` already calls `setSelectedGoalId(null)` (it does) — no code change needed if logic is correct, but confirm behavior on mobile viewport
 
 **Checkpoint**: Goals page fully navigable on mobile — list → detail → back flow works
 
@@ -143,14 +143,14 @@
 
 ### Implementation for User Story 5
 
-- [ ] T019 [US5] Update filter tabs in src/components/habits/HabitFilters.tsx — wrap tab container in `overflow-x-auto flex-nowrap` with `scrollbar-hide` (or `-webkit-overflow-scrolling: touch`) to enable horizontal scroll on mobile per FR-011
-- [ ] T020 [US5] Refactor HabitCard action buttons in src/components/habits/HabitCard.tsx for mobile:
+- [x] T019 [US5] Update filter tabs in src/components/habits/HabitFilters.tsx — wrap tab container in `overflow-x-auto flex-nowrap` with `scrollbar-hide` (or `-webkit-overflow-scrolling: touch`) to enable horizontal scroll on mobile per FR-011
+- [x] T020 [US5] Refactor HabitCard action buttons in src/components/habits/HabitCard.tsx for mobile:
   - Import `useIsMobile` from src/hooks/useMobile.ts
   - Import `DropdownMenu`, `DropdownMenuContent`, `DropdownMenuItem`, `DropdownMenuTrigger` from src/components/ui/dropdown-menu and `MoreHorizontal` icon from lucide-react
   - On mobile: replace individual icon buttons with a single `MoreHorizontal` ("...") icon `Button` triggering a `DropdownMenu` containing items: Edit, Archive/Restore, Delete (if archived), History
   - On desktop: keep existing inline icon buttons and add History (Clock) button from T011
   - Each DropdownMenuItem calls the same handlers as the inline buttons per FR-012
-- [ ] T021 [US5] Adjust spacing/padding in src/pages/HabitsPage.tsx — add mobile-appropriate padding: `px-4 md:px-6` on the page container, ensure minimum 44px tap target areas on interactive elements per SC-007
+- [x] T021 [US5] Adjust spacing/padding in src/pages/HabitsPage.tsx — add mobile-appropriate padding: `px-4 md:px-6` on the page container, ensure minimum 44px tap target areas on interactive elements per SC-007
 
 **Checkpoint**: Habits page polished for mobile touch interaction
 
@@ -164,8 +164,8 @@
 
 ### Implementation for User Story 6
 
-- [ ] T022 [US6] Adjust padding in src/pages/ProfilePage.tsx — update container class: add `px-4 md:px-0` for mobile side padding, verify `max-w-[680px]` works well on narrow screens (may need to be full-width on mobile with `max-w-full md:max-w-[680px]`)
-- [ ] T023 [US6] Verify stats card grid in src/components/profile/StatsCard.tsx (or equivalent) — confirm 2-column grid is preserved on mobile per spec, adjust gap and padding for touch comfort if needed
+- [x] T022 [US6] Adjust padding in src/pages/ProfilePage.tsx — update container class: add `px-4 md:px-0` for mobile side padding, verify `max-w-[680px]` works well on narrow screens (may need to be full-width on mobile with `max-w-full md:max-w-[680px]`)
+- [x] T023 [US6] Verify stats card grid in src/components/profile/StatsCard.tsx (or equivalent) — confirm 2-column grid is preserved on mobile per spec, adjust gap and padding for touch comfort if needed
 
 **Checkpoint**: Profile page comfortable on mobile devices
 
@@ -175,10 +175,10 @@
 
 **Purpose**: Final verification across all viewports and code quality
 
-- [ ] T024 [P] Run `npx tsc -b` — fix any TypeScript errors across all modified files
-- [ ] T025 [P] Run `npx eslint .` — fix any lint warnings across all modified files
-- [ ] T026 Cross-viewport regression test: manually verify all 5 pages at 320px, 375px, 768px, 1024px, 1440px widths per quickstart.md — confirm no horizontal overflow, no broken layouts, no desktop regressions (SC-001, SC-006)
-- [ ] T027 Verify all interactive elements have minimum 44x44px tap targets on mobile (SC-007) — spot-check buttons, checkboxes, navigation links across all pages
+- [x] T024 [P] Run `npx tsc -b` — fix any TypeScript errors across all modified files
+- [x] T025 [P] Run `npx eslint .` — fix any lint warnings across all modified files
+- [x] T026 Cross-viewport regression test: manually verify all 5 pages at 320px, 375px, 768px, 1024px, 1440px widths per quickstart.md — confirm no horizontal overflow, no broken layouts, no desktop regressions (SC-001, SC-006)
+- [x] T027 Verify all interactive elements have minimum 44x44px tap targets on mobile (SC-007) — spot-check buttons, checkboxes, navigation links across all pages
 
 ---
 
