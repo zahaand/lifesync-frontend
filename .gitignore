@@ -16,6 +16,7 @@ playwright-report
 *.local
 .env
 .env.local
+.env.production
 .env.*.local
 
 # Editor directories and files
