@@ -1,10 +1,10 @@
 🇷🇺 Описание на русском ниже / 🇬🇧 Russian description below
 
-# LifeSync Frontend v1.0.0
+# LifeSync Frontend v1.1.0
 
 B2C habit and goal tracking web application. Built with React 19 and TypeScript 5.9 using a strict layered architecture with server state isolation.
 
-46 unit tests | 22 E2E tests | 7 sprints | full mobile support
+55 unit tests | 22 E2E tests | 8 sprints | full mobile support | dark mode
 
 ## Methodology
 
@@ -65,6 +65,10 @@ JWT-based authentication with access and refresh tokens. Access token is stored 
 
 Paginated completion log for each habit (TD-002). Uses `useInfiniteQuery` to fetch `GET /habits/{id}/logs` with server-side pagination. Each log entry displays the completion date and time extracted from the `createdAt` timestamp. The drawer includes skeleton loading states, error handling with retry, and a "Load more" button for pagination.
 
+### Dark Mode
+
+Dark mode with system preference detection on first visit and a persistent theme toggle in the user menu. An inline `<head>` script prevents FOCT (Flash of Incorrect Theme) by applying the saved theme class before React renders. The Zustand theme store manages the `'light' | 'dark'` state without persist middleware to avoid race conditions with the inline script. All 24 files with hardcoded colors received `dark:` Tailwind variants using a zinc-based token system.
+
 ### Smart Greeting
 
 The dashboard greeting uses `displayName` from the user profile when available, falling back to `username`. The time-of-day greeting (Good morning / Good afternoon / Good evening) is determined client-side based on the current hour.
@@ -82,6 +86,7 @@ Unit and component tests use Vitest with happy-dom, Testing Library for renderin
 - **Sprint 5: Profile** — account settings, display name, Telegram linking, stats card, danger zone with account deletion
 - **Sprint 6: Mobile adaptation** — responsive layout for all pages, hamburger + Sheet sidebar, Goals master-detail toggle, HabitCard DropdownMenu, habit completion history drawer (TD-002)
 - **Sprint 7: Pre-release** — unit tests, E2E tests, data-testid strategy, documentation, build verification
+- **Sprint 8: Dark mode** — class-based Tailwind CSS v4 dark theme, FOCT prevention, OS preference detection, user menu update
 
 ## Screenshots
 
@@ -142,7 +147,7 @@ npm run dev
 
 ### Unit and Component Tests
 
-Vitest with happy-dom environment, Testing Library for component rendering, and MSW 2.x for intercepting API calls. 9 test files, 46 test cases.
+Vitest with happy-dom environment, Testing Library for component rendering, and MSW 2.x for intercepting API calls. 10 test files, 55 test cases.
 
 ```bash
 npm test                # Run all tests
@@ -173,7 +178,7 @@ src/
 │   └── profile/    # AccountCard, StatsCard, TelegramCard, DangerZoneCard
 ├── hooks/          # React Query hooks and utilities (useHabits, useGoals, useAuth, useIsMobile)
 ├── pages/          # Route pages (LoginPage, DashboardPage, HabitsPage, GoalsPage, ProfilePage)
-├── stores/         # Zustand stores (authStore — tokens, user state)
+├── stores/         # Zustand stores (authStore — tokens, user state; themeStore — dark mode)
 ├── test/           # Test setup, MSW handlers, test utilities
 ├── types/          # TypeScript type definitions (auth, habits, goals, users, habitLogs)
 └── lib/            # Utility functions (cn)
@@ -187,11 +192,11 @@ tests/
 
 ---
 
-# LifeSync Frontend v1.0.0
+# LifeSync Frontend v1.1.0
 
 B2C веб-приложение для трекинга привычек и целей. Построено на React 19 и TypeScript 5.9 со строгой слоистой архитектурой и изоляцией серверного состояния.
 
-46 юнит-тестов | 22 E2E-теста | 7 спринтов | полная мобильная поддержка
+55 юнит-тестов | 22 E2E-теста | 8 спринтов | полная мобильная поддержка | тёмная тема
 
 ## Методология
 
@@ -252,6 +257,10 @@ JWT-аутентификация с access- и refresh-токенами. Access-
 
 Пагинированный лог выполнений для каждой привычки (TD-002). Использует `useInfiniteQuery` для получения `GET /habits/{id}/logs` с серверной пагинацией. Каждая запись лога отображает дату выполнения и время, извлечённое из поля `createdAt`. Drawer включает skeleton-состояния загрузки, обработку ошибок с повторной попыткой и кнопку «Загрузить ещё» для пагинации.
 
+### Тёмная тема
+
+Тёмная тема с определением системных настроек при первом визите и переключателем в меню пользователя. Инлайн-скрипт в `<head>` предотвращает FOCT (Flash of Incorrect Theme), применяя сохранённый класс темы до рендеринга React. Zustand-хранилище управляет состоянием `'light' | 'dark'` без persist middleware во избежание race condition с инлайн-скриптом. Все 24 файла с хардкодными цветами получили `dark:` Tailwind-варианты на основе zinc-токенов.
+
 ### Умное приветствие
 
 Приветствие на дашборде использует `displayName` из профиля пользователя, если доступно, с фоллбэком на `username`. Приветствие по времени суток (Доброе утро / Добрый день / Добрый вечер) определяется на клиенте по текущему часу.
@@ -269,6 +278,7 @@ JWT-аутентификация с access- и refresh-токенами. Access-
 - **Спринт 5: Профиль** — настройки аккаунта, отображаемое имя, привязка Telegram, карточка статистики, danger zone с удалением аккаунта
 - **Спринт 6: Мобильная адаптация** — адаптивная раскладка для всех страниц, hamburger + Sheet sidebar, Goals master-detail переключение, HabitCard DropdownMenu, drawer истории выполнений привычек (TD-002)
 - **Спринт 7: Предрелиз** — юнит-тесты, E2E-тесты, стратегия data-testid, документация, проверка сборки
+- **Спринт 8: Тёмная тема** — class-based Tailwind CSS v4, FOCT prevention, определение OS preference, обновление меню
 
 ## Скриншоты
 
@@ -329,7 +339,7 @@ npm run dev
 
 ### Юнит- и компонентные тесты
 
-Vitest с окружением happy-dom, Testing Library для рендеринга компонентов, MSW 2.x для перехвата API-вызовов. 9 файлов тестов, 46 тест-кейсов.
+Vitest с окружением happy-dom, Testing Library для рендеринга компонентов, MSW 2.x для перехвата API-вызовов. 10 файлов тестов, 55 тест-кейсов.
 
 ```bash
 npm test                # Запуск всех тестов
@@ -360,7 +370,7 @@ src/
 │   └── profile/    # AccountCard, StatsCard, TelegramCard, DangerZoneCard
 ├── hooks/          # React Query хуки и утилиты (useHabits, useGoals, useAuth, useIsMobile)
 ├── pages/          # Страницы маршрутов (LoginPage, DashboardPage, HabitsPage, GoalsPage, ProfilePage)
-├── stores/         # Zustand-хранилища (authStore — токены, состояние пользователя)
+├── stores/         # Zustand-хранилища (authStore — токены, состояние пользователя; themeStore — тёмная тема)
 ├── test/           # Настройка тестов, MSW-обработчики, тестовые утилиты
 ├── types/          # TypeScript-определения типов (auth, habits, goals, users, habitLogs)
 └── lib/            # Утилиты (cn)
