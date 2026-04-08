@@ -7,6 +7,45 @@
 
 **Organization**: Tasks grouped by user story. US1 and US2 share foundational work (themeStore + FOCT script). US3 is the menu update. US4 covers all hardcoded color dark variants.
 
+## Approved Dark Mode Color Tokens
+
+```
+Page background:    bg-zinc-950         (#09090b)
+Cards / stat cards: bg-zinc-900         (#18181b)
+Sidebar:            bg-[#111113]
+Borders:            border-zinc-800     (#27272a)
+Primary text:       text-zinc-50        (#fafafa)
+Muted text:         text-zinc-500       (#71717a)
+Hints / labels:     text-zinc-600       (#52525b)
+
+Logo #534AB7:       unchanged in both modes
+Green #1D9E75:      unchanged in both modes
+
+Streak badge dark:
+  dark:bg-amber-950 dark:text-amber-400
+
+Done today badge dark:
+  dark:bg-emerald-950 dark:text-green-400
+
+Frequency badge dark:
+  dark:bg-zinc-800 dark:text-zinc-400 dark:border-zinc-700
+
+Version label dark:
+  dark:text-zinc-700
+
+Login page bg dark:
+  dark:bg-background  (CSS variable — resolves to ~#09090b)
+
+User chip dropdown dark:
+  background: bg-[#1c1c1e], border: border-zinc-700
+  menu items: text-zinc-50, hover: hover:bg-zinc-800
+  Log out item: text-red-400 hover:text-red-300
+
+Sun/Moon icon in dropdown:
+  Sun (light mode when dark): text-amber-400
+  Moon (dark mode when light): text-zinc-400
+```
+
 ## Format: `[ID] [P?] [Story] Description`
 
 - **[P]**: Can run in parallel (different files, no dependencies)
@@ -47,13 +86,13 @@
 
 ### Implementation for User Story 1
 
-- [ ] T004 [US1] Update `UserChip` component in `src/components/shared/Layout.tsx`: (1) import `Sun`, `Moon` from `lucide-react` and `useThemeStore` from `@/stores/themeStore`, (2) read `theme` and `toggleTheme` from the store, (3) replace the Profile `DropdownMenuItem` (the one with `<User>` icon and `navigate('/profile')`) with a theme toggle `DropdownMenuItem` that calls `toggleTheme()` on click, displays `Moon` icon + "Dark mode" text when `theme === 'light'`, and `Sun` icon + "Light mode" text when `theme === 'dark'`, (4) keep the Log out `DropdownMenuItem` unchanged, (5) remove the `DropdownMenuSeparator` between old Profile and Log out, (6) remove `User` icon import from lucide-react if no longer used, remove `useNavigate` import if no longer used in `UserChip`.
+- [ ] T004 [US1] Update `UserChip` component in `src/components/shared/Layout.tsx`: (1) import `Sun`, `Moon` from `lucide-react` and `useThemeStore` from `@/stores/themeStore`, (2) read `theme` and `toggleTheme` from the store, (3) replace the Profile `DropdownMenuItem` (the one with `<User>` icon and `navigate('/profile')`) with a theme toggle `DropdownMenuItem` that calls `toggleTheme()` on click, displays `Moon` icon + "Dark mode" text when `theme === 'light'`, and `Sun` icon + "Light mode" text when `theme === 'dark'`, (4) keep the Log out `DropdownMenuItem` unchanged, (5) remove the `DropdownMenuSeparator` between old Profile and Log out, (6) remove `User` icon import from lucide-react if no longer used, remove `useNavigate` import if no longer used in `UserChip`. **Design tokens**: Sun icon: `text-amber-400`. Moon icon: `text-zinc-400`. DropdownMenuContent dark: `dark:bg-[#1c1c1e] dark:border-zinc-700`. Menu items: `dark:text-zinc-50 dark:hover:bg-zinc-800`. Log out item: `dark:text-red-400 dark:focus:text-red-300`.
 
-- [ ] T005 [US1] Add `dark:` variants to sidebar in `src/components/shared/Layout.tsx`: (1) avatar background `bg-[#EEF2FF]` → add `dark:bg-[#534AB7]/20`, (2) active nav item `bg-[#EEEDFE]` → add `dark:bg-[#534AB7]/20`, (3) active nav item `text-[#534AB7]` — keep unchanged (readable on dark), (4) logo text `text-[#534AB7]` — keep unchanged, (5) version label `text-muted-foreground/50` → add `dark:text-muted-foreground/70` for better legibility, (6) mobile top bar `border-[#E8E6DF]` → add `dark:border-border`.
+- [ ] T005 [US1] Add `dark:` variants to sidebar in `src/components/shared/Layout.tsx`: (1) sidebar container: add `dark:bg-[#111113]`, (2) avatar background `bg-[#EEF2FF]` → add `dark:bg-[#534AB7]/20`, (3) active nav item `bg-[#EEEDFE]` → add `dark:bg-[#534AB7]/20`, (4) active nav item `text-[#534AB7]` — keep unchanged (readable on dark), (5) logo text `text-[#534AB7]` — keep unchanged, (6) version label: add `dark:text-zinc-700`, (7) mobile top bar `border-[#E8E6DF]` → add `dark:border-zinc-800`.
 
-- [ ] T006 [P] [US1] Add `dark:` variants to `src/pages/LoginPage.tsx`: (1) main container `bg-[#F1EFE8]` → replace with `bg-background` (uses CSS variable, auto-adapts to dark), (2) form container `bg-white` → add `dark:bg-card`, (3) border `border-[#C7C4BB]` → add `dark:border-border`, (4) tab borders and backgrounds — active tab `bg-[#534AB7] text-[#EEEDFE]` stays (readable), inactive tab `bg-white text-[#666360] hover:bg-[#F5F4F0]` → add `dark:bg-card dark:text-muted-foreground dark:hover:bg-accent`, (5) input fields: `text-[#2C2C2A]` → add `dark:text-foreground`, `placeholder:text-[#9E9B94]` → add `dark:placeholder:text-muted-foreground`, `border-[#C7C4BB]` → add `dark:border-border`, `bg-[#F5F4F0]` (filled state) → add `dark:bg-accent`, `bg-white` (empty state) → add `dark:bg-card`, `focus:border-[#534AB7] focus:ring-[#534AB7]` — keep (brand color), (6) submit button `bg-[#534AB7] hover:bg-[#3C3489] text-[#EEEDFE]` — keep (brand), (7) success message `text-[#085041] bg-[#E1F5EE] border-[#9FE1CB]` → add `dark:text-emerald-300 dark:bg-emerald-900/20 dark:border-emerald-800`, (8) link colors `text-[#534AB7]` — keep (brand).
+- [ ] T006 [P] [US1] Add `dark:` variants to `src/pages/LoginPage.tsx`: (1) main container `bg-[#F1EFE8]` → replace with `bg-background` (CSS variable — resolves to ~#09090b in dark mode automatically), (2) form container `bg-white` → add `dark:bg-zinc-900`, (3) border `border-[#C7C4BB]` → add `dark:border-zinc-800`, (4) tab borders and backgrounds — active tab `bg-[#534AB7] text-[#EEEDFE]` stays (readable), inactive tab `bg-white text-[#666360] hover:bg-[#F5F4F0]` → add `dark:bg-zinc-900 dark:text-zinc-500 dark:hover:bg-zinc-800`, (5) input fields: `text-[#2C2C2A]` → add `dark:text-zinc-50`, `placeholder:text-[#9E9B94]` → add `dark:placeholder:text-zinc-600`, `border-[#C7C4BB]` → add `dark:border-zinc-800`, `bg-[#F5F4F0]` (filled state) → add `dark:bg-zinc-800`, `bg-white` (empty state) → add `dark:bg-zinc-900`, `focus:border-[#534AB7] focus:ring-[#534AB7]` — keep (brand color), (6) submit button `bg-[#534AB7] hover:bg-[#3C3489] text-[#EEEDFE]` — keep (brand), (7) success message `text-[#085041] bg-[#E1F5EE] border-[#9FE1CB]` → add `dark:text-emerald-300 dark:bg-emerald-900/20 dark:border-emerald-800`, (8) link colors `text-[#534AB7]` — keep (brand).
 
-- [ ] T007 [P] [US1] Add `dark:` variants to `src/pages/DashboardPage.tsx` (~40 hardcoded colors). Apply the color mapping from plan.md §D5: text colors (`#2C2C2A` → `dark:text-foreground`, `#666360` → `dark:text-muted-foreground`, `#9E9B94` ��� `dark:text-muted-foreground`), backgrounds (`#F5F4F0` → `dark:bg-accent`, `bg-white` → `dark:bg-card`), borders (`#E8E6DF` → `dark:border-border`, `#C7C4BB` → `dark:border-border`), status badges (streak amber `text-[#854F0B] bg-[#FAEEDA]` → `dark:text-amber-300 dark:bg-amber-900/30`, completed green `text-[#3B6D11] bg-[#EAF3DE]` → `dark:text-green-400 dark:bg-green-900/30`). Keep all `#534AB7` and `#1D9E75` unchanged.
+- [ ] T007 [P] [US1] Add `dark:` variants to `src/pages/DashboardPage.tsx` (~40 hardcoded colors). Apply approved tokens: text (`#2C2C2A` → `dark:text-zinc-50`, `#666360` → `dark:text-zinc-500`, `#9E9B94` → `dark:text-zinc-600`), backgrounds (`#F5F4F0` → `dark:bg-zinc-800`, `bg-white` → `dark:bg-zinc-900`), borders (`#E8E6DF` → `dark:border-zinc-800`, `#C7C4BB` → `dark:border-zinc-800`), streak badge (`text-[#854F0B] bg-[#FAEEDA]` → `dark:text-amber-400 dark:bg-amber-950`), completed green (`text-[#3B6D11] bg-[#EAF3DE]` → `dark:text-green-400 dark:bg-emerald-950`). Keep all `#534AB7` and `#1D9E75` unchanged.
 
 - [ ] T008 [P] [US1] Add `dark:` variants to `src/pages/HabitsPage.tsx` (5 hardcoded colors). Same mapping as T007.
 
@@ -61,9 +100,9 @@
 
 - [ ] T010 [P] [US1] Add `dark:` variants to `src/pages/ProfilePage.tsx` (1 hardcoded color). Same mapping as T007.
 
-- [ ] T011 [P] [US1] Add `dark:` variants to habit components: `src/components/habits/HabitCard.tsx` (4 colors), `src/components/habits/HabitEmptyState.tsx` (5 colors), `src/components/habits/HabitHistoryDrawer.tsx` (11 colors), `src/components/habits/HabitFilters.tsx` (4 colors), `src/components/habits/HabitFormModal.tsx` (12 colors). Apply same color mapping. Streak badge: `text-[#854F0B] bg-[#FAEEDA]` → `dark:text-amber-300 dark:bg-amber-900/30`.
+- [ ] T011 [P] [US1] Add `dark:` variants to habit components: `src/components/habits/HabitCard.tsx` (4 colors), `src/components/habits/HabitEmptyState.tsx` (5 colors), `src/components/habits/HabitHistoryDrawer.tsx` (11 colors), `src/components/habits/HabitFilters.tsx` (4 colors), `src/components/habits/HabitFormModal.tsx` (12 colors). Apply same color mapping. **Badge tokens**: Streak badge: `dark:bg-amber-950 dark:text-amber-400`. Done today badge: `dark:bg-emerald-950 dark:text-green-400`. Frequency badge: `dark:bg-zinc-800 dark:text-zinc-400 dark:border-zinc-700`.
 
-- [ ] T012 [P] [US1] Add `dark:` variants to goal components: `src/components/goals/GoalCard.tsx` (9 colors), `src/components/goals/GoalEmptyState.tsx` (4 colors), `src/components/goals/GoalDetail.tsx` (5 colors), `src/components/goals/GoalMilestones.tsx` (10 colors), `src/components/goals/GoalLinkedHabits.tsx` (8 colors), `src/components/goals/GoalProgress.tsx` (6 colors), `src/components/goals/GoalFilters.tsx` (2 colors), `src/components/goals/GoalFormModal.tsx` (6 colors). Apply same color mapping. Done-today/completed: emerald/green variants per plan.md §D5.
+- [ ] T012 [P] [US1] Add `dark:` variants to goal components: `src/components/goals/GoalCard.tsx` (9 colors), `src/components/goals/GoalEmptyState.tsx` (4 colors), `src/components/goals/GoalDetail.tsx` (5 colors), `src/components/goals/GoalMilestones.tsx` (10 colors), `src/components/goals/GoalLinkedHabits.tsx` (8 colors), `src/components/goals/GoalProgress.tsx` (6 colors), `src/components/goals/GoalFilters.tsx` (2 colors), `src/components/goals/GoalFormModal.tsx` (6 colors). Apply same color mapping. **Badge tokens**: Done today badge: `dark:bg-emerald-950 dark:text-green-400`. Completed green: `dark:text-green-400 dark:bg-emerald-950`.
 
 - [ ] T013 [P] [US1] Add `dark:` variants to profile components: `src/components/profile/AccountCard.tsx` (13 colors), `src/components/profile/StatsCard.tsx` (8 colors), `src/components/profile/TelegramCard.tsx` (6 colors), `src/components/profile/DangerZoneCard.tsx` (2 colors), `src/components/profile/DeleteAccountDialog.tsx` (5 colors). Apply same color mapping.
 
