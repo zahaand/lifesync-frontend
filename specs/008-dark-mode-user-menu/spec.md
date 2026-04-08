@@ -35,7 +35,7 @@ A user selects dark mode and closes the browser. When they return later and open
 
 1. **Given** the user has selected dark mode, **When** they close and reopen the application, **Then** the app loads directly in dark mode without any flash of light mode.
 2. **Given** the user has selected light mode (or never changed the default), **When** they open the application, **Then** the app loads in light mode.
-3. **Given** the user clears browser storage, **When** they reopen the application, **Then** the app defaults to light mode.
+3. **Given** the user clears browser storage, **When** they reopen the application, **Then** the app applies the OS color scheme preference (or light mode if none detected).
 
 ---
 
@@ -78,7 +78,7 @@ A user viewing habits or goals pages in dark mode sees that custom-colored badge
 - What happens when localStorage is unavailable (private browsing in some browsers)? App defaults to light mode gracefully.
 - What happens when a stored theme value is corrupted or invalid? App defaults to light mode.
 - How does the theme toggle behave during page transitions? Theme must persist without flicker during client-side navigation.
-- What if the user has system-level dark mode preference? The app uses its own stored preference, not the OS setting (user explicitly controls via toggle).
+- What if the user has system-level dark mode preference? On first visit (no stored choice), the app respects the OS preference. Once the user explicitly toggles, their choice takes precedence over OS setting.
 
 ## Requirements *(mandatory)*
 
@@ -86,17 +86,20 @@ A user viewing habits or goals pages in dark mode sees that custom-colored badge
 
 - **FR-001**: System MUST support two theme modes: light and dark.
 - **FR-002**: System MUST persist the user's theme preference in browser local storage.
-- **FR-003**: System MUST apply the persisted theme on application startup before the first visible render, preventing any flash of the wrong theme.
+- **FR-003**: System MUST apply the persisted theme on application startup before the first visible render, using an inline script in the HTML document head that runs before any rendering occurs, preventing any flash of the wrong theme.
 - **FR-004**: System MUST provide a theme toggle action accessible from the user chip dropdown menu.
 - **FR-005**: The theme toggle MUST display a Moon icon with "Dark mode" text when in light mode, and a Sun icon with "Light mode" text when in dark mode.
-- **FR-006**: All application pages and components MUST be readable in both light and dark modes.
+- **FR-006**: All application pages and components MUST be readable in both light and dark modes. Components using the UI library's design tokens require no manual changes; only elements with hardcoded color values need explicit dark mode variants.
 - **FR-007**: The primary purple (#534AB7) and green (#1D9E75) brand colors MUST remain unchanged in both modes.
 - **FR-008**: The streak badge (amber) MUST have a dark mode variant that maintains readability against dark backgrounds.
 - **FR-009**: The done-today badge (emerald) MUST have a dark mode variant that maintains readability against dark backgrounds.
-- **FR-010**: The user chip dropdown menu MUST contain exactly two items: theme toggle and log out.
-- **FR-011**: The Profile menu item MUST be removed from the user chip dropdown menu.
-- **FR-012**: The user chip menu MUST behave identically on desktop (sidebar) and mobile (Sheet).
-- **FR-013**: When the stored theme value is missing or invalid, the system MUST default to light mode.
+- **FR-010**: The login page MUST switch to a dark background in dark mode, consistent with the rest of the application.
+- **FR-011**: The version label in the sidebar MUST remain legible in dark mode with an appropriate dark mode color variant.
+- **FR-012**: The user chip dropdown menu MUST contain exactly two items: theme toggle and log out.
+- **FR-013**: The Profile menu item MUST be removed from the user chip dropdown menu.
+- **FR-014**: The user chip menu MUST behave identically on desktop (sidebar) and mobile (Sheet).
+- **FR-015**: When the stored theme value is missing or invalid, the system MUST detect the user's operating system color scheme preference and apply it. If no OS preference is detected, the system MUST default to light mode.
+- **FR-016**: Once the user explicitly toggles the theme, their choice MUST override any OS preference and persist across sessions.
 
 ### Key Entities
 
@@ -114,9 +117,19 @@ A user viewing habits or goals pages in dark mode sees that custom-colored badge
 - **SC-005**: Custom-colored badges (amber streak, emerald done-today) remain visually distinct and readable in dark mode.
 - **SC-006**: All existing application tests continue to pass without modification related to theme changes.
 
+## Clarifications
+
+### Session 2026-04-08
+
+- Q: What should be the default theme for new users? → A: Follow system `prefers-color-scheme` on first visit, then persist the user's explicit choice. If no OS preference is detected, default to light mode.
+- Q: How to prevent flash of wrong theme on startup? → A: Inline script in the HTML `<head>` that reads localStorage (and falls back to OS preference) and applies the theme class before any rendering occurs.
+- Q: Which components need explicit dark mode variants? → A: Only components with hardcoded colors (badges, custom backgrounds). The UI component library handles dark mode automatically via CSS variables.
+- Q: Should the login page background become dark in dark mode? → A: Yes, switch to a dark background in dark mode for consistency with the rest of the application.
+- Q: Does the version label in the sidebar need a dark mode variant? → A: Yes, add a dark mode variant so the label remains legible on dark backgrounds.
+
 ## Assumptions
 
-- The application defaults to light mode for new users (no OS preference detection).
+- On first visit (no stored preference), the application respects the user's OS color scheme preference. If no OS preference is detected, it defaults to light mode.
 - Theme preference is device-local only — no server-side persistence or cross-device sync is needed.
 - The existing UI component library already supports dark mode styling out of the box; only custom-colored elements need manual dark mode variants.
 - The sidebar already provides a direct link to the Profile page, making the Profile menu item in the user chip redundant.
