@@ -1,0 +1,10 @@
+{
+  "required": "This field is required",
+  "minLength": "Must be at least {{min}} characters",
+  "maxLength": "Must be at most {{max}} characters",
+  "email": "Please enter a valid email address",
+  "invalidFormat": "Invalid format",
+  "usernameFormat": "Only lowercase letters, numbers, hyphens, and underscores",
+  "telegramDigitsOnly": "Chat ID must contain only digits",
+  "timeFormat": "Time must be in HH:mm format"
+}

@@ -1,0 +1,99 @@
+{
+  "page": {
+    "title": "Goals",
+    "statsActive": "active",
+    "statsCompleted": "completed"
+  },
+  "action": {
+    "newGoal": "New goal",
+    "createButton": "+ New goal"
+  },
+  "filter": {
+    "all": "All",
+    "active": "Active",
+    "completed": "Completed"
+  },
+  "emptyState": {
+    "noGoals": "No goals yet",
+    "noGoalsDescription": "Create your first goal to start tracking.",
+    "noGoalsButton": "+ New goal",
+    "noFiltered": "No {{filter}} goals",
+    "noSelection": "Select a goal to view details"
+  },
+  "card": {
+    "active": "Active",
+    "completed": "Completed",
+    "linkedHabit_one": "{{count}} habit linked",
+    "linkedHabit_other": "{{count}} habits linked",
+    "milestone_one": "{{done}} of {{total}} milestone done",
+    "milestone_other": "{{done}} of {{total}} milestones done",
+    "noMilestones": "No milestones"
+  },
+  "form": {
+    "createTitle": "Create goal",
+    "createDescription": "Create a new goal",
+    "editTitle": "Edit goal",
+    "editDescription": "Edit an existing goal",
+    "titleLabel": "Title",
+    "titlePlaceholder": "Goal title",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Optional description",
+    "targetDateLabel": "Target date",
+    "statusLabel": "Status",
+    "cancel": "Cancel",
+    "create": "Create",
+    "save": "Save",
+    "saving": "Saving..."
+  },
+  "detail": {
+    "editButton": "Edit",
+    "description": "Description"
+  },
+  "milestones": {
+    "title": "Milestones",
+    "empty": "No milestones yet",
+    "placeholder": "Add milestone...",
+    "addButton": "Add"
+  },
+  "linkedHabits": {
+    "title": "Linked habits",
+    "empty": "No habits linked",
+    "allLinked": "All habits linked",
+    "placeholder": "Link a habit...",
+    "linkButton": "Link",
+    "unlinkButton": "Unlink",
+    "streak_one": "{{count}} day",
+    "streak_other": "{{count}} days"
+  },
+  "progress": {
+    "title": "Progress",
+    "updateButton": "Update",
+    "updating": "Updating..."
+  },
+  "message": {
+    "created": "Goal created",
+    "createFailed": "Failed to create goal",
+    "updated": "Goal updated",
+    "updateFailed": "Failed to update goal",
+    "deleted": "Goal deleted",
+    "deleteFailed": "Failed to delete goal",
+    "progressUpdated": "Progress updated",
+    "progressFailed": "Failed to update progress",
+    "milestoneAdded": "Milestone added",
+    "milestoneAddFailed": "Failed to add milestone",
+    "milestoneFailed": "Failed to update milestone",
+    "milestoneRemoved": "Milestone removed",
+    "milestoneRemoveFailed": "Failed to remove milestone",
+    "habitLinked": "Habit linked",
+    "habitLinkFailed": "Failed to link habit",
+    "habitUnlinked": "Habit unlinked",
+    "habitUnlinkFailed": "Failed to unlink habit"
+  },
+  "deleteDialog": {
+    "title": "Delete goal",
+    "description": "This will permanently delete \"{{name}}\" and all its milestones. This action cannot be undone.",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "deleting": "Deleting..."
+  }
+}

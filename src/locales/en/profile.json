@@ -1,0 +1,55 @@
+{
+  "page": {
+    "title": "Profile"
+  },
+  "account": {
+    "title": "Account",
+    "usernameLabel": "Username",
+    "usernameReadOnly": "Username cannot be changed",
+    "emailLabel": "Email",
+    "emailReadOnly": "Email cannot be changed",
+    "displayNameLabel": "Display name",
+    "displayNamePlaceholder": "e.g. Alice Johnson",
+    "displayNameHint": "Used in greetings — leave empty to use your username",
+    "saveButton": "Save changes",
+    "cancelButton": "Cancel"
+  },
+  "stats": {
+    "title": "Stats",
+    "activeHabits": "ACTIVE HABITS",
+    "bestStreak": "BEST STREAK",
+    "bestStreak_one": "{{count}} day",
+    "bestStreak_other": "{{count}} days",
+    "activeGoals": "ACTIVE GOALS",
+    "completedGoals": "COMPLETED GOALS"
+  },
+  "telegram": {
+    "title": "Telegram",
+    "badge": "Optional",
+    "idLabel": "Telegram Chat ID",
+    "idPlaceholder": "e.g. 123456789",
+    "hint": "Link your Telegram to receive habit reminders via bot",
+    "linkButton": "Link Telegram",
+    "updateButton": "Update"
+  },
+  "dangerZone": {
+    "title": "Danger zone",
+    "description": "Permanently delete your account and all data. This cannot be undone.",
+    "deleteButton": "Delete account"
+  },
+  "deleteDialog": {
+    "title": "Delete account",
+    "warning": "This action cannot be undone. All your habits, goals, and data will be permanently deleted.",
+    "confirmPrompt": "Type your username to confirm:",
+    "cancelButton": "Cancel",
+    "deleteButton": "Delete",
+    "deleting": "Deleting..."
+  },
+  "message": {
+    "updated": "Profile updated",
+    "updateFailed": "Failed to update profile",
+    "telegramLinked": "Telegram linked",
+    "telegramLinkFailed": "Failed to link Telegram",
+    "deleteFailed": "Failed to delete account"
+  }
+}
