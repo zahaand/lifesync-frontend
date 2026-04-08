@@ -54,7 +54,7 @@ A logged-in user switches language on device A. Later they log in on device B, a
 1. **Given** a logged-in user changes language to Russian, **When** the toggle is clicked, **Then** the frontend sends PATCH /users/me with the locale field set to "ru".
 2. **Given** a user logs in, **When** GET /users/me returns a locale field, **Then** the app applies that locale, overriding localStorage and browser detection.
 3. **Given** a user logs in and GET /users/me returns no locale field (legacy account), **When** the app initializes, **Then** it falls back to localStorage, then browser detection, then English.
-4. **Given** the PATCH request to save locale fails (network error), **When** the user switches language, **Then** the language still changes locally and a non-blocking toast informs that sync failed.
+4. **Given** the PATCH request to save locale fails (network error), **When** the user switches language, **Then** the language change applies locally regardless; backend sync failure is silently ignored (fire-and-forget).
 
 ---
 
@@ -85,7 +85,7 @@ All user-visible text in the application is translated, including page titles, n
 - What happens when date formatting fails for a locale? The app falls back to ISO format (YYYY-MM-DD).
 - What happens to dynamic content from the backend (habit names, goal titles)? User-created content is NOT translated — it displays as entered by the user.
 - What happens on logout? Locale persists in localStorage (it is independent of auth state). The user sees the login page in their previously selected language. On next login, backend locale overrides if different.
-- What happens on registration? New user has no backend locale set. After successful register + auto-login, backend returns `locale: null` (default). The app applies the current localStorage locale value. PATCH /users/me `{ locale }` is called immediately after registration to sync the chosen locale to the new account.
+- What happens on registration? New user has no backend locale set. Registration does not auto-login in the current implementation. The locale syncs to the backend on the first PATCH trigger after the user logs in manually. No special handling needed on the registration flow itself.
 
 ## Clarifications
 
@@ -107,10 +107,10 @@ All user-visible text in the application is translated, including page titles, n
 - **FR-006**: System MUST prevent flash of incorrect language on page load (analogous to FOCT prevention for dark mode).
 - **FR-007**: System MUST translate all static UI text: page titles, navigation labels, button text, form labels, placeholders, helper text, empty states, toast messages, and Zod validation error messages (via i18next-integrated custom errorMap or per-schema translation keys).
 - **FR-008**: System MUST format dates and times according to the selected locale conventions.
-- **FR-009**: System MUST sync the selected locale to the backend via PATCH /users/me when the user is authenticated.
+- **FR-009**: System MUST sync the selected locale to the backend via PATCH /users/me when the user is authenticated. PATCH is fire-and-forget — failure is silently ignored, locale still changes locally.
 - **FR-010**: System MUST read the saved locale from GET /users/me on login and apply it, always overriding localStorage and browser detection (backend wins unconditionally on login).
 - **FR-011**: System MUST fall back gracefully: backend locale → localStorage → browser detection → English.
-- **FR-012**: System MUST use namespace-based translation files organized by feature area (common, auth, habits, goals, profile, dashboard).
+- **FR-012**: System MUST use namespace-based translation files organized by feature area (common, auth, habits, goals, profile, dashboard, validation).
 - **FR-013**: System MUST NOT translate user-generated content (habit names, goal titles, milestone descriptions).
 - **FR-014**: System MUST display English fallback text when a translation key is missing.
 - **FR-015**: System MUST format dates using `Intl.DateTimeFormat` with the active locale parameter. EN format: "Apr 6, 2026". RU format: "6 апр. 2026 г.". Applied to: goal target dates, habit log dates in history drawer, dashboard date subtitle.
@@ -118,7 +118,7 @@ All user-visible text in the application is translated, including page titles, n
 ### Key Entities
 
 - **Locale**: Represents a supported language. Values: `'en' | 'ru'`. Stored in Zustand localeStore, persisted to localStorage key `lifesync-locale` as a plain string (not JSON-wrapped), and synced to backend user.locale field.
-- **Translation Namespace**: A logical grouping of translation keys by feature area. Namespaces: common, auth, habits, goals, profile, dashboard.
+- **Translation Namespace**: A logical grouping of translation keys by feature area. Namespaces: common, auth, habits, goals, profile, dashboard, validation.
 - **Translation Resource**: A JSON object mapping translation keys to translated strings for a given locale and namespace.
 
 ## Success Criteria *(mandatory)*

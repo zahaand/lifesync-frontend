@@ -92,7 +92,7 @@ src/
 │       └── Layout.tsx         # MODIFY — language toggle in user chip menu, nav labels use t()
 ├── pages/
 │   ├── LoginPage.tsx          # MODIFY — all text via t()
-│   ├── RegisterPage.tsx       # MODIFY — all text via t()
+│   ├── (RegisterPage is embedded in LoginPage.tsx)
 │   ├── DashboardPage.tsx      # MODIFY — all text via t()
 │   ├��─ HabitsPage.tsx         # MODIFY — all text via t()
 │   ├��─ GoalsPage.tsx          # MODIFY — all text via t()
