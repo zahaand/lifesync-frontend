@@ -85,6 +85,14 @@ All user-visible text in the application is translated, including page titles, n
 - What happens when date formatting fails for a locale? The app falls back to ISO format (YYYY-MM-DD).
 - What happens to dynamic content from the backend (habit names, goal titles)? User-created content is NOT translated — it displays as entered by the user.
 
+## Clarifications
+
+### Session 2026-04-08
+
+- Q: Should Zod validation messages be translated via i18next? → A: Yes — translate all Zod validation messages via i18next (custom errorMap or per-schema message keys).
+- Q: Should localStorage locale use JSON wrapper or plain string? → A: Plain string (`"en"` or `"ru"`) — simpler inline script, no JSON.parse needed.
+- Q: On login, should backend locale override a recent localStorage change made while logged out? → A: Yes — backend always wins on login. User can toggle again after login if needed.
+
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
@@ -95,10 +103,10 @@ All user-visible text in the application is translated, including page titles, n
 - **FR-004**: System MUST persist the selected language in localStorage so it survives browser restarts.
 - **FR-005**: System MUST detect the browser's preferred language on first visit and select the closest supported language (en or ru), defaulting to English if no match.
 - **FR-006**: System MUST prevent flash of incorrect language on page load (analogous to FOCT prevention for dark mode).
-- **FR-007**: System MUST translate all static UI text: page titles, navigation labels, button text, form labels, placeholders, helper text, empty states, and toast messages.
+- **FR-007**: System MUST translate all static UI text: page titles, navigation labels, button text, form labels, placeholders, helper text, empty states, toast messages, and Zod validation error messages (via i18next-integrated custom errorMap or per-schema translation keys).
 - **FR-008**: System MUST format dates and times according to the selected locale conventions.
 - **FR-009**: System MUST sync the selected locale to the backend via PATCH /users/me when the user is authenticated.
-- **FR-010**: System MUST read the saved locale from GET /users/me on login and apply it, overriding localStorage and browser detection.
+- **FR-010**: System MUST read the saved locale from GET /users/me on login and apply it, always overriding localStorage and browser detection (backend wins unconditionally on login).
 - **FR-011**: System MUST fall back gracefully: backend locale → localStorage → browser detection → English.
 - **FR-012**: System MUST use namespace-based translation files organized by feature area (common, auth, habits, goals, profile, dashboard).
 - **FR-013**: System MUST NOT translate user-generated content (habit names, goal titles, milestone descriptions).
@@ -106,7 +114,7 @@ All user-visible text in the application is translated, including page titles, n
 
 ### Key Entities
 
-- **Locale**: Represents a supported language. Values: `'en' | 'ru'`. Stored in Zustand localeStore, persisted to localStorage key `lifesync-locale`, and synced to backend user.locale field.
+- **Locale**: Represents a supported language. Values: `'en' | 'ru'`. Stored in Zustand localeStore, persisted to localStorage key `lifesync-locale` as a plain string (not JSON-wrapped), and synced to backend user.locale field.
 - **Translation Namespace**: A logical grouping of translation keys by feature area. Namespaces: common, auth, habits, goals, profile, dashboard.
 - **Translation Resource**: A JSON object mapping translation keys to translated strings for a given locale and namespace.
 
