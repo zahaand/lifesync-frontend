@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 
 export type GoalFilterTab = 'ALL' | 'ACTIVE' | 'COMPLETED'
@@ -7,13 +8,15 @@ type GoalFiltersProps = {
   onFilterChange: (tab: GoalFilterTab) => void
 }
 
-const TABS: { label: string; value: GoalFilterTab }[] = [
-  { label: 'All', value: 'ALL' },
-  { label: 'Active', value: 'ACTIVE' },
-  { label: 'Completed', value: 'COMPLETED' },
+const TABS: { labelKey: string; value: GoalFilterTab }[] = [
+  { labelKey: 'filter.all', value: 'ALL' },
+  { labelKey: 'filter.active', value: 'ACTIVE' },
+  { labelKey: 'filter.completed', value: 'COMPLETED' },
 ]
 
 export default function GoalFilters({ activeFilter, onFilterChange }: GoalFiltersProps) {
+  const { t } = useTranslation('goals')
+
   return (
     <div className="mb-4 flex gap-2">
       {TABS.map((tab) => {
@@ -29,7 +32,7 @@ export default function GoalFilters({ activeFilter, onFilterChange }: GoalFilter
             }`}
             onClick={() => onFilterChange(tab.value)}
           >
-            {tab.label}
+            {t(tab.labelKey)}
           </Button>
         )
       })}

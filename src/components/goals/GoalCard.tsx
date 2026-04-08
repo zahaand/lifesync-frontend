@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Card } from '@/components/ui/card'
 import GoalProgress from '@/components/shared/GoalProgress'
 import type { Goal } from '@/types/goals'
@@ -9,16 +10,18 @@ type GoalCardProps = {
   onClick: () => void
 }
 
-function formatDeadline(targetDate: string | null) {
-  if (!targetDate) return 'No deadline'
-  return new Date(targetDate).toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  })
-}
-
 export default function GoalCard({ goal, isSelected, linkedHabitsCount, onClick }: GoalCardProps) {
+  const { t, i18n } = useTranslation('goals')
+
+  const formatDeadline = (targetDate: string | null) => {
+    if (!targetDate) return t('common:date.noDeadline')
+    const loc = i18n.language === 'ru' ? 'ru-RU' : 'en-US'
+    return new Date(targetDate).toLocaleDateString(loc, {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    })
+  }
   const isCompleted = goal.status === 'COMPLETED'
   const isDark = document.documentElement.classList.contains('dark')
   const progressColor = isCompleted ? (isDark ? '#4ade80' : '#3B6D11') : '#534AB7'
@@ -52,7 +55,7 @@ export default function GoalCard({ goal, isSelected, linkedHabitsCount, onClick 
               : 'bg-[#EEEDFE] dark:bg-[#534AB7]/20 text-[#3C3489]'
           }`}
         >
-          {isCompleted ? 'Completed' : 'Active'}
+          {isCompleted ? t('card.completed') : t('card.active')}
         </span>
       </div>
 
@@ -67,13 +70,13 @@ export default function GoalCard({ goal, isSelected, linkedHabitsCount, onClick 
       <div className="flex justify-between text-[11px] text-[#9E9B94] dark:text-zinc-500">
         <span>
           {linkedHabitsCount !== undefined
-            ? `${linkedHabitsCount} ${linkedHabitsCount === 1 ? 'habit' : 'habits'} linked`
+            ? t('card.linkedHabit', { count: linkedHabitsCount })
             : ''}
         </span>
         <span>
           {goal.milestones.length > 0
-            ? `${completedMilestones} of ${goal.milestones.length} milestones done`
-            : 'No milestones'}
+            ? t('card.milestone', { count: goal.milestones.length, done: completedMilestones, total: goal.milestones.length })
+            : t('card.noMilestones')}
         </span>
       </div>
     </Card>

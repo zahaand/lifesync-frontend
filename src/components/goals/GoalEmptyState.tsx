@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Target } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -6,10 +7,12 @@ type GoalEmptyStateProps =
   | { variant: 'no-selection' }
 
 export default function GoalEmptyState(props: GoalEmptyStateProps) {
+  const { t } = useTranslation('goals')
+
   if (props.variant === 'no-selection') {
     return (
       <div className="flex h-full items-center justify-center">
-        <span className="text-[13px] text-[#9E9B94] dark:text-zinc-500">Select a goal to view details</span>
+        <span className="text-[13px] text-[#9E9B94] dark:text-zinc-500">{t('emptyState.noSelection')}</span>
       </div>
     )
   }
@@ -18,13 +21,13 @@ export default function GoalEmptyState(props: GoalEmptyStateProps) {
     <div className="py-12 text-center">
       <Target className="mx-auto mb-3 size-8 text-[#C7C4BB] dark:text-zinc-600" />
       <p className="mb-3 text-[13px] text-[#9E9B94] dark:text-zinc-500">
-        No goals yet. Create your first goal to start tracking.
+        {t('emptyState.noGoalsDescription')}
       </p>
       <Button
         className="rounded-lg bg-[#534AB7] px-4 py-2 text-[13px] font-medium text-[#EEEDFE]"
         onClick={props.onCreateClick}
       >
-        + New goal
+        {t('emptyState.noGoalsButton')}
       </Button>
     </div>
   )

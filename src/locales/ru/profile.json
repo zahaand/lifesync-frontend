@@ -1,0 +1,56 @@
+{
+  "page": {
+    "title": "Профиль"
+  },
+  "account": {
+    "title": "Аккаунт",
+    "usernameLabel": "Имя пользователя",
+    "usernameReadOnly": "Имя пользователя нельзя изменить",
+    "emailLabel": "Email",
+    "emailReadOnly": "Email нельзя изменить",
+    "displayNameLabel": "Отображаемое имя",
+    "displayNamePlaceholder": "напр. Алиса Иванова",
+    "displayNameHint": "Используется в приветствиях — оставьте пустым для имени пользователя",
+    "saveButton": "Сохранить",
+    "cancelButton": "Отмена"
+  },
+  "stats": {
+    "title": "Статистика",
+    "activeHabits": "АКТИВНЫХ ПРИВЫЧЕК",
+    "bestStreak": "ЛУЧШАЯ СЕРИЯ",
+    "bestStreak_one": "{{count}} день",
+    "bestStreak_few": "{{count}} дня",
+    "bestStreak_many": "{{count}} дней",
+    "activeGoals": "АКТИВНЫХ ЦЕЛЕЙ",
+    "completedGoals": "ЗАВЕРШЁННЫХ ЦЕЛЕЙ"
+  },
+  "telegram": {
+    "title": "Telegram",
+    "badge": "Необязательно",
+    "idLabel": "Telegram Chat ID",
+    "idPlaceholder": "напр. 123456789",
+    "hint": "Свяжите Telegram для получения напоминаний о привычках",
+    "linkButton": "Связать Telegram",
+    "updateButton": "Обновить"
+  },
+  "dangerZone": {
+    "title": "Опасная зона",
+    "description": "Безвозвратное удаление аккаунта и всех данных.",
+    "deleteButton": "Удалить аккаунт"
+  },
+  "deleteDialog": {
+    "title": "Удаление аккаунта",
+    "warning": "Это действие необратимо. Все привычки, цели и данные будут удалены навсегда.",
+    "confirmPrompt": "Введите имя пользователя для подтверждения:",
+    "cancelButton": "Отмена",
+    "deleteButton": "Удалить",
+    "deleting": "Удаление..."
+  },
+  "message": {
+    "updated": "Профиль обновлён",
+    "updateFailed": "Не удалось обновить профиль",
+    "telegramLinked": "Telegram связан",
+    "telegramLinkFailed": "Не удалось связать Telegram",
+    "deleteFailed": "Не удалось удалить аккаунт"
+  }
+}

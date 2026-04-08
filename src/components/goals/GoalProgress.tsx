@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import SharedGoalProgress from '@/components/shared/GoalProgress'
@@ -10,6 +11,7 @@ type GoalProgressProps = {
 }
 
 export default function GoalProgressSection({ goal }: GoalProgressProps) {
+  const { t } = useTranslation('goals')
   const [inputValue, setInputValue] = useState(String(goal.progress))
   const updateProgress = useUpdateGoalProgress()
 
@@ -45,7 +47,7 @@ export default function GoalProgressSection({ goal }: GoalProgressProps) {
   return (
     <div className="rounded-xl border border-[#E8E6DF] dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5">
       <div className="mb-3 text-[11px] font-medium uppercase tracking-wider text-[#9E9B94] dark:text-zinc-500">
-        Progress
+        {t('progress.title')}
       </div>
       <div
         className={`mb-2 text-[32px] font-semibold ${isCompleted ? 'text-[#3B6D11] dark:text-green-400' : 'text-[#534AB7]'}`}
@@ -70,7 +72,7 @@ export default function GoalProgressSection({ goal }: GoalProgressProps) {
           onClick={handleUpdate}
           disabled={updateProgress.isPending}
         >
-          {updateProgress.isPending ? 'Updating...' : 'Update'}
+          {updateProgress.isPending ? t('progress.updating') : t('progress.updateButton')}
         </Button>
       </div>
     </div>

@@ -3,18 +3,18 @@ import { z } from 'zod'
 // --- Zod Schemas ---
 
 export const registerSchema = z.object({
-  email: z.string().email('Please enter a valid email address'),
+  email: z.string().email(),
   username: z
     .string()
-    .min(3, 'Username must be at least 3 characters')
-    .max(32, 'Username must be at most 32 characters')
-    .regex(/^[a-z0-9_-]+$/, 'Username can only contain lowercase letters, numbers, hyphens, and underscores'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
+    .min(3)
+    .max(32)
+    .regex(/^[a-z0-9_-]+$/),
+  password: z.string().min(8),
 })
 
 export const loginSchema = z.object({
-  identifier: z.string().min(1, 'Email or username is required'),
-  password: z.string().min(1, 'Password is required'),
+  identifier: z.string().min(1),
+  password: z.string().min(1),
 })
 
 // --- Types (inferred from schemas + API responses) ---

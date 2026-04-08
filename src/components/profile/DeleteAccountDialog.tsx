@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   Dialog,
   DialogContent,
@@ -23,6 +24,7 @@ export default function DeleteAccountDialog({
   onOpenChange,
   username,
 }: DeleteAccountDialogProps) {
+  const { t } = useTranslation('profile')
   const [confirmValue, setConfirmValue] = useState('')
   const deleteAccount = useDeleteAccount()
 
@@ -45,17 +47,16 @@ export default function DeleteAccountDialog({
       <DialogContent className="max-w-[440px]">
         <DialogHeader>
           <DialogTitle className="text-[16px] font-semibold text-red-600">
-            Delete account
+            {t('deleteDialog.title')}
           </DialogTitle>
           <DialogDescription className="text-[13px] text-[#666360] dark:text-zinc-500">
-            This action cannot be undone. All your habits, goals, and data will be
-            permanently deleted.
+            {t('deleteDialog.warning')}
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-2 px-1 py-2">
           <Label htmlFor="confirm-username" className="text-[13px] text-[#2C2C2A] dark:text-zinc-50">
-            Type your username to confirm:
+            {t('deleteDialog.confirmPrompt')}
           </Label>
           <Input
             id="confirm-username"
@@ -72,14 +73,14 @@ export default function DeleteAccountDialog({
             className="rounded-lg border-[#C7C4BB] dark:border-zinc-800 px-4 py-2 text-[13px] text-[#666360] dark:text-zinc-500"
             onClick={() => handleOpenChange(false)}
           >
-            Cancel
+            {t('deleteDialog.cancelButton')}
           </Button>
           <Button
             className="rounded-lg bg-red-500 px-4 py-2 text-[13px] font-medium text-white hover:bg-red-600"
             onClick={handleConfirm}
             disabled={!isMatch || deleteAccount.isPending}
           >
-            {deleteAccount.isPending ? 'Deleting...' : 'Delete'}
+            {deleteAccount.isPending ? t('deleteDialog.deleting') : t('deleteDialog.deleteButton')}
           </Button>
         </DialogFooter>
       </DialogContent>

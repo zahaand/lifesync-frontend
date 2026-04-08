@@ -32,9 +32,9 @@ npm test && npm run lint
 TypeScript 5.9, React 19.2, Node 20+: Follow standard conventions
 
 ## Recent Changes
+- 009-i18n: Added [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
 - 008-dark-mode-user-menu: Added TypeScript 5.9, React 19.2, Node 20+ + Vite 8, React Router v7, TanStack React Query v5, Zustand, shadcn/ui (Nova preset) + Radix, Lucide React, Sonner, Tailwind CSS v4
 - 007-pre-release: Added TypeScript 5.9, React 19.2, Node 20+ + Vite 8, React Router v7, TanStack React Query v5, Axios, Zustand, shadcn/ui, Lucide React, Sonner
-- 006-polish-mobile-techdebt: Added TypeScript 5.9, React 19.2, Node 20+ + React Router v7, TanStack React Query v5, Axios, Zustand, shadcn/ui (Nova preset) + Radix, Lucide React, Sonner, Tailwind CSS v4, Vite 8
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->

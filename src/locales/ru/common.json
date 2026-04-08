@@ -1,0 +1,45 @@
+{
+  "nav": {
+    "dashboard": "Панель",
+    "habits": "Привычки",
+    "goals": "Цели",
+    "profile": "Профиль",
+    "navigation": "Навигация",
+    "openMenu": "Открыть меню"
+  },
+  "menu": {
+    "darkMode": "Тёмная тема",
+    "lightMode": "Светлая тема",
+    "english": "English",
+    "russian": "Русский",
+    "logout": "Выйти",
+    "loggingOut": "Выход..."
+  },
+  "action": {
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "delete": "Удалить",
+    "edit": "Редактировать",
+    "close": "Закрыть",
+    "back": "Назад",
+    "create": "Создать",
+    "viewAll": "Смотреть все",
+    "tryAgain": "Попробуйте снова.",
+    "add": "Добавить",
+    "update": "Обновить",
+    "link": "Связать",
+    "unlink": "Отвязать"
+  },
+  "status": {
+    "loading": "Загрузка...",
+    "saving": "Сохранение...",
+    "deleting": "Удаление..."
+  },
+  "error": {
+    "failedToLoad": "Не удалось загрузить."
+  },
+  "date": {
+    "noDeadline": "Без дедлайна"
+  },
+  "optional": "(необязательно)"
+}

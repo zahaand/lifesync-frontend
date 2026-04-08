@@ -1,10 +1,10 @@
 🇷🇺 Описание на русском ниже / 🇬🇧 Russian description below
 
-# LifeSync Frontend v1.1.0
+# LifeSync Frontend v1.2.0
 
 B2C habit and goal tracking web application. Built with React 19 and TypeScript 5.9 using a strict layered architecture with server state isolation.
 
-55 unit tests | 22 E2E tests | 8 sprints | full mobile support | dark mode
+55 unit tests | 22 E2E tests | 9 sprints | full mobile support | dark mode | bilingual UI (EN/RU)
 
 ## Methodology
 
@@ -20,7 +20,7 @@ Each feature goes through a structured SDD cycle:
 - **Implement** — code generation following the task list
 - **Analyze** — post-implementation review against spec and constitution
 
-The project was developed over 7 sprints, each following this full cycle.
+The project was developed over 9 sprints, each following this full cycle.
 
 ## Architecture
 
@@ -69,6 +69,10 @@ Paginated completion log for each habit (TD-002). Uses `useInfiniteQuery` to fet
 
 Dark mode with system preference detection on first visit and a persistent theme toggle in the user menu. An inline `<head>` script prevents FOCT (Flash of Incorrect Theme) by applying the saved theme class before React renders. The Zustand theme store manages the `'light' | 'dark'` state without persist middleware to avoid race conditions with the inline script. All 24 files with hardcoded colors received `dark:` Tailwind variants using a zinc-based token system.
 
+### Bilingual UI
+
+English and Russian with instant switching, browser language detection, and backend profile sync. Uses react-i18next with 7 translation namespaces (~190 keys per language). Russian pluralization uses `_one/_few/_many` suffixes for streak counts, milestones, and linked habits. Zod validation messages are translated via a global error map. An inline `<head>` script sets `<html lang>` before React renders to prevent flash of incorrect language.
+
 ### Smart Greeting
 
 The dashboard greeting uses `displayName` from the user profile when available, falling back to `username`. The time-of-day greeting (Good morning / Good afternoon / Good evening) is determined client-side based on the current hour.
@@ -87,6 +91,7 @@ Unit and component tests use Vitest with happy-dom, Testing Library for renderin
 - **Sprint 6: Mobile adaptation** — responsive layout for all pages, hamburger + Sheet sidebar, Goals master-detail toggle, HabitCard DropdownMenu, habit completion history drawer (TD-002)
 - **Sprint 7: Pre-release** — unit tests, E2E tests, data-testid strategy, documentation, build verification
 - **Sprint 8: Dark mode** — class-based Tailwind CSS v4 dark theme, FOCT prevention, OS preference detection, user menu update
+- **Sprint 9: Internationalization** — react-i18next, EN + RU, ~190 translation keys, Zod validation messages translated, backend locale sync, browser language detection
 
 ## Screenshots
 
@@ -111,6 +116,7 @@ Unit and component tests use Vitest with happy-dom, Testing Library for renderin
 | Icons | Lucide React |
 | Notifications | Sonner |
 | Forms | React Hook Form + Zod |
+| i18n | react-i18next + i18next |
 | Unit Tests | Vitest + Testing Library + MSW 2.x |
 | E2E Tests | Playwright (Chromium) |
 | Methodology | Spec-Driven Development (SDD) |
@@ -178,10 +184,11 @@ src/
 │   └── profile/    # AccountCard, StatsCard, TelegramCard, DangerZoneCard
 ├── hooks/          # React Query hooks and utilities (useHabits, useGoals, useAuth, useIsMobile)
 ├── pages/          # Route pages (LoginPage, DashboardPage, HabitsPage, GoalsPage, ProfilePage)
-├── stores/         # Zustand stores (authStore — tokens, user state; themeStore — dark mode)
+├── locales/        # Translation JSON files (en/, ru/ — 7 namespaces each)
+├── stores/         # Zustand stores (authStore, themeStore, localeStore)
 ├── test/           # Test setup, MSW handlers, test utilities
 ├── types/          # TypeScript type definitions (auth, habits, goals, users, habitLogs)
-└── lib/            # Utility functions (cn)
+└── lib/            # Utility functions (cn) and i18n config (i18n.ts)
 tests/
 └── e2e/            # Playwright E2E tests (auth, habits, goals, profile, mobile)
 ```
@@ -192,11 +199,11 @@ tests/
 
 ---
 
-# LifeSync Frontend v1.1.0
+# LifeSync Frontend v1.2.0
 
 B2C веб-приложение для трекинга привычек и целей. Построено на React 19 и TypeScript 5.9 со строгой слоистой архитектурой и изоляцией серверного состояния.
 
-55 юнит-тестов | 22 E2E-теста | 8 спринтов | полная мобильная поддержка | тёмная тема
+55 юнит-тестов | 22 E2E-теста | 9 спринтов | полная мобильная поддержка | тёмная тема | двуязычный интерфейс (EN/RU)
 
 ## Методология
 
@@ -212,7 +219,7 @@ B2C веб-приложение для трекинга привычек и це
 - **Implement** — генерация кода по списку задач
 - **Analyze** — пост-имплементационный обзор против спецификации и конституции
 
-Проект разработан за 7 спринтов, каждый из которых прошёл полный цикл.
+Проект разработан за 9 спринтов, каждый из которых прошёл полный цикл.
 
 ## Архитектура
 
@@ -261,6 +268,10 @@ JWT-аутентификация с access- и refresh-токенами. Access-
 
 Тёмная тема с определением системных настроек при первом визите и переключателем в меню пользователя. Инлайн-скрипт в `<head>` предотвращает FOCT (Flash of Incorrect Theme), применяя сохранённый класс темы до рендеринга React. Zustand-хранилище управляет состоянием `'light' | 'dark'` без persist middleware во избежание race condition с инлайн-скриптом. Все 24 файла с хардкодными цветами получили `dark:` Tailwind-варианты на основе zinc-токенов.
 
+### Двуязычный интерфейс
+
+Английский и русский с мгновенным переключением, определением языка браузера и синхронизацией с профилем backend. Используется react-i18next с 7 неймспейсами переводов (~190 ключей на язык). Русская плюрализация через суффиксы `_one/_few/_many` для серий, вех и привязанных привычек. Сообщения валидации Zod переведены через глобальный error map. Инлайн-скрипт в `<head>` устанавливает `<html lang>` до рендеринга React для предотвращения мерцания неверного языка.
+
 ### Умное приветствие
 
 Приветствие на дашборде использует `displayName` из профиля пользователя, если доступно, с фоллбэком на `username`. Приветствие по времени суток (Доброе утро / Добрый день / Добрый вечер) определяется на клиенте по текущему часу.
@@ -279,6 +290,7 @@ JWT-аутентификация с access- и refresh-токенами. Access-
 - **Спринт 6: Мобильная адаптация** — адаптивная раскладка для всех страниц, hamburger + Sheet sidebar, Goals master-detail переключение, HabitCard DropdownMenu, drawer истории выполнений привычек (TD-002)
 - **Спринт 7: Предрелиз** — юнит-тесты, E2E-тесты, стратегия data-testid, документация, проверка сборки
 - **Спринт 8: Тёмная тема** — class-based Tailwind CSS v4, FOCT prevention, определение OS preference, обновление меню
+- **Спринт 9: Интернационализация** — react-i18next, EN + RU, ~190 ключей перевода, перевод Zod валидаций, синхронизация с backend, определение языка браузера
 
 ## Скриншоты
 
@@ -303,6 +315,7 @@ JWT-аутентификация с access- и refresh-токенами. Access-
 | Иконки | Lucide React |
 | Уведомления | Sonner |
 | Формы | React Hook Form + Zod |
+| i18n | react-i18next + i18next |
 | Юнит-тесты | Vitest + Testing Library + MSW 2.x |
 | E2E-тесты | Playwright (Chromium) |
 | Методология | Spec-Driven Development (SDD) |
@@ -370,10 +383,11 @@ src/
 │   └── profile/    # AccountCard, StatsCard, TelegramCard, DangerZoneCard
 ├── hooks/          # React Query хуки и утилиты (useHabits, useGoals, useAuth, useIsMobile)
 ├── pages/          # Страницы маршрутов (LoginPage, DashboardPage, HabitsPage, GoalsPage, ProfilePage)
-├── stores/         # Zustand-хранилища (authStore — токены, состояние пользователя; themeStore — тёмная тема)
-├── test/           # Настройка тестов, MSW-обработчики, тестовые утилиты
-├── types/          # TypeScript-определения типов (auth, habits, goals, users, habitLogs)
-└── lib/            # Утилиты (cn)
+├── locales/        # JSON-файлы переводов (en/, ru/ — по 7 неймспейсов)
+├── stores/         # Zustand-хранилища (authStore, themeStore, localeStore)
+├── test/           # Настройка тестов, MSW-обработчики, тестовые у��илиты
+├��─ types/          # TypeScript-определения типов (auth, habits, goals, users, habitLogs)
+└── lib/            # Утилиты (cn) и конфиг i18n (i18n.ts)
 tests/
 └── e2e/            # Playwright E2E-тесты (auth, habits, goals, profile, mobile)
 ```

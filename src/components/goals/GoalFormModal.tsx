@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -25,7 +26,7 @@ import { useCreateGoal, useUpdateGoal } from '@/hooks/useGoals'
 import type { Goal, GoalStatus } from '@/types/goals'
 
 const goalSchema = z.object({
-  title: z.string().min(1, 'Title is required').max(200, 'Title must be 200 characters or less'),
+  title: z.string().min(1).max(200),
   description: z.string().optional(),
   targetDate: z.string().optional(),
   status: z.enum(['ACTIVE', 'COMPLETED']).optional(),
@@ -41,6 +42,7 @@ type GoalFormModalProps = {
 }
 
 export default function GoalFormModal({ open, onOpenChange, mode, goal }: GoalFormModalProps) {
+  const { t } = useTranslation('goals')
   const createGoal = useCreateGoal()
   const updateGoal = useUpdateGoal()
   const isPending = createGoal.isPending || updateGoal.isPending
@@ -119,10 +121,10 @@ export default function GoalFormModal({ open, onOpenChange, mode, goal }: GoalFo
       <DialogContent className="max-w-[480px]">
         <DialogHeader>
           <DialogTitle className="text-[16px] font-semibold">
-            {mode === 'create' ? 'Create goal' : 'Edit goal'}
+            {mode === 'create' ? t('form.createTitle') : t('form.editTitle')}
           </DialogTitle>
           <DialogDescription className="sr-only">
-            {mode === 'create' ? 'Create a new goal' : 'Edit an existing goal'}
+            {mode === 'create' ? t('form.createDescription') : t('form.editDescription')}
           </DialogDescription>
         </DialogHeader>
 
@@ -130,12 +132,12 @@ export default function GoalFormModal({ open, onOpenChange, mode, goal }: GoalFo
           <div className="space-y-4 px-5 py-5">
             {/* Title */}
             <div>
-              <Label className="mb-1.5 text-[13px]">Title</Label>
+              <Label className="mb-1.5 text-[13px]">{t('form.titleLabel')}</Label>
               <Input
                 data-testid="goal-title-input"
                 {...register('title')}
                 className="h-9 rounded-lg border-[#C7C4BB] dark:border-zinc-800"
-                placeholder="Goal title"
+                placeholder={t('form.titlePlaceholder')}
               />
               {errors.title && (
                 <p className="mt-1 text-[12px] text-red-500">{errors.title.message}</p>
@@ -144,17 +146,17 @@ export default function GoalFormModal({ open, onOpenChange, mode, goal }: GoalFo
 
             {/* Description */}
             <div>
-              <Label className="mb-1.5 text-[13px]">Description</Label>
+              <Label className="mb-1.5 text-[13px]">{t('form.descriptionLabel')}</Label>
               <Textarea
                 {...register('description')}
                 className="h-20 resize-none rounded-lg border-[#C7C4BB] dark:border-zinc-800"
-                placeholder="Optional description"
+                placeholder={t('form.descriptionPlaceholder')}
               />
             </div>
 
             {/* Target date */}
             <div>
-              <Label className="mb-1.5 text-[13px]">Target date</Label>
+              <Label className="mb-1.5 text-[13px]">{t('form.targetDateLabel')}</Label>
               <Input
                 {...register('targetDate')}
                 type="date"
@@ -165,7 +167,7 @@ export default function GoalFormModal({ open, onOpenChange, mode, goal }: GoalFo
             {/* Status (edit only) */}
             {mode === 'edit' && (
               <div>
-                <Label className="mb-1.5 text-[13px]">Status</Label>
+                <Label className="mb-1.5 text-[13px]">{t('form.statusLabel')}</Label>
                 <Select
                   value={statusValue}
                   onValueChange={(v) => setValue('status', v as GoalStatus)}
@@ -174,8 +176,8 @@ export default function GoalFormModal({ open, onOpenChange, mode, goal }: GoalFo
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="ACTIVE">Active</SelectItem>
-                    <SelectItem value="COMPLETED">Completed</SelectItem>
+                    <SelectItem value="ACTIVE">{t('card.active')}</SelectItem>
+                    <SelectItem value="COMPLETED">{t('card.completed')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -189,7 +191,7 @@ export default function GoalFormModal({ open, onOpenChange, mode, goal }: GoalFo
               className="rounded-lg border-[#C7C4BB] dark:border-zinc-800 px-4 py-2 text-[13px] text-[#666360] dark:text-zinc-500"
               onClick={() => onOpenChange(false)}
             >
-              Cancel
+              {t('form.cancel')}
             </Button>
             <Button
               type="submit"
@@ -197,7 +199,7 @@ export default function GoalFormModal({ open, onOpenChange, mode, goal }: GoalFo
               className="rounded-lg bg-[#534AB7] px-4 py-2 text-[13px] text-[#EEEDFE]"
               disabled={isPending}
             >
-              {isPending ? 'Saving...' : 'Save'}
+              {isPending ? t('form.saving') : t('form.save')}
             </Button>
           </DialogFooter>
         </form>

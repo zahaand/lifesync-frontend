@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import i18n from 'i18next'
 import { goalsApi } from '@/api/goals'
 import type {
   CreateGoalRequest,
@@ -63,10 +64,10 @@ export function useCreateGoal() {
     mutationFn: (data: CreateGoalRequest) => goalsApi.createGoal(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['goals'] })
-      toast.success('Goal created')
+      toast.success(i18n.t('goals:message.created'))
     },
     onError: () => {
-      toast.error('Failed to create goal')
+      toast.error(i18n.t('goals:message.createFailed'))
     },
   })
 }
@@ -79,10 +80,10 @@ export function useUpdateGoal() {
       goalsApi.updateGoal(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['goals'] })
-      toast.success('Goal updated')
+      toast.success(i18n.t('goals:message.updated'))
     },
     onError: () => {
-      toast.error('Failed to update goal')
+      toast.error(i18n.t('goals:message.updateFailed'))
     },
   })
 }
@@ -94,10 +95,10 @@ export function useDeleteGoal() {
     mutationFn: (id: string) => goalsApi.deleteGoal(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['goals'] })
-      toast.success('Goal deleted')
+      toast.success(i18n.t('goals:message.deleted'))
     },
     onError: () => {
-      toast.error('Failed to delete goal')
+      toast.error(i18n.t('goals:message.deleteFailed'))
     },
   })
 }
@@ -110,10 +111,10 @@ export function useUpdateGoalProgress() {
       goalsApi.updateGoalProgress(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['goals'] })
-      toast.success('Progress updated')
+      toast.success(i18n.t('goals:message.progressUpdated'))
     },
     onError: () => {
-      toast.error('Failed to update progress')
+      toast.error(i18n.t('goals:message.progressFailed'))
     },
   })
 }
@@ -126,10 +127,10 @@ export function useAddMilestone() {
       goalsApi.addMilestone(goalId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['goals'] })
-      toast.success('Milestone added')
+      toast.success(i18n.t('goals:message.milestoneAdded'))
     },
     onError: () => {
-      toast.error('Failed to add milestone')
+      toast.error(i18n.t('goals:message.milestoneAddFailed'))
     },
   })
 }
@@ -151,7 +152,7 @@ export function useUpdateMilestone() {
       queryClient.invalidateQueries({ queryKey: ['goals'] })
     },
     onError: () => {
-      toast.error('Failed to update milestone')
+      toast.error(i18n.t('goals:message.milestoneFailed'))
     },
   })
 }
@@ -164,10 +165,10 @@ export function useDeleteMilestone() {
       goalsApi.deleteMilestone(goalId, milestoneId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['goals'] })
-      toast.success('Milestone removed')
+      toast.success(i18n.t('goals:message.milestoneRemoved'))
     },
     onError: () => {
-      toast.error('Failed to remove milestone')
+      toast.error(i18n.t('goals:message.milestoneRemoveFailed'))
     },
   })
 }
@@ -180,10 +181,10 @@ export function useLinkHabit() {
       goalsApi.linkHabit(goalId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['goals'] })
-      toast.success('Habit linked')
+      toast.success(i18n.t('goals:message.habitLinked'))
     },
     onError: () => {
-      toast.error('Failed to link habit')
+      toast.error(i18n.t('goals:message.habitLinkFailed'))
     },
   })
 }
@@ -196,10 +197,10 @@ export function useUnlinkHabit() {
       goalsApi.unlinkHabit(goalId, habitId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['goals'] })
-      toast.success('Habit unlinked')
+      toast.success(i18n.t('goals:message.habitUnlinked'))
     },
     onError: () => {
-      toast.error('Failed to unlink habit')
+      toast.error(i18n.t('goals:message.habitUnlinkFailed'))
     },
   })
 }

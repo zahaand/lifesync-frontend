@@ -36,24 +36,24 @@ describe('GoalCard', () => {
   it('shows Active badge for active goal', () => {
     render(<GoalCard goal={activeGoal} isSelected={false} onClick={vi.fn()} />)
 
-    expect(screen.getByText('Active')).toBeInTheDocument()
+    expect(screen.getByText('card.active')).toBeInTheDocument()
   })
 
   it('shows Completed badge for completed goal', () => {
     render(<GoalCard goal={completedGoal} isSelected={false} onClick={vi.fn()} />)
 
-    expect(screen.getByText('Completed')).toBeInTheDocument()
+    expect(screen.getByText('card.completed')).toBeInTheDocument()
   })
 
   it('shows milestones count', () => {
     render(<GoalCard goal={activeGoal} isSelected={false} onClick={vi.fn()} />)
 
-    expect(screen.getByText('1 of 2 milestones done')).toBeInTheDocument()
+    expect(screen.getByText('card.milestone')).toBeInTheDocument()
   })
 
   it('shows linked habits count when provided', () => {
     render(<GoalCard goal={activeGoal} isSelected={false} linkedHabitsCount={3} onClick={vi.fn()} />)
 
-    expect(screen.getByText('3 habits linked')).toBeInTheDocument()
+    expect(screen.getByText('card.linkedHabit')).toBeInTheDocument()
   })
 })

@@ -1,0 +1,45 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "habits": "Habits",
+    "goals": "Goals",
+    "profile": "Profile",
+    "navigation": "Navigation",
+    "openMenu": "Open menu"
+  },
+  "menu": {
+    "darkMode": "Dark mode",
+    "lightMode": "Light mode",
+    "english": "English",
+    "russian": "Русский",
+    "logout": "Log out",
+    "loggingOut": "Logging out..."
+  },
+  "action": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "back": "Back",
+    "create": "Create",
+    "viewAll": "View all",
+    "tryAgain": "Try again.",
+    "add": "Add",
+    "update": "Update",
+    "link": "Link",
+    "unlink": "Unlink"
+  },
+  "status": {
+    "loading": "Loading...",
+    "saving": "Saving...",
+    "deleting": "Deleting..."
+  },
+  "error": {
+    "failedToLoad": "Failed to load."
+  },
+  "date": {
+    "noDeadline": "No deadline"
+  },
+  "optional": "(optional)"
+}

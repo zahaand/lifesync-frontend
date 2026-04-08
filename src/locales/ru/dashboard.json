@@ -1,0 +1,33 @@
+{
+  "greeting": "Привет, {{name}}",
+  "greetingDefault": "Привет",
+  "stats": {
+    "todaysHabits": "ПРИВЫЧКИ НА СЕГОДНЯ",
+    "completed": "выполнено",
+    "bestStreak": "ЛУЧШАЯ СЕРИЯ",
+    "days_one": "{{count}} день",
+    "days_few": "{{count}} дня",
+    "days_many": "{{count}} дней",
+    "empty": "—",
+    "activeGoals": "АКТИВНЫЕ ЦЕЛИ",
+    "inProgress": "в процессе",
+    "completedGoals": "ЗАВЕРШЁННЫЕ ЦЕЛИ",
+    "achieved": "достигнуто"
+  },
+  "habits": {
+    "title": "Привычки на сегодня",
+    "emptyState": "Привычек пока нет. Создайте первую привычку.",
+    "completedToday": "Выполнено сегодня",
+    "notDoneYet": "Ещё не выполнено",
+    "streak_one": "{{count}} день подряд",
+    "streak_few": "{{count}} дня подряд",
+    "streak_many": "{{count}} дней подряд"
+  },
+  "goals": {
+    "title": "Активные цели",
+    "emptyState": "Активных целей нет. Поставьте цель, чтобы начать.",
+    "active": "Активная",
+    "completed": "Завершена",
+    "due": "До {{date}}"
+  }
+}

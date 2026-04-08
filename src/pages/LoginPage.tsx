@@ -2,6 +2,7 @@ import {useState, useEffect} from 'react'
 import {useSearchParams, useNavigate} from 'react-router-dom'
 import {useForm} from 'react-hook-form'
 import {zodResolver} from '@hookform/resolvers/zod'
+import {useTranslation} from 'react-i18next'
 import {Loader2} from 'lucide-react'
 import {Input} from '@/components/ui/input'
 import {Label} from '@/components/ui/label'
@@ -12,6 +13,7 @@ import {useAuthStore, selectIsAuthenticated} from '@/stores/authStore'
 import type {RegisterRequest, LoginRequest} from '@/types/auth'
 
 function RegisterForm({onSuccess}: { onSuccess: () => void }) {
+    const {t} = useTranslation('auth')
     const {
         register,
         handleSubmit,
@@ -39,13 +41,13 @@ function RegisterForm({onSuccess}: { onSuccess: () => void }) {
 
             <div>
                 <Label htmlFor="register-email" className="mb-1 block text-[12px] font-medium text-[#666360] dark:text-zinc-500">
-                    Email
+                    {t('register.email')}
                 </Label>
                 <Input
                     id="register-email"
                     data-testid="email-input"
                     type="email"
-                    placeholder="alice@example.com"
+                    placeholder={t('register.emailPlaceholder')}
                     className={`h-[36px] rounded-lg border-[#C7C4BB] dark:border-zinc-800 px-3 text-[13px] text-[#2C2C2A] dark:text-zinc-50 placeholder:text-[#9E9B94] dark:placeholder:text-zinc-600 focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] ${values.email ? 'bg-[#F5F4F0] dark:bg-zinc-800' : 'bg-white dark:bg-zinc-900'}`}
                     {...register('email')}
                 />
@@ -56,32 +58,32 @@ function RegisterForm({onSuccess}: { onSuccess: () => void }) {
 
             <div>
                 <Label htmlFor="register-username" className="mb-1 block text-[12px] font-medium text-[#666360] dark:text-zinc-500">
-                    Username
+                    {t('register.username')}
                 </Label>
                 <Input
                     id="register-username"
                     data-testid="username-input"
                     type="text"
-                    placeholder="alice-dev"
+                    placeholder={t('register.usernamePlaceholder')}
                     className={`h-[36px] rounded-lg border-[#C7C4BB] dark:border-zinc-800 px-3 text-[13px] text-[#2C2C2A] dark:text-zinc-50 placeholder:text-[#9E9B94] dark:placeholder:text-zinc-600 focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] ${values.username ? 'bg-[#F5F4F0] dark:bg-zinc-800' : 'bg-white dark:bg-zinc-900'}`}
                     {...register('username')}
                 />
                 {errors.username ? (
                     <p className="mt-1 text-[12px] text-red-600">{errors.username.message}</p>
                 ) : (
-                    <p className="mt-1 text-[11px] text-[#9E9B94] dark:text-zinc-600">3–32 characters: letters, digits, _ and -</p>
+                    <p className="mt-1 text-[11px] text-[#9E9B94] dark:text-zinc-600">{t('register.usernameHint')}</p>
                 )}
             </div>
 
             <div>
                 <Label htmlFor="register-password" className="mb-1 block text-[12px] font-medium text-[#666360] dark:text-zinc-500">
-                    Password
+                    {t('register.password')}
                 </Label>
                 <Input
                     id="register-password"
                     data-testid="register-password-input"
                     type="password"
-                    placeholder="Minimum 8 characters"
+                    placeholder={t('register.passwordHint')}
                     className={`h-[36px] rounded-lg border-[#C7C4BB] dark:border-zinc-800 px-3 text-[13px] text-[#2C2C2A] dark:text-zinc-50 placeholder:text-[#9E9B94] dark:placeholder:text-zinc-600 focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] ${values.password ? 'bg-[#F5F4F0] dark:bg-zinc-800' : 'bg-white dark:bg-zinc-900'}`}
                     {...register('password')}
                 />
@@ -99,10 +101,10 @@ function RegisterForm({onSuccess}: { onSuccess: () => void }) {
                 {mutation.isPending ? (
                     <>
                         <Loader2 className="mr-2 size-4 animate-spin"/>
-                        Creating account...
+                        {t('register.submitting')}
                     </>
                 ) : (
-                    'Create account'
+                    t('register.submit')
                 )}
             </Button>
         </form>
@@ -110,6 +112,7 @@ function RegisterForm({onSuccess}: { onSuccess: () => void }) {
 }
 
 function LoginForm() {
+    const {t} = useTranslation('auth')
     const {
         register,
         handleSubmit,
@@ -137,26 +140,26 @@ function LoginForm() {
 
             <div>
                 <Label htmlFor="login-identifier" className="mb-1 block text-[12px] font-medium text-[#666360] dark:text-zinc-500">
-                    Email or username
+                    {t('login.emailOrUsername')}
                 </Label>
                 <Input
                     id="login-identifier"
                     data-testid="identifier-input"
                     type="text"
-                    placeholder="alice@example.com"
+                    placeholder={t('register.emailPlaceholder')}
                     className={`h-[36px] rounded-lg border-[#C7C4BB] dark:border-zinc-800 px-3 text-[13px] text-[#2C2C2A] dark:text-zinc-50 placeholder:text-[#9E9B94] dark:placeholder:text-zinc-600 focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] ${values.identifier ? 'bg-[#F5F4F0] dark:bg-zinc-800' : 'bg-white dark:bg-zinc-900'}`}
                     {...register('identifier')}
                 />
                 {errors.identifier ? (
                     <p className="mt-1 text-[12px] text-red-600">{errors.identifier.message}</p>
                 ) : (
-                    <p className="mt-1 text-[11px] text-[#9E9B94] dark:text-zinc-600">You can sign in with either email or username</p>
+                    <p className="mt-1 text-[11px] text-[#9E9B94] dark:text-zinc-600">{t('login.emailOrUsernameHint')}</p>
                 )}
             </div>
 
             <div>
                 <Label htmlFor="login-password" className="mb-1 block text-[12px] font-medium text-[#666360] dark:text-zinc-500">
-                    Password
+                    {t('login.password')}
                 </Label>
                 <Input
                     id="login-password"
@@ -180,10 +183,10 @@ function LoginForm() {
                 {mutation.isPending ? (
                     <>
                         <Loader2 className="mr-2 size-4 animate-spin"/>
-                        Signing in...
+                        {t('login.submitting')}
                     </>
                 ) : (
-                    'Sign in'
+                    t('login.submit')
                 )}
             </Button>
         </form>
@@ -191,6 +194,7 @@ function LoginForm() {
 }
 
 export default function LoginPage() {
+    const {t} = useTranslation('auth')
     const [searchParams, setSearchParams] = useSearchParams()
     const navigate = useNavigate()
     const isAuthenticated = useAuthStore(selectIsAuthenticated)
@@ -211,7 +215,7 @@ export default function LoginPage() {
 
     const handleRegisterSuccess = () => {
         setSearchParams({tab: 'signin'}, {replace: true})
-        setSuccessMessage('Account created successfully. Please sign in.')
+        setSuccessMessage(t('register.success'))
     }
 
     return (
@@ -227,12 +231,12 @@ export default function LoginPage() {
                 {/* Title + Subtitle */}
                 <div className="mb-5 text-center">
                     <h1 className="text-[18px] font-semibold text-[#2C2C2A] dark:text-zinc-50">
-                        {activeTab === 'signin' ? 'Welcome back' : 'Create your account'}
+                        {activeTab === 'signin' ? t('login.title') : t('register.title')}
                     </h1>
                     <p className="text-[13px] text-[#9E9B94] dark:text-zinc-500">
                         {activeTab === 'signin'
-                            ? 'Sign in to continue'
-                            : 'Start tracking habits and goals'}
+                            ? t('login.subtitle')
+                            : t('register.subtitle')}
                     </p>
                 </div>
 
@@ -249,7 +253,7 @@ export default function LoginPage() {
                                 : 'bg-white dark:bg-zinc-900 text-[#666360] dark:text-zinc-500 hover:bg-[#F5F4F0] dark:hover:bg-zinc-800'
                         }`}
                     >
-                        Sign in
+                        {t('login.submit')}
                     </Button>
                     <Button
                         type="button"
@@ -262,7 +266,7 @@ export default function LoginPage() {
                                 : 'bg-white dark:bg-zinc-900 text-[#666360] dark:text-zinc-500 hover:bg-[#F5F4F0] dark:hover:bg-zinc-800'
                         }`}
                     >
-                        Sign up
+                        {t('register.submit')}
                     </Button>
                 </div>
 

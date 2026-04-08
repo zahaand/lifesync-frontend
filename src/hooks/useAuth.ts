@@ -1,8 +1,10 @@
 import {useMutation} from '@tanstack/react-query'
 import {useNavigate} from 'react-router-dom'
 import {AxiosError} from 'axios'
+import i18n from 'i18next'
 import {authApi} from '@/api/auth'
 import {useAuthStore} from '@/stores/authStore'
+import {useLocaleStore} from '@/stores/localeStore'
 import type {RegisterRequest, LoginRequest, ConflictError, ValidationError} from '@/types/auth'
 import type {UseFormSetError} from 'react-hook-form'
 
@@ -28,7 +30,7 @@ export function useRegister(setError: UseFormSetError<RegisterRequest>) {
                     }
                 }
             } else {
-                setError('root', {message: 'Something went wrong. Please try again.'})
+                setError('root', {message: i18n.t('auth:error.generic')})
             }
         },
     })
@@ -43,6 +45,11 @@ export function useLogin(setError: UseFormSetError<LoginRequest>) {
         onSuccess: (data) => {
             setTokens(data.accessToken, data.refreshToken, data.user)
 
+            const userLocale = (data.user as { locale?: string | null }).locale
+            if (userLocale === 'en' || userLocale === 'ru') {
+                useLocaleStore.getState().setLocale(userLocale)
+            }
+
             const params = new URLSearchParams(window.location.search)
             const returnUrl = params.get('returnUrl')
             const safeUrl = returnUrl && returnUrl.startsWith('/') && !returnUrl.includes('://') && !returnUrl.startsWith('//')
@@ -54,11 +61,11 @@ export function useLogin(setError: UseFormSetError<LoginRequest>) {
             const status = error.response?.status
 
             if (status === 401) {
-                setError('root', {message: 'Invalid credentials'})
+                setError('root', {message: i18n.t('auth:error.invalidCredentials')})
             } else if (status === 403) {
-                setError('root', {message: 'Your account has been suspended. Please contact support.'})
+                setError('root', {message: i18n.t('auth:error.accountSuspended')})
             } else {
-                setError('root', {message: 'Something went wrong. Please try again.'})
+                setError('root', {message: i18n.t('auth:error.generic')})
             }
         },
     })

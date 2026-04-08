@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -19,6 +20,7 @@ type AccountCardProps = {
 type ProfileFormValues = z.infer<typeof updateProfileSchema>
 
 export default function AccountCard({ profile, isLoading }: AccountCardProps) {
+  const { t } = useTranslation('profile')
   const updateProfile = useUpdateProfile()
 
   const form = useForm<ProfileFormValues>({
@@ -79,7 +81,7 @@ export default function AccountCard({ profile, isLoading }: AccountCardProps) {
   return (
     <Card className="p-6">
       <CardContent className="p-0">
-        <h2 className="mb-4 text-[16px] font-medium text-[#2C2C2A] dark:text-zinc-50">Account</h2>
+        <h2 className="mb-4 text-[16px] font-medium text-[#2C2C2A] dark:text-zinc-50">{t('account.title')}</h2>
 
         <div className="flex items-start gap-4">
           <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#EEEDFE] dark:bg-[#534AB7]/20 text-[20px] font-medium text-[#534AB7]">
@@ -89,7 +91,7 @@ export default function AccountCard({ profile, isLoading }: AccountCardProps) {
           <form onSubmit={handleSubmit(onSubmit)} className="flex-1 space-y-4">
             <div className="space-y-1.5">
               <Label htmlFor="username" className="text-[13px] text-[#2C2C2A] dark:text-zinc-50">
-                Username
+                {t('account.usernameLabel')}
               </Label>
               <Input
                 id="username"
@@ -97,16 +99,16 @@ export default function AccountCard({ profile, isLoading }: AccountCardProps) {
                 disabled
                 className="h-9 border-[#C7C4BB] dark:border-zinc-800 rounded-lg bg-[#F5F4F0] dark:bg-zinc-800 text-[#9E9B94] dark:text-zinc-500"
               />
-              <p className="text-[11px] text-[#9E9B94] dark:text-zinc-500">Username cannot be changed</p>
+              <p className="text-[11px] text-[#9E9B94] dark:text-zinc-500">{t('account.usernameReadOnly')}</p>
             </div>
 
             <div className="space-y-1.5">
               <Label htmlFor="displayName" className="text-[13px] text-[#2C2C2A] dark:text-zinc-50">
-                Display name
+                {t('account.displayNameLabel')}
               </Label>
               <Input
                 id="displayName"
-                placeholder="e.g. Alice Johnson"
+                placeholder={t('account.displayNamePlaceholder')}
                 {...register('displayName')}
                 className="h-9 border-[#C7C4BB] dark:border-zinc-800 rounded-lg"
               />
@@ -114,14 +116,14 @@ export default function AccountCard({ profile, isLoading }: AccountCardProps) {
                 <p className="text-[12px] text-red-500">{errors.displayName.message}</p>
               ) : (
                 <p className="text-[11px] text-[#9E9B94] dark:text-zinc-500">
-                  Used in greetings — leave empty to use your username
+                  {t('account.displayNameHint')}
                 </p>
               )}
             </div>
 
             <div className="space-y-1.5">
               <Label htmlFor="email" className="text-[13px] text-[#2C2C2A] dark:text-zinc-50">
-                Email
+                {t('account.emailLabel')}
               </Label>
               <Input
                 id="email"
@@ -129,7 +131,7 @@ export default function AccountCard({ profile, isLoading }: AccountCardProps) {
                 disabled
                 className="h-9 border-[#C7C4BB] dark:border-zinc-800 rounded-lg bg-[#F5F4F0] dark:bg-zinc-800 text-[#9E9B94] dark:text-zinc-500"
               />
-              <p className="text-[11px] text-[#9E9B94] dark:text-zinc-500">Email cannot be changed</p>
+              <p className="text-[11px] text-[#9E9B94] dark:text-zinc-500">{t('account.emailReadOnly')}</p>
             </div>
 
             <div className="flex justify-end gap-2">
@@ -140,14 +142,14 @@ export default function AccountCard({ profile, isLoading }: AccountCardProps) {
                 onClick={handleCancel}
                 disabled={!isDirty}
               >
-                Cancel
+                {t('account.cancelButton')}
               </Button>
               <Button
                 type="submit"
                 className="rounded-lg bg-[#534AB7] px-4 py-2 text-[13px] font-medium text-[#EEEDFE]"
                 disabled={!isDirty || updateProfile.isPending}
               >
-                {updateProfile.isPending ? 'Saving...' : 'Save changes'}
+                {updateProfile.isPending ? t('common:status.saving') : t('account.saveButton')}
               </Button>
             </div>
           </form>

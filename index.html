@@ -12,6 +12,9 @@
           var t = s ? JSON.parse(s).state.theme : null;
           var d = !t && window.matchMedia('(prefers-color-scheme: dark)').matches;
           if (t === 'dark' || d) document.documentElement.classList.add('dark');
+          var l = localStorage.getItem('lifesync-locale');
+          if (l === 'en' || l === 'ru') { document.documentElement.lang = l; }
+          else { document.documentElement.lang = (navigator.language || '').startsWith('ru') ? 'ru' : 'en'; }
         } catch(e) {}
       })();
     </script>

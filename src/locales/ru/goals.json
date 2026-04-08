@@ -1,0 +1,102 @@
+{
+  "page": {
+    "title": "Цели",
+    "statsActive": "активных",
+    "statsCompleted": "завершённых"
+  },
+  "action": {
+    "newGoal": "Новая цель",
+    "createButton": "+ Новая цель"
+  },
+  "filter": {
+    "all": "Все",
+    "active": "Активные",
+    "completed": "Завершённые"
+  },
+  "emptyState": {
+    "noGoals": "Целей пока нет",
+    "noGoalsDescription": "Создайте первую цель, чтобы начать.",
+    "noGoalsButton": "+ Новая цель",
+    "noFiltered": "Нет целей: {{filter}}",
+    "noSelection": "Выберите цель для просмотра"
+  },
+  "card": {
+    "active": "Активная",
+    "completed": "Завершена",
+    "linkedHabit_one": "{{count}} привычка",
+    "linkedHabit_few": "{{count}} привычки",
+    "linkedHabit_many": "{{count}} привычек",
+    "milestone_one": "{{done}} из {{total}} этапа",
+    "milestone_few": "{{done}} из {{total}} этапов",
+    "milestone_many": "{{done}} из {{total}} этапов",
+    "noMilestones": "Нет этапов"
+  },
+  "form": {
+    "createTitle": "Создать цель",
+    "createDescription": "Создание новой цели",
+    "editTitle": "Редактировать цель",
+    "editDescription": "Редактирование цели",
+    "titleLabel": "Название",
+    "titlePlaceholder": "Название цели",
+    "descriptionLabel": "Описание",
+    "descriptionPlaceholder": "Необязательное описание",
+    "targetDateLabel": "Целевая дата",
+    "statusLabel": "Статус",
+    "cancel": "Отмена",
+    "create": "Создать",
+    "save": "Сохранить",
+    "saving": "Сохранение..."
+  },
+  "detail": {
+    "editButton": "Редактировать",
+    "description": "Описание"
+  },
+  "milestones": {
+    "title": "Этапы",
+    "empty": "Этапов пока нет",
+    "placeholder": "Добавить этап...",
+    "addButton": "Добавить"
+  },
+  "linkedHabits": {
+    "title": "Связанные привычки",
+    "empty": "Привычки не связаны",
+    "allLinked": "Все привычки связаны",
+    "placeholder": "Связать привычку...",
+    "linkButton": "Связать",
+    "unlinkButton": "Отвязать",
+    "streak_one": "{{count}} день",
+    "streak_few": "{{count}} дня",
+    "streak_many": "{{count}} дней"
+  },
+  "progress": {
+    "title": "Прогресс",
+    "updateButton": "Обновить",
+    "updating": "Обновление..."
+  },
+  "message": {
+    "created": "Цель создана",
+    "createFailed": "Не удалось создать цель",
+    "updated": "Цель обновлена",
+    "updateFailed": "Не удалось обновить цель",
+    "deleted": "Цель удалена",
+    "deleteFailed": "Не удалось удалить цель",
+    "progressUpdated": "Прогресс обновлён",
+    "progressFailed": "Не удалось обновить прогресс",
+    "milestoneAdded": "Этап добавлен",
+    "milestoneAddFailed": "Не удалось добавить этап",
+    "milestoneFailed": "Не удалось обновить этап",
+    "milestoneRemoved": "Этап удалён",
+    "milestoneRemoveFailed": "Не удалось удалить этап",
+    "habitLinked": "Привычка связана",
+    "habitLinkFailed": "Не удалось связать привычку",
+    "habitUnlinked": "Привычка отвязана",
+    "habitUnlinkFailed": "Не удалось отвязать привычку"
+  },
+  "deleteDialog": {
+    "title": "Удалить цель",
+    "description": "Цель «{{name}}» и все её этапы будут удалены навсегда. Это действие нельзя отменить.",
+    "cancel": "Отмена",
+    "delete": "Удалить",
+    "deleting": "Удаление..."
+  }
+}

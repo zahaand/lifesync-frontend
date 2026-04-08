@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Plus, ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -14,6 +15,7 @@ import useIsMobile from '@/hooks/useIsMobile'
 import type { Goal, GoalDetail as GoalDetailType } from '@/types/goals'
 
 export default function GoalsPage() {
+  const { t } = useTranslation('goals')
   const queryClient = useQueryClient()
   const { data, isLoading } = useAllGoals()
   const isMobile = useIsMobile()
@@ -64,9 +66,9 @@ export default function GoalsPage() {
           {/* Header */}
           <div className="mb-5 flex items-start justify-between">
             <div>
-              <h1 className="text-[20px] font-semibold text-[#2C2C2A] dark:text-zinc-50">Goals</h1>
+              <h1 className="text-[20px] font-semibold text-[#2C2C2A] dark:text-zinc-50">{t('page.title')}</h1>
               <p className="mt-1 text-[13px] text-[#9E9B94] dark:text-zinc-500">
-                {activeCount} active · {completedCount} completed
+                {activeCount} {t('page.statsActive')} · {completedCount} {t('page.statsCompleted')}
               </p>
             </div>
             <Button
@@ -75,7 +77,7 @@ export default function GoalsPage() {
               onClick={() => setCreateModalOpen(true)}
             >
               <Plus className="mr-1.5 size-4" />
-              New goal
+              {t('action.newGoal')}
             </Button>
           </div>
 
@@ -93,7 +95,7 @@ export default function GoalsPage() {
             <GoalEmptyState variant="no-goals" onCreateClick={() => setCreateModalOpen(true)} />
           ) : filteredGoals.length === 0 ? (
             <div className="py-12 text-center text-[13px] text-[#9E9B94] dark:text-zinc-500">
-              No {filterTab.toLowerCase()} goals
+              {t('emptyState.noFilteredGoals', { filter: filterTab.toLowerCase() })}
             </div>
           ) : (
             <div className="space-y-3">
@@ -126,7 +128,7 @@ export default function GoalsPage() {
               onClick={() => setSelectedGoalId(null)}
             >
               <ArrowLeft className="size-4" />
-              Goals
+              {t('page.title')}
             </Button>
           )}
 

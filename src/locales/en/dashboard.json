@@ -1,0 +1,31 @@
+{
+  "greeting": "Hello, {{name}}",
+  "greetingDefault": "Hello",
+  "stats": {
+    "todaysHabits": "TODAY'S HABITS",
+    "completed": "completed",
+    "bestStreak": "BEST STREAK",
+    "days_one": "{{count}} day",
+    "days_other": "{{count}} days",
+    "empty": "—",
+    "activeGoals": "ACTIVE GOALS",
+    "inProgress": "in progress",
+    "completedGoals": "COMPLETED GOALS",
+    "achieved": "achieved"
+  },
+  "habits": {
+    "title": "Today's habits",
+    "emptyState": "No habits yet. Create your first habit to get started.",
+    "completedToday": "Completed today",
+    "notDoneYet": "Not done yet",
+    "streak_one": "{{count}} day streak",
+    "streak_other": "{{count}} day streak"
+  },
+  "goals": {
+    "title": "Active goals",
+    "emptyState": "No active goals. Set a goal to start tracking your progress.",
+    "active": "Active",
+    "completed": "Completed",
+    "due": "Due {{date}}"
+  }
+}

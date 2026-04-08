@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -12,6 +13,7 @@ type GoalMilestonesProps = {
 }
 
 export default function GoalMilestones({ goalId, milestones }: GoalMilestonesProps) {
+  const { t } = useTranslation('goals')
   const [newTitle, setNewTitle] = useState('')
   const addMilestone = useAddMilestone()
   const updateMilestone = useUpdateMilestone()
@@ -41,11 +43,11 @@ export default function GoalMilestones({ goalId, milestones }: GoalMilestonesPro
   return (
     <div className="rounded-xl border border-[#E8E6DF] dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5">
       <div className="mb-3 text-[11px] font-medium uppercase tracking-wider text-[#9E9B94] dark:text-zinc-500">
-        Milestones
+        {t('milestones.title')}
       </div>
 
       {milestones.length === 0 ? (
-        <p className="py-3 text-[13px] text-[#9E9B94] dark:text-zinc-500">No milestones yet</p>
+        <p className="py-3 text-[13px] text-[#9E9B94] dark:text-zinc-500">{t('milestones.empty')}</p>
       ) : (
         <div>
           {milestones.map((ms, idx) => (
@@ -87,7 +89,7 @@ export default function GoalMilestones({ goalId, milestones }: GoalMilestonesPro
       {/* Add row */}
       <div className="mt-3 flex gap-2">
         <Input
-          placeholder="Add milestone..."
+          placeholder={t('milestones.placeholder')}
           value={newTitle}
           onChange={(e) => setNewTitle(e.target.value)}
           onKeyDown={(e) => {
@@ -100,7 +102,7 @@ export default function GoalMilestones({ goalId, milestones }: GoalMilestonesPro
           onClick={handleAdd}
           disabled={addMilestone.isPending}
         >
-          Add
+          {t('milestones.addButton')}
         </Button>
       </div>
     </div>

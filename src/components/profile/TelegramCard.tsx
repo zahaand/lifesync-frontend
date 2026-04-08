@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -19,6 +20,7 @@ type TelegramCardProps = {
 type TelegramFormValues = z.infer<typeof updateTelegramSchema>
 
 export default function TelegramCard({ profile, isLoading }: TelegramCardProps) {
+  const { t } = useTranslation('profile')
   const updateTelegram = useUpdateTelegram()
 
   const isLinked = !!profile?.telegramChatId
@@ -51,20 +53,20 @@ export default function TelegramCard({ profile, isLoading }: TelegramCardProps) 
     <Card className="p-6">
       <CardContent className="p-0">
         <div className="mb-4 flex items-center gap-2">
-          <h2 className="text-[16px] font-medium text-[#2C2C2A] dark:text-zinc-50">Telegram</h2>
+          <h2 className="text-[16px] font-medium text-[#2C2C2A] dark:text-zinc-50">{t('telegram.title')}</h2>
           <Badge className="rounded-full border-0 bg-[#E6F1FB] dark:bg-sky-950 px-2 py-0.5 text-[10px] font-medium text-[#0C447C] dark:text-sky-400">
-            Optional
+            {t('telegram.badge')}
           </Badge>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
           <div className="space-y-1.5">
             <Label htmlFor="telegramChatId" className="text-[13px] text-[#2C2C2A] dark:text-zinc-50">
-              Telegram Chat ID
+              {t('telegram.idLabel')}
             </Label>
             <Input
               id="telegramChatId"
-              placeholder="e.g. 123456789"
+              placeholder={t('telegram.idPlaceholder')}
               {...register('telegramChatId')}
               className="h-9 border-[#C7C4BB] dark:border-zinc-800 rounded-lg"
             />
@@ -72,7 +74,7 @@ export default function TelegramCard({ profile, isLoading }: TelegramCardProps) 
               <p className="text-[12px] text-red-500">{errors.telegramChatId.message}</p>
             ) : (
               <p className="text-[11px] text-[#9E9B94] dark:text-zinc-500">
-                Link your Telegram to receive habit reminders via bot
+                {t('telegram.hint')}
               </p>
             )}
           </div>
@@ -83,10 +85,10 @@ export default function TelegramCard({ profile, isLoading }: TelegramCardProps) 
             disabled={updateTelegram.isPending}
           >
             {updateTelegram.isPending
-              ? 'Saving...'
+              ? t('common:status.saving')
               : isLinked
-                ? 'Update'
-                : 'Link Telegram'}
+                ? t('telegram.updateButton')
+                : t('telegram.linkButton')}
           </Button>
         </form>
       </CardContent>

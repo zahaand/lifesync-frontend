@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Outlet, NavLink } from 'react-router-dom'
-import { LayoutDashboard, ListChecks, Target, User, LogOut, Menu, ChevronUp, Sun, Moon } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import { LayoutDashboard, ListChecks, Target, User, LogOut, Menu, ChevronUp, Sun, Moon, Globe } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import {
@@ -17,15 +18,16 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useAuthStore } from '@/stores/authStore'
 import { useThemeStore } from '@/stores/themeStore'
+import { useLocaleStore } from '@/stores/localeStore'
 import { useLogout } from '@/hooks/useAuth'
 import { useCurrentUser } from '@/hooks/useUsers'
 import useIsMobile from '@/hooks/useIsMobile'
 
 const navItems = [
-  { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { to: '/habits', label: 'Habits', icon: ListChecks },
-  { to: '/goals', label: 'Goals', icon: Target },
-  { to: '/profile', label: 'Profile', icon: User },
+  { to: '/dashboard', labelKey: 'common:nav.dashboard', icon: LayoutDashboard },
+  { to: '/habits', labelKey: 'common:nav.habits', icon: ListChecks },
+  { to: '/goals', labelKey: 'common:nav.goals', icon: Target },
+  { to: '/profile', labelKey: 'common:nav.profile', icon: User },
 ]
 
 function getInitials(displayName: string | undefined, username: string | undefined): string {
@@ -34,11 +36,14 @@ function getInitials(displayName: string | undefined, username: string | undefin
 }
 
 function UserChip({ onNavClick }: { onNavClick?: () => void }) {
+  const { t } = useTranslation()
   const authUser = useAuthStore((s) => s.user)
   const { data: profile } = useCurrentUser()
   const logout = useLogout()
   const theme = useThemeStore((s) => s.theme)
   const toggleTheme = useThemeStore((s) => s.toggleTheme)
+  const locale = useLocaleStore((s) => s.locale)
+  const toggleLocale = useLocaleStore((s) => s.toggleLocale)
   const [open, setOpen] = useState(false)
 
   const displayName = profile?.displayName || profile?.username || authUser?.username || ''
@@ -78,7 +83,17 @@ function UserChip({ onNavClick }: { onNavClick?: () => void }) {
           ) : (
             <Sun className="mr-2 size-4 text-amber-400" />
           )}
-          {theme === 'light' ? 'Dark mode' : 'Light mode'}
+          {theme === 'light' ? t('common:menu.darkMode') : t('common:menu.lightMode')}
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => {
+            toggleLocale()
+            onNavClick?.()
+          }}
+          className="dark:text-zinc-50 dark:hover:bg-zinc-800"
+        >
+          <Globe className="mr-2 size-4" />
+          {locale === 'en' ? t('common:menu.english') : t('common:menu.russian')}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
@@ -87,7 +102,7 @@ function UserChip({ onNavClick }: { onNavClick?: () => void }) {
           className="dark:text-red-400 dark:focus:text-red-300 dark:hover:bg-zinc-800"
         >
           <LogOut className="mr-2 size-4" />
-          {logout.isPending ? 'Logging out...' : 'Log out'}
+          {logout.isPending ? t('common:menu.loggingOut') : t('common:menu.logout')}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -99,6 +114,8 @@ function SidebarContent({
 }: {
   onNavClick?: () => void
 }) {
+  const { t } = useTranslation()
+
   return (
     <>
       <div className="p-4">
@@ -122,7 +139,7 @@ function SidebarContent({
             }
           >
             <item.icon className="size-4" />
-            {item.label}
+            {t(item.labelKey)}
           </NavLink>
         ))}
       </nav>
@@ -141,6 +158,7 @@ function SidebarContent({
 }
 
 export default function Layout() {
+  const { t } = useTranslation()
   const isMobile = useIsMobile()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
@@ -154,7 +172,7 @@ export default function Layout() {
             size="icon"
             className="size-8"
             onClick={() => setSidebarOpen(true)}
-            aria-label="Open menu"
+            aria-label={t('common:nav.openMenu')}
           >
             <Menu className="size-5" />
           </Button>
@@ -172,7 +190,7 @@ export default function Layout() {
             side="left"
             className="flex w-[260px] flex-col bg-sidebar p-0 text-sidebar-foreground"
           >
-            <SheetTitle className="sr-only">Navigation</SheetTitle>
+            <SheetTitle className="sr-only">{t('common:nav.navigation')}</SheetTitle>
             <SidebarContent onNavClick={() => setSidebarOpen(false)} />
           </SheetContent>
         </Sheet>

@@ -1,0 +1,95 @@
+{
+  "page": {
+    "title": "Привычки",
+    "statsActive": "активных",
+    "statsArchived": "в архиве"
+  },
+  "action": {
+    "newHabit": "Новая привычка",
+    "createButton": "+ Новая привычка"
+  },
+  "filter": {
+    "all": "Все",
+    "active": "Активные",
+    "archived": "Архив",
+    "search": "Поиск привычек..."
+  },
+  "section": {
+    "active": "Активные — {{count}}",
+    "archived": "Архив — {{count}}"
+  },
+  "emptyState": {
+    "noResults": "Ничего не найдено.",
+    "noHabits": "Привычек пока нет",
+    "noHabitsDescription": "Нажмите '+ Новая привычка', чтобы создать первую.",
+    "noHabitsButton": "+ Новая привычка"
+  },
+  "card": {
+    "streak_one": "{{count}} день",
+    "streak_few": "{{count}} дня",
+    "streak_many": "{{count}} дней",
+    "doneTodayBadge": "Выполнено",
+    "notDoneYet": "Ещё не выполнено",
+    "daily": "Ежедневно",
+    "weekly": "Еженедельно",
+    "custom": "Другое",
+    "paused": "Пауза",
+    "edit": "Редактировать",
+    "history": "История",
+    "archive": "В архив",
+    "restore": "Восстановить",
+    "delete": "Удалить"
+  },
+  "days": {
+    "mo": "Пн",
+    "tu": "Вт",
+    "we": "Ср",
+    "th": "Чт",
+    "fr": "Пт",
+    "sa": "Сб",
+    "su": "Вс"
+  },
+  "form": {
+    "createTitle": "Новая привычка",
+    "editTitle": "Редактировать привычку",
+    "nameLabel": "Название",
+    "namePlaceholder": "напр. Утренняя пробежка",
+    "descriptionLabel": "Описание",
+    "descriptionPlaceholder": "О чём эта привычка?",
+    "frequencyLabel": "Частота",
+    "frequencyDaily": "Ежедневно",
+    "frequencyWeekly": "Еженедельно",
+    "frequencyCustom": "Другое",
+    "targetDaysLabel": "Дни выполнения",
+    "targetDaysRequired": "Выберите хотя бы один день",
+    "reminderTimeLabel": "Время напоминания",
+    "cancel": "Отмена",
+    "create": "Создать",
+    "save": "Сохранить"
+  },
+  "history": {
+    "title": "История выполнений",
+    "error": "Не удалось загрузить историю.",
+    "empty": "Выполнений пока нет",
+    "loadMore": "Загрузить ещё",
+    "loading": "Загрузка..."
+  },
+  "message": {
+    "created": "Привычка создана",
+    "createFailed": "Не удалось создать привычку",
+    "updated": "Привычка обновлена",
+    "updateFailed": "Не удалось обновить привычку",
+    "deleted": "Привычка удалена",
+    "deleteFailed": "Не удалось удалить привычку",
+    "archived": "Привычка в архиве",
+    "restored": "Привычка восстановлена",
+    "completeFailed": "Не удалось отметить привычку",
+    "uncompleteFailed": "Не удалось отменить отметку"
+  },
+  "deleteDialog": {
+    "title": "Удалить привычку",
+    "description": "Это действие нельзя отменить. Привычка «{{name}}» и вся история выполнений будут удалены навсегда.",
+    "cancel": "Отмена",
+    "delete": "Удалить"
+  }
+}

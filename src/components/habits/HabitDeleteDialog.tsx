@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,23 +23,24 @@ export default function HabitDeleteDialog({
   habitName,
   onConfirm,
 }: HabitDeleteDialogProps) {
+  const { t } = useTranslation('habits')
+
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete habit</AlertDialogTitle>
+          <AlertDialogTitle>{t('deleteDialog.title')}</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. The habit &ldquo;{habitName}&rdquo; and all its
-            completion history will be permanently deleted.
+            {t('deleteDialog.description', { name: habitName })}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>{t('deleteDialog.cancel')}</AlertDialogCancel>
           <AlertDialogAction
             onClick={onConfirm}
             className="bg-red-500 text-white hover:bg-red-600"
           >
-            Delete
+            {t('deleteDialog.delete')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

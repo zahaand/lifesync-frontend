@@ -1,0 +1,94 @@
+{
+  "page": {
+    "title": "Habits",
+    "statsActive": "active",
+    "statsArchived": "archived"
+  },
+  "action": {
+    "newHabit": "New habit",
+    "createButton": "+ New habit"
+  },
+  "filter": {
+    "all": "All",
+    "active": "Active",
+    "archived": "Archived",
+    "search": "Search habits..."
+  },
+  "section": {
+    "active": "Active — {{count}}",
+    "archived": "Archived — {{count}}"
+  },
+  "emptyState": {
+    "noResults": "No habits match your search.",
+    "noHabits": "No habits yet",
+    "noHabitsDescription": "Click '+ New habit' to create your first.",
+    "noHabitsButton": "+ New habit"
+  },
+  "card": {
+    "streak_one": "{{count}} day",
+    "streak_other": "{{count}} days",
+    "doneTodayBadge": "Done today",
+    "notDoneYet": "Not done yet",
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "custom": "Custom",
+    "paused": "Paused",
+    "edit": "Edit",
+    "history": "History",
+    "archive": "Archive",
+    "restore": "Restore",
+    "delete": "Delete"
+  },
+  "days": {
+    "mo": "Mo",
+    "tu": "Tu",
+    "we": "We",
+    "th": "Th",
+    "fr": "Fr",
+    "sa": "Sa",
+    "su": "Su"
+  },
+  "form": {
+    "createTitle": "New habit",
+    "editTitle": "Edit habit",
+    "nameLabel": "Name",
+    "namePlaceholder": "e.g. Morning Run",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "What is this habit about?",
+    "frequencyLabel": "Frequency",
+    "frequencyDaily": "Daily",
+    "frequencyWeekly": "Weekly",
+    "frequencyCustom": "Custom",
+    "targetDaysLabel": "Target days",
+    "targetDaysRequired": "Select at least one day",
+    "reminderTimeLabel": "Reminder time",
+    "cancel": "Cancel",
+    "create": "Create",
+    "save": "Save"
+  },
+  "history": {
+    "title": "Completion history",
+    "error": "Failed to load history.",
+    "empty": "No completions yet",
+    "loadMore": "Load more",
+    "loading": "Loading..."
+  },
+  "message": {
+    "created": "Habit created",
+    "createFailed": "Failed to create habit",
+    "updated": "Habit updated",
+    "updateFailed": "Failed to update habit",
+    "deleted": "Habit deleted",
+    "deleteFailed": "Failed to delete habit",
+    "archived": "Habit archived",
+    "restored": "Habit restored",
+    "completeFailed": "Failed to complete habit",
+    "uncompleteFailed": "Failed to uncomplete habit"
+  },
+  "deleteDialog": {
+    "title": "Delete habit",
+    "description": "This action cannot be undone. The habit \"{{name}}\" and all its completion history will be permanently deleted.",
+    "cancel": "Cancel",
+    "delete": "Delete"
+  }
+}
