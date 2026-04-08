@@ -115,12 +115,12 @@ export default function HabitCard({
             {habit.frequency}
           </span>
           {habit.currentStreak > 0 && (
-            <span className="rounded bg-amber-50 px-1.5 py-0.5 text-[11px] text-amber-800">
+            <span className="rounded bg-amber-50 dark:bg-amber-950 px-1.5 py-0.5 text-[11px] text-amber-800 dark:text-amber-400">
               {'🔥'} {habit.currentStreak} day streak
             </span>
           )}
           {habit.completedToday ? (
-            <span className="rounded bg-emerald-50 px-1.5 py-0.5 text-[11px] text-emerald-800">
+            <span className="rounded bg-emerald-50 dark:bg-emerald-950 px-1.5 py-0.5 text-[11px] text-emerald-800 dark:text-green-400">
               Done today
             </span>
           ) : (

@@ -39,19 +39,19 @@ export default function GoalDetail({ goalId, listGoal, onEdit, onDelete }: GoalD
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
-          <h2 className="text-[20px] font-semibold text-[#2C2C2A]">{goal.title}</h2>
+          <h2 className="text-[20px] font-semibold text-[#2C2C2A] dark:text-zinc-50">{goal.title}</h2>
           {goal.description && (
-            <p className="mt-1 text-[13px] text-[#9E9B94]">{goal.description}</p>
+            <p className="mt-1 text-[13px] text-[#9E9B94] dark:text-zinc-500">{goal.description}</p>
           )}
         </div>
         <div className="flex gap-2">
           <Button
             variant="outline"
             size="icon"
-            className="h-8 w-8 rounded-lg border-[#E8E6DF]"
+            className="h-8 w-8 rounded-lg border-[#E8E6DF] dark:border-zinc-800"
             onClick={onEdit}
           >
-            <Pencil className="size-4 text-[#666360]" />
+            <Pencil className="size-4 text-[#666360] dark:text-zinc-500" />
           </Button>
           <Button
             data-testid="goal-delete-button"

@@ -57,7 +57,7 @@ function StatsRow() {
       label: 'BEST STREAK',
       value: habitsLoading ? null : `${bestStreakValue} days`,
       sub: bestStreakName || '—',
-      colorClass: 'text-[#854F0B]',
+      colorClass: 'text-[#854F0B] dark:text-amber-400',
       loading: habitsLoading,
       error: habitsError,
       retry: refetchHabits,
@@ -75,7 +75,7 @@ function StatsRow() {
       label: 'COMPLETED GOALS',
       value: goalsLoading ? null : String(completedCount),
       sub: 'achieved',
-      colorClass: 'text-[#3B6D11]',
+      colorClass: 'text-[#3B6D11] dark:text-green-400',
       loading: goalsLoading,
       error: goalsError,
       retry: refetchCompleted,
@@ -87,10 +87,10 @@ function StatsRow() {
       {stats.map((s) => (
         <Card
           key={s.label}
-          className="gap-0 rounded-lg border-0 bg-[#F5F4F0] p-0 ring-0"
+          className="gap-0 rounded-lg border-0 bg-[#F5F4F0] dark:bg-zinc-800 p-0 ring-0"
         >
           <CardContent className="p-4">
-            <div className="mb-1 text-[10px] font-medium uppercase tracking-wider text-[#9E9B94]">
+            <div className="mb-1 text-[10px] font-medium uppercase tracking-wider text-[#9E9B94] dark:text-zinc-500">
               {s.label}
             </div>
             {s.loading ? (
@@ -99,7 +99,7 @@ function StatsRow() {
                 <Skeleton className="h-[14px] w-16 rounded" />
               </>
             ) : s.error ? (
-              <div className="text-[11px] text-[#9E9B94]">
+              <div className="text-[11px] text-[#9E9B94] dark:text-zinc-500">
                 Failed to load.{' '}
                 <Button
                   variant="link"
@@ -114,7 +114,7 @@ function StatsRow() {
                 <div className={`mb-1 text-[22px] font-semibold ${s.colorClass}`}>
                   {s.value}
                 </div>
-                <div className="text-[11px] text-[#9E9B94]">
+                <div className="text-[11px] text-[#9E9B94] dark:text-zinc-500">
                   {s.sub}
                 </div>
               </>
@@ -146,10 +146,10 @@ function HabitsCard() {
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-[#E8E6DF]">
+    <div className="overflow-hidden rounded-xl border border-[#E8E6DF] dark:border-zinc-800">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-[#E8E6DF] px-4 py-3">
-        <span className="text-[14px] font-medium text-[#2C2C2A]">
+        <span className="text-[14px] font-medium text-[#2C2C2A] dark:text-zinc-50">
           Today&apos;s habits
         </span>
         <Link to="/habits" className="text-[12px] text-[#534AB7]">
@@ -165,7 +165,7 @@ function HabitsCard() {
           ))}
         </div>
       ) : isError ? (
-        <div className="px-4 py-8 text-center text-[13px] text-[#9E9B94]">
+        <div className="px-4 py-8 text-center text-[13px] text-[#9E9B94] dark:text-zinc-500">
           Failed to load.{' '}
           <Button
             variant="link"
@@ -176,7 +176,7 @@ function HabitsCard() {
           </Button>
         </div>
       ) : habits.length === 0 ? (
-        <div className="px-4 py-8 text-center text-[13px] text-[#9E9B94]">
+        <div className="px-4 py-8 text-center text-[13px] text-[#9E9B94] dark:text-zinc-500">
           No habits yet. Create your first habit to get started.
         </div>
       ) : (
@@ -199,22 +199,22 @@ function HabitsCard() {
                     ? `Mark ${habit.title} as incomplete`
                     : `Mark ${habit.title} as complete`
                 }
-                className="h-[22px] w-[22px] rounded-full border-[#C7C4BB] data-[state=checked]:border-[#534AB7] data-[state=checked]:bg-[#534AB7]"
+                className="h-[22px] w-[22px] rounded-full border-[#C7C4BB] dark:border-zinc-800 data-[state=checked]:border-[#534AB7] data-[state=checked]:bg-[#534AB7]"
               />
               <div className="flex-1">
                 <div
-                  className={`text-[13px] font-medium ${habit.completedToday ? 'text-[#9E9B94] line-through' : 'text-[#2C2C2A]'}`}
+                  className={`text-[13px] font-medium ${habit.completedToday ? 'text-[#9E9B94] dark:text-zinc-500 line-through' : 'text-[#2C2C2A]'}`}
                 >
                   {habit.title}
                 </div>
                 <div className="mt-1 flex items-center gap-2">
                   <Badge
                     variant="secondary"
-                    className="rounded-full border-0 bg-[#F5F4F0] px-2 py-0.5 text-[10px] text-[#666360]"
+                    className="rounded-full border-0 bg-[#F5F4F0] dark:bg-zinc-800 px-2 py-0.5 text-[10px] text-[#666360] dark:text-zinc-500"
                   >
                     {habit.frequency}
                   </Badge>
-                  <span className="text-[11px] text-[#9E9B94]">
+                  <span className="text-[11px] text-[#9E9B94] dark:text-zinc-500">
                     {habit.completedToday ? 'Completed today' : 'Not done yet'}
                   </span>
                 </div>
@@ -222,7 +222,7 @@ function HabitsCard() {
               {habit.currentStreak > 0 && (
                 <Badge
                   variant="secondary"
-                  className="shrink-0 rounded-full border-0 bg-[#FAEEDA] px-2.5 py-1 text-[11px] font-medium text-[#854F0B]"
+                  className="shrink-0 rounded-full border-0 bg-[#FAEEDA] dark:bg-amber-950 px-2.5 py-1 text-[11px] font-medium text-[#854F0B] dark:text-amber-400"
                 >
                   🔥 {habit.currentStreak} day streak
                 </Badge>
@@ -244,10 +244,10 @@ function GoalsCard() {
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-[#E8E6DF]">
+    <div className="overflow-hidden rounded-xl border border-[#E8E6DF] dark:border-zinc-800">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-[#E8E6DF] px-4 py-3">
-        <span className="text-[14px] font-medium text-[#2C2C2A]">
+        <span className="text-[14px] font-medium text-[#2C2C2A] dark:text-zinc-50">
           Active goals
         </span>
         <Link to="/goals" className="text-[12px] text-[#534AB7]">
@@ -263,7 +263,7 @@ function GoalsCard() {
           ))}
         </div>
       ) : activeIsError ? (
-        <div className="px-4 py-8 text-center text-[13px] text-[#9E9B94]">
+        <div className="px-4 py-8 text-center text-[13px] text-[#9E9B94] dark:text-zinc-500">
           Failed to load.{' '}
           <Button
             variant="link"
@@ -274,13 +274,14 @@ function GoalsCard() {
           </Button>
         </div>
       ) : activeGoals.length === 0 ? (
-        <div className="px-4 py-8 text-center text-[13px] text-[#9E9B94]">
+        <div className="px-4 py-8 text-center text-[13px] text-[#9E9B94] dark:text-zinc-500">
           No active goals. Set a goal to start tracking your progress.
         </div>
       ) : (
         activeGoals.map((goal, idx) => {
           const isLast = idx === activeGoals.length - 1
-          const progressColor = goal.status === 'COMPLETED' ? '#3B6D11' : '#534AB7'
+          const isDark = document.documentElement.classList.contains('dark')
+          const progressColor = goal.status === 'COMPLETED' ? (isDark ? '#4ade80' : '#3B6D11') : '#534AB7'
           const clampedProgress = Math.max(0, Math.min(100, goal.progress))
           return (
             <div
@@ -289,11 +290,11 @@ function GoalsCard() {
             >
               {/* Name + progress % */}
               <div className="flex items-center justify-between">
-                <span className="text-[13px] font-medium text-[#2C2C2A]">
+                <span className="text-[13px] font-medium text-[#2C2C2A] dark:text-zinc-50">
                   {goal.title}
                 </span>
                 <span
-                  className={`text-[13px] font-semibold ${goal.status === 'COMPLETED' ? 'text-[#3B6D11]' : 'text-[#534AB7]'}`}
+                  className={`text-[13px] font-semibold ${goal.status === 'COMPLETED' ? 'text-[#3B6D11] dark:text-green-400' : 'text-[#534AB7]'}`}
                 >
                   {clampedProgress}%
                 </span>
@@ -301,15 +302,15 @@ function GoalsCard() {
 
               {/* Meta: deadline + badge */}
               <div className="mb-2 mt-1 flex items-center gap-2">
-                <span className="text-[11px] text-[#9E9B94]">
+                <span className="text-[11px] text-[#9E9B94] dark:text-zinc-500">
                   {formatDeadline(goal.targetDate)}
                 </span>
                 <Badge
                   variant="secondary"
                   className={`rounded-full border-0 px-2 py-0.5 text-[10px] font-medium ${
                     goal.status === 'COMPLETED'
-                      ? 'bg-[#EAF3DE] text-[#27500A]'
-                      : 'bg-[#EEEDFE] text-[#3C3489]'
+                      ? 'bg-[#EAF3DE] dark:bg-emerald-950 text-[#27500A] dark:text-green-400'
+                      : 'bg-[#EEEDFE] dark:bg-[#534AB7]/20 text-[#3C3489]'
                   }`}
                 >
                   {goal.status === 'COMPLETED' ? 'Completed' : 'Active'}
@@ -323,7 +324,7 @@ function GoalsCard() {
                 aria-valuenow={clampedProgress}
                 aria-valuemin={0}
                 aria-valuemax={100}
-                className="mb-2 h-[5px] rounded-full bg-[#F5F4F0]"
+                className="mb-2 h-[5px] rounded-full bg-[#F5F4F0] dark:bg-zinc-800"
               />
 
               {/* Milestones */}
@@ -332,10 +333,10 @@ function GoalsCard() {
                   {goal.milestones.slice(0, 3).map((ms) => (
                     <div key={ms.id} className="flex items-center gap-2">
                       <div
-                        className={`h-[7px] w-[7px] shrink-0 rounded-full ${ms.completed ? 'bg-[#1D9E75]' : 'bg-[#C7C4BB]'}`}
+                        className={`h-[7px] w-[7px] shrink-0 rounded-full ${ms.completed ? 'bg-[#1D9E75]' : 'bg-[#C7C4BB] dark:bg-zinc-700'}`}
                       />
                       <span
-                        className={`text-[11px] ${ms.completed ? 'text-[#9E9B94] line-through' : 'text-[#666360]'}`}
+                        className={`text-[11px] ${ms.completed ? 'text-[#9E9B94] dark:text-zinc-600 line-through' : 'text-[#666360] dark:text-zinc-500'}`}
                       >
                         {ms.title}
                       </span>
@@ -365,10 +366,10 @@ export default function DashboardPage() {
     <div>
       {/* Top bar */}
       <div className="mb-6">
-        <h1 className="text-[20px] font-semibold text-[#2C2C2A]">
+        <h1 className="text-[20px] font-semibold text-[#2C2C2A] dark:text-zinc-50">
           {greetingText}
         </h1>
-        <p className="mt-1 text-[13px] text-[#9E9B94]">
+        <p className="mt-1 text-[13px] text-[#9E9B94] dark:text-zinc-500">
           {formatDate()}
         </p>
       </div>

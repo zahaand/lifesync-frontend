@@ -51,27 +51,27 @@ export default function TelegramCard({ profile, isLoading }: TelegramCardProps) 
     <Card className="p-6">
       <CardContent className="p-0">
         <div className="mb-4 flex items-center gap-2">
-          <h2 className="text-[16px] font-medium text-[#2C2C2A]">Telegram</h2>
-          <Badge className="rounded-full border-0 bg-[#E6F1FB] px-2 py-0.5 text-[10px] font-medium text-[#0C447C]">
+          <h2 className="text-[16px] font-medium text-[#2C2C2A] dark:text-zinc-50">Telegram</h2>
+          <Badge className="rounded-full border-0 bg-[#E6F1FB] dark:bg-sky-950 px-2 py-0.5 text-[10px] font-medium text-[#0C447C] dark:text-sky-400">
             Optional
           </Badge>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
           <div className="space-y-1.5">
-            <Label htmlFor="telegramChatId" className="text-[13px] text-[#2C2C2A]">
+            <Label htmlFor="telegramChatId" className="text-[13px] text-[#2C2C2A] dark:text-zinc-50">
               Telegram Chat ID
             </Label>
             <Input
               id="telegramChatId"
               placeholder="e.g. 123456789"
               {...register('telegramChatId')}
-              className="h-9 border-[#C7C4BB] rounded-lg"
+              className="h-9 border-[#C7C4BB] dark:border-zinc-800 rounded-lg"
             />
             {errors.telegramChatId ? (
               <p className="text-[12px] text-red-500">{errors.telegramChatId.message}</p>
             ) : (
-              <p className="text-[11px] text-[#9E9B94]">
+              <p className="text-[11px] text-[#9E9B94] dark:text-zinc-500">
                 Link your Telegram to receive habit reminders via bot
               </p>
             )}

@@ -72,11 +72,11 @@ export default function HabitHistoryDrawer({
         side="right"
         className="w-full p-0 md:w-[400px]"
       >
-        <SheetHeader className="border-b border-[#E8E6DF] px-5 py-4">
-          <SheetTitle className="text-[16px] font-semibold text-[#2C2C2A]">
+        <SheetHeader className="border-b border-[#E8E6DF] dark:border-zinc-800 px-5 py-4">
+          <SheetTitle className="text-[16px] font-semibold text-[#2C2C2A] dark:text-zinc-50">
             {habitTitle}
           </SheetTitle>
-          <p className="text-[13px] text-[#9E9B94]">Completion history</p>
+          <p className="text-[13px] text-[#9E9B94] dark:text-zinc-500">Completion history</p>
         </SheetHeader>
 
         <div className="flex-1 overflow-y-auto px-5 py-2">
@@ -88,7 +88,7 @@ export default function HabitHistoryDrawer({
             </div>
           ) : isError ? (
             <div className="py-12 text-center">
-              <p className="text-[13px] text-[#9E9B94]">
+              <p className="text-[13px] text-[#9E9B94] dark:text-zinc-500">
                 Failed to load history.
               </p>
               <Button
@@ -100,7 +100,7 @@ export default function HabitHistoryDrawer({
               </Button>
             </div>
           ) : allLogs.length === 0 ? (
-            <div className="py-12 text-center text-[13px] text-[#9E9B94]">
+            <div className="py-12 text-center text-[13px] text-[#9E9B94] dark:text-zinc-500">
               No completions yet
             </div>
           ) : (
@@ -108,15 +108,15 @@ export default function HabitHistoryDrawer({
               {allLogs.map((log) => (
                 <div
                   key={log.id}
-                  className="flex items-center justify-between border-b border-[#F5F4F0] py-3"
+                  className="flex items-center justify-between border-b border-[#F5F4F0] dark:border-zinc-800 py-3"
                 >
                   <div className="flex items-center gap-2">
                     <div className="h-2 w-2 shrink-0 rounded-full bg-[#1D9E75]" />
-                    <span className="text-[13px] text-[#2C2C2A]">
+                    <span className="text-[13px] text-[#2C2C2A] dark:text-zinc-50">
                       {formatLogDate(log.date)}
                     </span>
                   </div>
-                  <span className="text-[13px] text-[#9E9B94]">
+                  <span className="text-[13px] text-[#9E9B94] dark:text-zinc-500">
                     {formatLogTime(log.createdAt)}
                   </span>
                 </div>
@@ -127,7 +127,7 @@ export default function HabitHistoryDrawer({
                   <Button
                     variant="outline"
                     size="sm"
-                    className="rounded-lg border-[#C7C4BB] text-[13px] text-[#666360]"
+                    className="rounded-lg border-[#C7C4BB] dark:border-zinc-800 text-[13px] text-[#666360] dark:text-zinc-500"
                     onClick={() => fetchNextPage()}
                     disabled={isFetchingNextPage}
                   >

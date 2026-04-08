@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Outlet, NavLink, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, ListChecks, Target, User, LogOut, Menu, ChevronUp } from 'lucide-react'
+import { Outlet, NavLink } from 'react-router-dom'
+import { LayoutDashboard, ListChecks, Target, User, LogOut, Menu, ChevronUp, Sun, Moon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import {
@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useAuthStore } from '@/stores/authStore'
+import { useThemeStore } from '@/stores/themeStore'
 import { useLogout } from '@/hooks/useAuth'
 import { useCurrentUser } from '@/hooks/useUsers'
 import useIsMobile from '@/hooks/useIsMobile'
@@ -36,7 +37,8 @@ function UserChip({ onNavClick }: { onNavClick?: () => void }) {
   const authUser = useAuthStore((s) => s.user)
   const { data: profile } = useCurrentUser()
   const logout = useLogout()
-  const navigate = useNavigate()
+  const theme = useThemeStore((s) => s.theme)
+  const toggleTheme = useThemeStore((s) => s.toggleTheme)
   const [open, setOpen] = useState(false)
 
   const displayName = profile?.displayName || profile?.username || authUser?.username || ''
@@ -51,7 +53,7 @@ function UserChip({ onNavClick }: { onNavClick?: () => void }) {
           data-testid="user-chip"
           className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left hover:bg-sidebar-accent"
         >
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#EEF2FF] text-xs font-semibold text-[#534AB7]">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#EEF2FF] dark:bg-[#534AB7]/20 text-xs font-semibold text-[#534AB7]">
             {initials}
           </div>
           <div className="min-w-0 flex-1">
@@ -63,20 +65,26 @@ function UserChip({ onNavClick }: { onNavClick?: () => void }) {
           />
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent side="top" align="start" className="w-[232px]">
+      <DropdownMenuContent side="top" align="start" className="w-[232px] dark:bg-[#1c1c1e] dark:border-zinc-700">
         <DropdownMenuItem
           onClick={() => {
+            toggleTheme()
             onNavClick?.()
-            navigate('/profile')
           }}
+          className="dark:text-zinc-50 dark:hover:bg-zinc-800"
         >
-          <User className="mr-2 size-4" />
-          Profile
+          {theme === 'light' ? (
+            <Moon className="mr-2 size-4 text-zinc-400" />
+          ) : (
+            <Sun className="mr-2 size-4 text-amber-400" />
+          )}
+          {theme === 'light' ? 'Dark mode' : 'Light mode'}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={() => logout.mutate()}
           disabled={logout.isPending}
+          className="dark:text-red-400 dark:focus:text-red-300 dark:hover:bg-zinc-800"
         >
           <LogOut className="mr-2 size-4" />
           {logout.isPending ? 'Logging out...' : 'Log out'}
@@ -108,7 +116,7 @@ function SidebarContent({
             className={({ isActive }) =>
               `flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium ${
                 isActive
-                  ? 'bg-[#EEEDFE] text-[#534AB7]'
+                  ? 'bg-[#EEEDFE] dark:bg-[#534AB7]/20 text-[#534AB7]'
                   : 'text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
               }`
             }
@@ -125,7 +133,7 @@ function SidebarContent({
         <UserChip onNavClick={onNavClick} />
       </div>
 
-      <span className="px-3 pb-3 text-[11px] text-muted-foreground/50 select-none">
+      <span className="px-3 pb-3 text-[11px] text-muted-foreground/50 dark:text-zinc-700 select-none">
         v{__APP_VERSION__}
       </span>
     </>
@@ -140,7 +148,7 @@ export default function Layout() {
     <div className="flex h-screen">
       {/* Mobile topbar */}
       {isMobile && (
-        <header className="fixed top-0 right-0 left-0 z-40 flex h-14 items-center border-b border-[#E8E6DF] bg-white px-4">
+        <header className="fixed top-0 right-0 left-0 z-40 flex h-14 items-center border-b border-[#E8E6DF] dark:border-zinc-800 bg-white dark:bg-[#111113] px-4">
           <Button
             variant="ghost"
             size="icon"
@@ -172,7 +180,7 @@ export default function Layout() {
 
       {/* Desktop sidebar */}
       {!isMobile && (
-        <aside className="flex w-64 flex-col border-r bg-sidebar text-sidebar-foreground">
+        <aside className="flex w-64 flex-col border-r bg-sidebar dark:bg-[#111113] text-sidebar-foreground">
           <SidebarContent />
         </aside>
       )}

@@ -60,12 +60,12 @@ export default function GoalsPage() {
     <div className={isMobile ? 'min-h-0' : 'grid h-[calc(100vh-0px)] grid-cols-[380px_1fr]'}>
       {/* Left column: Goals list */}
       {showList && (
-        <div className={`overflow-y-auto p-4 md:border-r md:border-[#E8E6DF] md:p-6 ${!isMobile ? '' : ''}`}>
+        <div className={`overflow-y-auto p-4 md:border-r md:border-[#E8E6DF] md:dark:border-zinc-800 md:p-6 ${!isMobile ? '' : ''}`}>
           {/* Header */}
           <div className="mb-5 flex items-start justify-between">
             <div>
-              <h1 className="text-[20px] font-semibold text-[#2C2C2A]">Goals</h1>
-              <p className="mt-1 text-[13px] text-[#9E9B94]">
+              <h1 className="text-[20px] font-semibold text-[#2C2C2A] dark:text-zinc-50">Goals</h1>
+              <p className="mt-1 text-[13px] text-[#9E9B94] dark:text-zinc-500">
                 {activeCount} active · {completedCount} completed
               </p>
             </div>
@@ -92,7 +92,7 @@ export default function GoalsPage() {
           ) : allGoals.length === 0 ? (
             <GoalEmptyState variant="no-goals" onCreateClick={() => setCreateModalOpen(true)} />
           ) : filteredGoals.length === 0 ? (
-            <div className="py-12 text-center text-[13px] text-[#9E9B94]">
+            <div className="py-12 text-center text-[13px] text-[#9E9B94] dark:text-zinc-500">
               No {filterTab.toLowerCase()} goals
             </div>
           ) : (
@@ -116,7 +116,7 @@ export default function GoalsPage() {
 
       {/* Right panel: Goal detail */}
       {(!isMobile || showDetail) && (
-        <div className={`overflow-y-auto p-4 md:bg-[#F5F4F0] md:p-6 ${isMobile ? '' : 'bg-[#F5F4F0]'}`}>
+        <div className={`overflow-y-auto p-4 md:bg-[#F5F4F0] md:dark:bg-zinc-900 md:p-6 ${isMobile ? '' : 'bg-[#F5F4F0] dark:bg-zinc-900'}`}>
           {/* Mobile back button */}
           {isMobile && effectiveSelectedId && (
             <Button

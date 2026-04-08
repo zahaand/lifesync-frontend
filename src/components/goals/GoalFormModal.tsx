@@ -134,7 +134,7 @@ export default function GoalFormModal({ open, onOpenChange, mode, goal }: GoalFo
               <Input
                 data-testid="goal-title-input"
                 {...register('title')}
-                className="h-9 rounded-lg border-[#C7C4BB]"
+                className="h-9 rounded-lg border-[#C7C4BB] dark:border-zinc-800"
                 placeholder="Goal title"
               />
               {errors.title && (
@@ -147,7 +147,7 @@ export default function GoalFormModal({ open, onOpenChange, mode, goal }: GoalFo
               <Label className="mb-1.5 text-[13px]">Description</Label>
               <Textarea
                 {...register('description')}
-                className="h-20 resize-none rounded-lg border-[#C7C4BB]"
+                className="h-20 resize-none rounded-lg border-[#C7C4BB] dark:border-zinc-800"
                 placeholder="Optional description"
               />
             </div>
@@ -158,7 +158,7 @@ export default function GoalFormModal({ open, onOpenChange, mode, goal }: GoalFo
               <Input
                 {...register('targetDate')}
                 type="date"
-                className="h-9 rounded-lg border-[#C7C4BB]"
+                className="h-9 rounded-lg border-[#C7C4BB] dark:border-zinc-800"
               />
             </div>
 
@@ -182,11 +182,11 @@ export default function GoalFormModal({ open, onOpenChange, mode, goal }: GoalFo
             )}
           </div>
 
-          <DialogFooter className="flex justify-end border-t border-[#E8E6DF] px-5 pb-4 pt-3">
+          <DialogFooter className="flex justify-end border-t border-[#E8E6DF] dark:border-zinc-800 px-5 pb-4 pt-3">
             <Button
               type="button"
               variant="outline"
-              className="rounded-lg border-[#C7C4BB] px-4 py-2 text-[13px] text-[#666360]"
+              className="rounded-lg border-[#C7C4BB] dark:border-zinc-800 px-4 py-2 text-[13px] text-[#666360] dark:text-zinc-500"
               onClick={() => onOpenChange(false)}
             >
               Cancel

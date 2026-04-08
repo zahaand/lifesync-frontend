@@ -40,32 +40,32 @@ export default function GoalLinkedHabits({ goalId, linkedHabitIds }: GoalLinkedH
   }
 
   return (
-    <div className="rounded-xl border border-[#E8E6DF] bg-white p-5">
-      <div className="mb-3 text-[11px] font-medium uppercase tracking-wider text-[#9E9B94]">
+    <div className="rounded-xl border border-[#E8E6DF] dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5">
+      <div className="mb-3 text-[11px] font-medium uppercase tracking-wider text-[#9E9B94] dark:text-zinc-500">
         Linked habits
       </div>
 
       {linkedHabits.length === 0 ? (
-        <p className="py-3 text-[13px] text-[#9E9B94]">No habits linked</p>
+        <p className="py-3 text-[13px] text-[#9E9B94] dark:text-zinc-500">No habits linked</p>
       ) : (
         <div>
           {linkedHabits.map((habit, idx) => (
             <div
               key={habit.id}
               className={`flex items-center justify-between py-2 ${
-                idx < linkedHabits.length - 1 ? 'border-b border-[#F5F4F0]' : ''
+                idx < linkedHabits.length - 1 ? 'border-b border-[#F5F4F0] dark:border-zinc-800' : ''
               }`}
             >
-              <span className="text-[13px] text-[#2C2C2A]">{habit.title}</span>
+              <span className="text-[13px] text-[#2C2C2A] dark:text-zinc-50">{habit.title}</span>
               <div className="flex items-center gap-2">
                 {habit.currentStreak > 0 && (
-                  <span className="rounded-full bg-[#FAEEDA] px-2 py-0.5 text-[11px] font-medium text-[#854F0B]">
+                  <span className="rounded-full bg-[#FAEEDA] dark:bg-amber-950 px-2 py-0.5 text-[11px] font-medium text-[#854F0B] dark:text-amber-400">
                     {habit.currentStreak} day streak
                   </span>
                 )}
                 <Button
                   variant="ghost"
-                  className="h-auto px-1 py-0 text-[11px] text-[#9E9B94] hover:text-red-500"
+                  className="h-auto px-1 py-0 text-[11px] text-[#9E9B94] dark:text-zinc-500 hover:text-red-500"
                   onClick={() => handleUnlink(habit.id)}
                 >
                   Unlink
