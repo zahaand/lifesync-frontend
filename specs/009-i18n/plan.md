@@ -34,9 +34,9 @@ Add internationalization (EN + RU) to LifeSync frontend using react-i18next + i1
 **Technology Constraints**:
 - Styling via Tailwind CSS v4 utility classes — PASS
 - Imports use `@/` path alias — PASS
-- User-facing text: **REQUIRES AMENDMENT** — current rule says "MUST be in English". Will amend to "MUST be translatable via i18next; English is the default/fallback"
-- New dependencies: react-i18next + i18next — **JUSTIFIED** (core feature requirement, de facto React i18n standard)
-- New directory `src/locales/`: **REQUIRES AMENDMENT** — must add to permitted project structure
+- User-facing text: **REQUIRES AMENDMENT** — current rule says "MUST be in English". Will amend to "MUST be translatable via i18next; English is the default/fallback". Justification: the English-only constraint was intended for code identifiers, comments, commit messages, and API calls. UI text is now translatable — this is an extension, not a violation. Code and git history remain English-only; UI strings use i18next with English fallback.
+- New dependencies: react-i18next + i18next — **JUSTIFIED** (core feature requirement, de facto React i18n standard, no viable alternative within existing stack)
+- New directory `src/locales/`: **REQUIRES AMENDMENT** — must add to permitted project structure. Justification: `src/locales/` contains JSON translation files, not source code. Adding it to permitted directories does not violate API isolation or any other constitution principle.
 
 ## Project Structure
 

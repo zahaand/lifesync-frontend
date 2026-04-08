@@ -84,6 +84,8 @@ All user-visible text in the application is translated, including page titles, n
 - What happens when the i18n library fails to initialize? The app renders in English (hardcoded fallback).
 - What happens when date formatting fails for a locale? The app falls back to ISO format (YYYY-MM-DD).
 - What happens to dynamic content from the backend (habit names, goal titles)? User-created content is NOT translated — it displays as entered by the user.
+- What happens on logout? Locale persists in localStorage (it is independent of auth state). The user sees the login page in their previously selected language. On next login, backend locale overrides if different.
+- What happens on registration? New user has no backend locale set. After successful register + auto-login, backend returns `locale: null` (default). The app applies the current localStorage locale value. PATCH /users/me `{ locale }` is called immediately after registration to sync the chosen locale to the new account.
 
 ## Clarifications
 
@@ -98,7 +100,7 @@ All user-visible text in the application is translated, including page titles, n
 ### Functional Requirements
 
 - **FR-001**: System MUST support exactly two languages: English (en) and Russian (ru).
-- **FR-002**: System MUST provide a language toggle in the user chip dropdown menu, positioned between the dark mode toggle and the Log out item, displaying a Globe icon and the current language name.
+- **FR-002**: System MUST provide a language toggle in the user chip dropdown menu, positioned between the dark mode toggle and the Log out item, displaying a Globe icon and the current language name in its native script (EN active: "English", RU active: "Русский"). Clicking switches to the other language immediately.
 - **FR-003**: System MUST switch all UI text instantly when the user toggles language, without requiring a page reload.
 - **FR-004**: System MUST persist the selected language in localStorage so it survives browser restarts.
 - **FR-005**: System MUST detect the browser's preferred language on first visit and select the closest supported language (en or ru), defaulting to English if no match.
@@ -111,6 +113,7 @@ All user-visible text in the application is translated, including page titles, n
 - **FR-012**: System MUST use namespace-based translation files organized by feature area (common, auth, habits, goals, profile, dashboard).
 - **FR-013**: System MUST NOT translate user-generated content (habit names, goal titles, milestone descriptions).
 - **FR-014**: System MUST display English fallback text when a translation key is missing.
+- **FR-015**: System MUST format dates using `Intl.DateTimeFormat` with the active locale parameter. EN format: "Apr 6, 2026". RU format: "6 апр. 2026 г.". Applied to: goal target dates, habit log dates in history drawer, dashboard date subtitle.
 
 ### Key Entities
 
@@ -136,7 +139,9 @@ All user-visible text in the application is translated, including page titles, n
 - Backend API (Spring Boot) already supports or will support a `locale` field on the user entity via PATCH/GET /users/me. If not yet implemented, frontend gracefully handles its absence (fallback chain).
 - Only two languages (EN, RU) are in scope. Adding more languages later should be straightforward due to the namespace-based architecture, but is not a requirement for this sprint.
 - RTL (right-to-left) language support is out of scope — both English and Russian are LTR.
-- Pluralization rules for Russian (which has complex plural forms) are handled by i18next's built-in plural resolution.
+- Pluralization rules for Russian (which has 3 plural forms: one, few, many) are handled by i18next's built-in plural resolution using `_one`/`_few`/`_many` suffixes. Example: `{ "days_one": "{{count}} день", "days_few": "{{count}} дня", "days_many": "{{count}} дней" }`. Scope: streak counts, milestone counts, goal progress labels.
 - The application name "LifeSync" is a proper noun and is NOT translated.
 - react-i18next and i18next are new dependencies that will be added to the project.
 - The existing FOCT prevention pattern (inline `<head>` script reading localStorage) will be extended for language preference.
+- Browser language detection uses `navigator.language` (primary) with `navigator.languages[0]` as fallback. If value starts with `"ru"` (covers "ru", "ru-RU", "ru-UA") → locale = `"ru"`, otherwise → `"en"`. Detection runs ONLY on first visit (no `lifesync-locale` in localStorage). Subsequent visits always use the persisted localStorage value.
+- Test strategy: global i18n mock in `src/test/setup.ts`. Mock `useTranslation()` returns the translation key as the value (e.g., `t('habits.card.notDoneYet')` → `'habits.card.notDoneYet'`). No individual test files need updating.
