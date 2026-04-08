@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Plus } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
@@ -20,6 +21,7 @@ import {
 import type { Habit, CreateHabitRequest } from '@/types/habits'
 
 export default function HabitsPage() {
+  const { t } = useTranslation('habits')
   const { data: habitsData, isLoading } = useAllHabits()
   const completeHabit = useCompleteHabit()
   const uncompleteHabit = useUncompleteHabit()
@@ -92,21 +94,21 @@ export default function HabitsPage() {
     if (!editingHabit) return
     updateHabit.mutate(
       { id: editingHabit.id, data },
-      { onSuccess: () => { setEditingHabit(null); toast.success('Habit updated') } },
+      { onSuccess: () => { setEditingHabit(null); toast.success(t('message.updated')) } },
     )
   }
 
   const handleArchive = (habitId: string) => {
     updateHabit.mutate(
       { id: habitId, data: { isActive: false } },
-      { onSuccess: () => toast.success('Habit archived') },
+      { onSuccess: () => toast.success(t('message.archived')) },
     )
   }
 
   const handleRestore = (habitId: string) => {
     updateHabit.mutate(
       { id: habitId, data: { isActive: true } },
-      { onSuccess: () => toast.success('Habit restored') },
+      { onSuccess: () => toast.success(t('message.restored')) },
     )
   }
 
@@ -141,9 +143,9 @@ export default function HabitsPage() {
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-[20px] font-semibold text-[#2C2C2A] dark:text-zinc-50">Habits</h1>
+          <h1 className="text-[20px] font-semibold text-[#2C2C2A] dark:text-zinc-50">{t('page.title')}</h1>
           <p className="text-[13px] text-[#9E9B94] dark:text-zinc-500 mt-1">
-            {activeHabits.length} active · {archivedHabits.length} archived
+            {activeHabits.length} {t('page.statsActive')} · {archivedHabits.length} {t('page.statsArchived')}
           </p>
         </div>
         <Button
@@ -152,7 +154,7 @@ export default function HabitsPage() {
           className="bg-[#534AB7] text-[#EEEDFE] text-[13px] font-medium px-4 py-2 rounded-lg"
         >
           <Plus className="mr-1.5 h-4 w-4" />
-          New habit
+          {t('action.newHabit')}
         </Button>
       </div>
 
@@ -175,7 +177,7 @@ export default function HabitsPage() {
           {filteredActive.length > 0 && (
             <div>
               <h2 className="text-[11px] font-medium uppercase tracking-wider text-[#9E9B94] dark:text-zinc-500 mb-3">
-                Active — {filteredActive.length}
+                {t('section.active', { count: filteredActive.length })}
               </h2>
               {filteredActive.map((habit) => (
                 <HabitCard
@@ -197,7 +199,7 @@ export default function HabitsPage() {
           {filteredArchived.length > 0 && (
             <div className={filteredActive.length > 0 ? 'mt-5' : ''}>
               <h2 className="text-[11px] font-medium uppercase tracking-wider text-[#9E9B94] dark:text-zinc-500 mb-3">
-                Archived — {filteredArchived.length}
+                {t('section.archived', { count: filteredArchived.length })}
               </h2>
               {filteredArchived.map((habit) => (
                 <HabitCard

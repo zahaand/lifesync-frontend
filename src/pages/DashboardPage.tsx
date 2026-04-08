@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -10,15 +11,8 @@ import { useHabits, useCompleteHabit, useUncompleteHabit } from '@/hooks/useHabi
 import { useGoalsSummary } from '@/hooks/useGoals'
 import { useCurrentUser } from '@/hooks/useUsers'
 
-function getGreeting(): string {
-  const hour = new Date().getHours()
-  if (hour >= 5 && hour <= 11) return 'Good morning'
-  if (hour >= 12 && hour <= 17) return 'Good afternoon'
-  return 'Good evening'
-}
-
-function formatDate(): string {
-  return new Date().toLocaleDateString('en-US', {
+function formatDate(locale: string): string {
+  return new Date().toLocaleDateString(locale === 'ru' ? 'ru-RU' : 'en-US', {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
@@ -27,6 +21,7 @@ function formatDate(): string {
 }
 
 function StatsRow() {
+  const { t } = useTranslation('dashboard')
   const { data: habitsData, isLoading: habitsLoading, isError: habitsError, refetch: refetchHabits } = useHabits()
   const { activeCount, completedCount, isLoading: goalsLoading, isError: goalsError, refetchActive, refetchCompleted } = useGoalsSummary()
 
@@ -45,36 +40,36 @@ function StatsRow() {
 
   const stats = [
     {
-      label: "TODAY'S HABITS",
+      label: t('stats.todaysHabits'),
       value: habitsLoading ? null : `${todayCompleted} / ${todayTotal}`,
-      sub: 'completed',
+      sub: t('stats.completed'),
       colorClass: 'text-[#534AB7]',
       loading: habitsLoading,
       error: habitsError,
       retry: refetchHabits,
     },
     {
-      label: 'BEST STREAK',
-      value: habitsLoading ? null : `${bestStreakValue} days`,
-      sub: bestStreakName || '—',
+      label: t('stats.bestStreak'),
+      value: habitsLoading ? null : t('stats.days', { count: bestStreakValue }),
+      sub: bestStreakName || t('stats.empty'),
       colorClass: 'text-[#854F0B] dark:text-amber-400',
       loading: habitsLoading,
       error: habitsError,
       retry: refetchHabits,
     },
     {
-      label: 'ACTIVE GOALS',
+      label: t('stats.activeGoals'),
       value: goalsLoading ? null : String(activeCount),
-      sub: 'in progress',
+      sub: t('stats.inProgress'),
       colorClass: 'text-[#534AB7]',
       loading: goalsLoading,
       error: goalsError,
       retry: refetchActive,
     },
     {
-      label: 'COMPLETED GOALS',
+      label: t('stats.completedGoals'),
       value: goalsLoading ? null : String(completedCount),
-      sub: 'achieved',
+      sub: t('stats.achieved'),
       colorClass: 'text-[#3B6D11] dark:text-green-400',
       loading: goalsLoading,
       error: goalsError,
@@ -100,13 +95,13 @@ function StatsRow() {
               </>
             ) : s.error ? (
               <div className="text-[11px] text-[#9E9B94] dark:text-zinc-500">
-                Failed to load.{' '}
+                {t('common:error.failedToLoad')}{' '}
                 <Button
                   variant="link"
                   className="h-auto p-0 text-[11px] text-[#534AB7]"
                   onClick={() => s.retry()}
                 >
-                  Try again.
+                  {t('common:action.tryAgain')}
                 </Button>
               </div>
             ) : (
@@ -127,6 +122,7 @@ function StatsRow() {
 }
 
 function HabitsCard() {
+  const { t } = useTranslation('dashboard')
   const { data, isLoading, isError, refetch } = useHabits()
   const completeMutation = useCompleteHabit()
   const uncompleteMutation = useUncompleteHabit()
@@ -150,10 +146,10 @@ function HabitsCard() {
       {/* Header */}
       <div className="flex items-center justify-between border-b border-[#E8E6DF] px-4 py-3">
         <span className="text-[14px] font-medium text-[#2C2C2A] dark:text-zinc-50">
-          Today&apos;s habits
+          {t('habits.title')}
         </span>
         <Link to="/habits" className="text-[12px] text-[#534AB7]">
-          View all
+          {t('common:action.viewAll')}
         </Link>
       </div>
 
@@ -166,18 +162,18 @@ function HabitsCard() {
         </div>
       ) : isError ? (
         <div className="px-4 py-8 text-center text-[13px] text-[#9E9B94] dark:text-zinc-500">
-          Failed to load.{' '}
+          {t('common:error.failedToLoad')}{' '}
           <Button
             variant="link"
             className="h-auto p-0 text-[13px] text-[#534AB7]"
             onClick={() => refetch()}
           >
-            Try again.
+            {t('common:action.tryAgain')}
           </Button>
         </div>
       ) : habits.length === 0 ? (
         <div className="px-4 py-8 text-center text-[13px] text-[#9E9B94] dark:text-zinc-500">
-          No habits yet. Create your first habit to get started.
+          {t('habits.emptyState')}
         </div>
       ) : (
         habits.map((habit, idx) => {
@@ -215,7 +211,7 @@ function HabitsCard() {
                     {habit.frequency}
                   </Badge>
                   <span className="text-[11px] text-[#9E9B94] dark:text-zinc-500">
-                    {habit.completedToday ? 'Completed today' : 'Not done yet'}
+                    {habit.completedToday ? t('habits.completedToday') : t('habits.notDoneYet')}
                   </span>
                 </div>
               </div>
@@ -224,7 +220,7 @@ function HabitsCard() {
                   variant="secondary"
                   className="shrink-0 rounded-full border-0 bg-[#FAEEDA] dark:bg-amber-950 px-2.5 py-1 text-[11px] font-medium text-[#854F0B] dark:text-amber-400"
                 >
-                  🔥 {habit.currentStreak} day streak
+                  🔥 {t('habits.streak', { count: habit.currentStreak })}
                 </Badge>
               )}
             </div>
@@ -236,11 +232,13 @@ function HabitsCard() {
 }
 
 function GoalsCard() {
+  const { t, i18n } = useTranslation('dashboard')
   const { activeGoals, activeIsLoading, activeIsError, refetchActive } = useGoalsSummary()
 
   const formatDeadline = (targetDate: string | null) => {
-    if (!targetDate) return 'No deadline'
-    return `Due ${new Date(targetDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`
+    if (!targetDate) return t('common:date.noDeadline')
+    const date = new Date(targetDate).toLocaleDateString(i18n.language === 'ru' ? 'ru-RU' : 'en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    return t('goals.due', { date })
   }
 
   return (
@@ -248,10 +246,10 @@ function GoalsCard() {
       {/* Header */}
       <div className="flex items-center justify-between border-b border-[#E8E6DF] px-4 py-3">
         <span className="text-[14px] font-medium text-[#2C2C2A] dark:text-zinc-50">
-          Active goals
+          {t('goals.title')}
         </span>
         <Link to="/goals" className="text-[12px] text-[#534AB7]">
-          View all
+          {t('common:action.viewAll')}
         </Link>
       </div>
 
@@ -264,18 +262,18 @@ function GoalsCard() {
         </div>
       ) : activeIsError ? (
         <div className="px-4 py-8 text-center text-[13px] text-[#9E9B94] dark:text-zinc-500">
-          Failed to load.{' '}
+          {t('common:error.failedToLoad')}{' '}
           <Button
             variant="link"
             className="h-auto p-0 text-[13px] text-[#534AB7]"
             onClick={() => refetchActive()}
           >
-            Try again.
+            {t('common:action.tryAgain')}
           </Button>
         </div>
       ) : activeGoals.length === 0 ? (
         <div className="px-4 py-8 text-center text-[13px] text-[#9E9B94] dark:text-zinc-500">
-          No active goals. Set a goal to start tracking your progress.
+          {t('goals.emptyState')}
         </div>
       ) : (
         activeGoals.map((goal, idx) => {
@@ -313,7 +311,7 @@ function GoalsCard() {
                       : 'bg-[#EEEDFE] dark:bg-[#534AB7]/20 text-[#3C3489]'
                   }`}
                 >
-                  {goal.status === 'COMPLETED' ? 'Completed' : 'Active'}
+                  {goal.status === 'COMPLETED' ? t('goals.completed') : t('goals.active')}
                 </Badge>
               </div>
 
@@ -353,14 +351,14 @@ function GoalsCard() {
 }
 
 export default function DashboardPage() {
+  const { t, i18n } = useTranslation('dashboard')
   const user = useAuthStore((s) => s.user)
   const { data: currentUser } = useCurrentUser()
 
-  const greeting = getGreeting()
   const username = user?.username ?? ''
   const displayName = currentUser?.displayName || ''
   const name = displayName || username
-  const greetingText = name ? `${greeting}, ${name}` : greeting
+  const greetingText = name ? t('greeting', { name }) : t('greetingDefault')
 
   return (
     <div>
@@ -370,7 +368,7 @@ export default function DashboardPage() {
           {greetingText}
         </h1>
         <p className="mt-1 text-[13px] text-[#9E9B94] dark:text-zinc-500">
-          {formatDate()}
+          {formatDate(i18n.language)}
         </p>
       </div>
 
