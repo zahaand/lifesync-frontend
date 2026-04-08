@@ -1,8 +1,8 @@
 <!--
   Sync Impact Report
   ==================
-  Version change: 1.0.0 → 1.0.1 (patch — clarification fix)
-  Modified principles: Technology Constraints (React Router v6 → v7)
+  Version change: 1.0.1 → 1.1.0 (minor — i18n support)
+  Modified principles: Technology Constraints (Language rule: English-only → i18next translatable), Development Workflow (Project structure: added src/locales/)
   Added sections:
     - Core Principles (5 principles)
     - Technology Constraints
@@ -91,7 +91,9 @@ pages.
 - **Imports**: All imports MUST use the `@/` path alias. Relative
   imports (`../`) are forbidden except within the same directory.
 - **Language**: All user-facing text (labels, buttons, placeholders,
-  error messages) MUST be in English.
+  error messages) MUST be translatable via i18next. English (en) is
+  the default/fallback language. Code, comments, commit messages, and
+  API calls remain English-only.
 - **Dependencies**: New dependencies require justification. Prefer
   existing stack capabilities over adding new libraries.
 
@@ -109,9 +111,10 @@ pages.
 - **Code review**: All changes MUST pass `tsc -b` and `eslint .`
   before merge. No TypeScript errors or lint warnings permitted.
 - **Project structure**: The directory layout defined in the project
-  context (`src/api/`, `src/components/`, `src/hooks/`, `src/pages/`,
-  `src/stores/`, `src/types/`, `src/lib/`) MUST be respected. New
-  top-level directories under `src/` require constitution amendment.
+  context (`src/api/`, `src/components/`, `src/hooks/`, `src/locales/`,
+  `src/pages/`, `src/stores/`, `src/types/`, `src/lib/`) MUST be
+  respected. New top-level directories under `src/` require
+  constitution amendment.
 
 ## Governance
 
@@ -131,4 +134,4 @@ task lists MUST be validated against these principles.
 - **Guidance**: Use `CLAUDE.md` for runtime development guidance that
   supplements this constitution.
 
-**Version**: 1.0.1 | **Ratified**: 2026-04-02 | **Last Amended**: 2026-04-02
+**Version**: 1.1.0 | **Ratified**: 2026-04-02 | **Last Amended**: 2026-04-09
