@@ -5,7 +5,7 @@
 
 ## Summary
 
-Add dark mode support to LifeSync frontend with class-based Tailwind CSS v4 dark mode, a Zustand theme store persisted to localStorage, an inline `<head>` script to prevent FOCT (flash of incorrect theme), and OS `prefers-color-scheme` detection for first-time visitors. Update the user chip dropdown menu to replace Profile with a theme toggle (Sun/Moon icon) while keeping Log out.
+Add dark mode support to LifeSync frontend with class-based Tailwind CSS v4 dark mode, a Zustand theme store persisted to localStorage, an inline `<head>` script to prevent FOCT (Flash of Incorrect Theme), and OS `prefers-color-scheme` detection for first-time visitors. Update the user chip dropdown menu to replace Profile with a theme toggle (Sun/Moon icon) while keeping Log out.
 
 ## Technical Context
 
@@ -15,7 +15,7 @@ Add dark mode support to LifeSync frontend with class-based Tailwind CSS v4 dark
 **Testing**: Vitest + React Testing Library + MSW (happy-dom)
 **Target Platform**: Web browser (desktop 1280px + mobile 375px)
 **Project Type**: Single-page web application (React SPA)
-**Performance Goals**: Zero flash of wrong theme on page load; instant theme toggle (<16ms visual update)
+**Performance Goals**: Zero FOCT (Flash of Incorrect Theme) on page load; instant theme toggle (<16ms visual update)
 **Constraints**: No backend changes; all 46 existing tests must pass; tsc --noEmit zero errors
 **Scale/Scope**: ~10 source files to modify, 1 new store file, 1 inline script addition
 
@@ -95,26 +95,32 @@ src/stores/__tests__/
 
 ### D1: Theme Store Design
 
-Create `src/stores/themeStore.ts` following the existing `authStore.ts` pattern with Zustand `persist` middleware.
+Create `src/stores/themeStore.ts` following the existing `authStore.ts` pattern. Manual localStorage read/write — NO persist middleware. Rationale: persist middleware runs after React hydration, causing a race condition with the inline `<head>` FOCT script. Manual localStorage access in themeStore ensures the store always reads the value already applied by the inline script.
 
 **Store shape**:
 - `theme: 'light' | 'dark'` — current active theme
 - `toggleTheme()` — switches between light/dark, persists to localStorage, updates `<html>` class
-- `initTheme()` — reads localStorage, falls back to `prefers-color-scheme`, applies to DOM
+
+On store creation: reads localStorage key, validates value, falls back to `prefers-color-scheme`, then to `'light'`.
 
 **localStorage key**: `lifesync-theme`
+**Value format**: JSON string `{ state: { theme: 'light' | 'dark' } }` — matches what themeStore writes manually and what the inline script reads via `JSON.parse()`.
 
 **Why not extend authStore**: Theme is an independent concern with different lifecycle (survives logout). Separate store is cleaner and follows single-responsibility.
 
-### D2: Flash Prevention (FOCT)
+### D2: FOCT (Flash of Incorrect Theme) Prevention
 
 Add a synchronous inline `<script>` in `index.html` `<head>` that:
-1. Reads `lifesync-theme` from localStorage
-2. If not found, checks `window.matchMedia('(prefers-color-scheme: dark)')` 
-3. Applies `class="dark"` to `<html>` element if dark mode
-4. Runs before any CSS or JS loads — zero flash guaranteed
+1. Reads `lifesync-theme` from localStorage and parses JSON: `JSON.parse(value).state.theme`
+2. If value is `'dark'` → adds `'dark'` class to `<html>` element
+3. If value is missing/invalid → checks `window.matchMedia('(prefers-color-scheme: dark)')`, adds class if true
+4. Wraps all access in try/catch — localStorage errors default to light mode silently
+5. Runs before any CSS or JS loads — zero FOCT guaranteed
 
-This script must stay in sync with the localStorage key used by the Zustand store.
+**localStorage key**: `lifesync-theme`
+**Value format**: JSON string `{ state: { theme: 'light' | 'dark' } }` — this format matches what `themeStore.ts` writes manually, and what the inline script reads via `JSON.parse()`.
+
+This script must stay in sync with the localStorage key and JSON format used by the Zustand store.
 
 ### D3: Hardcoded Color Strategy
 
@@ -136,27 +142,47 @@ Replace the Profile `DropdownMenuItem` with a theme toggle item:
 - On click: call `toggleTheme()`
 - Keep Log out item unchanged, remove Profile item
 
-### D5: Dark Mode Color Mapping
+### D5: Dark Mode Color Mapping (Approved Zinc Tokens)
+
+**Base dark tokens:**
+
+| Role | Dark Token | Hex |
+|------|-----------|-----|
+| Page background | `bg-zinc-950` | `#09090b` |
+| Cards / surfaces | `bg-zinc-900` | `#18181b` |
+| Sidebar | `bg-[#111113]` | `#111113` |
+| Borders | `border-zinc-800` | `#27272a` |
+| Primary text | `text-zinc-50` | `#fafafa` |
+| Muted text | `text-zinc-500` | `#71717a` |
+| Hints / labels | `text-zinc-600` | `#52525b` |
+| Version label | `text-zinc-700` | `#3f3f46` |
+
+**Light → Dark mapping:**
 
 | Light Mode | Dark Mode Equivalent | Usage |
 |------------|---------------------|-------|
-| `bg-[#F1EFE8]` | `dark:bg-[#1a1a1a]` | Login page background |
-| `bg-white` / `bg-[#FFFFFF]` | `dark:bg-[#262626]` | Cards, form containers |
-| `text-[#2C2C2A]` | `dark:text-[#E5E5E5]` | Primary text |
-| `text-[#666360]` | `dark:text-[#A3A3A3]` | Secondary text |
-| `text-[#9E9B94]` | `dark:text-[#737373]` | Muted/placeholder text |
-| `border-[#C7C4BB]` | `dark:border-[#404040]` | Form borders |
-| `border-[#E8E6DF]` | `dark:border-[#333333]` | Section dividers |
+| `bg-[#F1EFE8]` | `dark:bg-background` (CSS var) | Login page background |
+| `bg-white` | `dark:bg-zinc-900` | Cards, form containers |
+| `text-[#2C2C2A]` | `dark:text-zinc-50` | Primary text |
+| `text-[#666360]` | `dark:text-zinc-500` | Secondary text |
+| `text-[#9E9B94]` | `dark:text-zinc-500` | Muted/placeholder text |
+| `border-[#C7C4BB]` | `dark:border-zinc-800` | Form borders |
+| `border-[#E8E6DF]` | `dark:border-zinc-800` | Section dividers |
+| `bg-[#F5F4F0]` | `dark:bg-zinc-800` | Filled inputs, stat cards |
 | `bg-[#EEF2FF]` | `dark:bg-[#534AB7]/20` | Avatar background |
 | `bg-[#EEEDFE]` | `dark:bg-[#534AB7]/20` | Active nav item bg |
 | `text-[#534AB7]` | (unchanged) | Brand purple — readable on both |
 | `bg-[#534AB7]` | (unchanged) | Primary buttons — readable on both |
-| `bg-[#F5F4F0]` | `dark:bg-[#333333]` | Filled input backgrounds |
-| `hover:bg-[#F5F4F0]` | `dark:hover:bg-[#333333]` | Inactive tab hover |
-| Streak: `text-[#854F0B]` bg `bg-[#FAEEDA]` | `dark:text-amber-300 dark:bg-amber-900/30` | Streak badge |
-| Done: emerald text/bg | `dark:text-emerald-300 dark:bg-emerald-900/30` | Done-today badge |
-| Completed: `text-[#3B6D11]` bg `#EAF3DE` | `dark:text-green-400 dark:bg-green-900/30` | Goal completed |
-| Success: `text-[#085041]` bg `#E1F5EE` border `#9FE1CB` | `dark:text-emerald-300 dark:bg-emerald-900/20 dark:border-emerald-800` | Success messages |
+| `text-[#1D9E75]` | (unchanged) | Brand green — readable on both |
+
+**Status color tokens:**
+
+| Light Mode | Dark Mode Equivalent | Usage |
+|------------|---------------------|-------|
+| Streak: `text-[#854F0B]` `bg-[#FAEEDA]` | `dark:text-amber-400 dark:bg-amber-950` | Streak badge |
+| Done: `text-emerald-800` `bg-emerald-50` | `dark:text-green-400 dark:bg-emerald-950` | Done-today badge |
+| Completed: `text-[#3B6D11]` `bg-[#EAF3DE]` | `dark:text-green-400 dark:bg-emerald-950` | Goal completed |
+| Success: `text-[#085041]` `bg-[#E1F5EE]` `border-[#9FE1CB]` | `dark:text-emerald-300 dark:bg-emerald-900/20 dark:border-emerald-800` | Success messages |
 
 ## Post-Design Constitution Re-Check
 
