@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,6 +26,7 @@ export default function GoalDeleteDialog({
   goalTitle,
   onDeleted,
 }: GoalDeleteDialogProps) {
+  const { t } = useTranslation('goals')
   const deleteGoal = useDeleteGoal()
 
   const handleDelete = () => {
@@ -40,20 +42,19 @@ export default function GoalDeleteDialog({
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete goal</AlertDialogTitle>
+          <AlertDialogTitle>{t('deleteDialog.title')}</AlertDialogTitle>
           <AlertDialogDescription>
-            This will permanently delete &quot;{goalTitle}&quot; and all its milestones. This
-            action cannot be undone.
+            {t('deleteDialog.description', { name: goalTitle })}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>{t('deleteDialog.cancel')}</AlertDialogCancel>
           <AlertDialogAction
             className="bg-red-500 text-white hover:bg-red-600"
             onClick={handleDelete}
             disabled={deleteGoal.isPending}
           >
-            {deleteGoal.isPending ? 'Deleting...' : 'Delete'}
+            {deleteGoal.isPending ? t('deleteDialog.deleting') : t('deleteDialog.delete')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

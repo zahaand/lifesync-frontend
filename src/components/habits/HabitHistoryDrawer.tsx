@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import {
@@ -15,24 +16,26 @@ type HabitHistoryDrawerProps = {
   onOpenChange: (open: boolean) => void
 }
 
-function formatLogDate(dateStr: string): string {
+function formatLogDate(dateStr: string, locale: string): string {
   const date = new Date(dateStr + 'T00:00:00')
   const today = new Date()
   const yesterday = new Date()
   yesterday.setDate(yesterday.getDate() - 1)
+  const loc = locale === 'ru' ? 'ru-RU' : 'en-US'
 
   const isSameDay = (a: Date, b: Date) =>
     a.getFullYear() === b.getFullYear() &&
     a.getMonth() === b.getMonth() &&
     a.getDate() === b.getDate()
 
+  const formatted = date.toLocaleDateString(loc, { month: 'long', day: 'numeric' })
   if (isSameDay(date, today)) {
-    return `Today, ${date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}`
+    return formatted
   }
   if (isSameDay(date, yesterday)) {
-    return `Yesterday, ${date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}`
+    return formatted
   }
-  return date.toLocaleDateString('en-US', {
+  return date.toLocaleDateString(loc, {
     weekday: 'long',
     month: 'long',
     day: 'numeric',
@@ -54,6 +57,7 @@ export default function HabitHistoryDrawer({
   open,
   onOpenChange,
 }: HabitHistoryDrawerProps) {
+  const { t, i18n } = useTranslation('habits')
   const {
     data,
     isLoading,
@@ -76,7 +80,7 @@ export default function HabitHistoryDrawer({
           <SheetTitle className="text-[16px] font-semibold text-[#2C2C2A] dark:text-zinc-50">
             {habitTitle}
           </SheetTitle>
-          <p className="text-[13px] text-[#9E9B94] dark:text-zinc-500">Completion history</p>
+          <p className="text-[13px] text-[#9E9B94] dark:text-zinc-500">{t('history.title')}</p>
         </SheetHeader>
 
         <div className="flex-1 overflow-y-auto px-5 py-2">
@@ -89,19 +93,19 @@ export default function HabitHistoryDrawer({
           ) : isError ? (
             <div className="py-12 text-center">
               <p className="text-[13px] text-[#9E9B94] dark:text-zinc-500">
-                Failed to load history.
+                {t('history.error')}
               </p>
               <Button
                 variant="link"
                 className="mt-1 h-auto p-0 text-[13px] text-[#534AB7]"
                 onClick={() => refetch()}
               >
-                Try again.
+                {t('common:action.tryAgain')}
               </Button>
             </div>
           ) : allLogs.length === 0 ? (
             <div className="py-12 text-center text-[13px] text-[#9E9B94] dark:text-zinc-500">
-              No completions yet
+              {t('history.empty')}
             </div>
           ) : (
             <>
@@ -113,7 +117,7 @@ export default function HabitHistoryDrawer({
                   <div className="flex items-center gap-2">
                     <div className="h-2 w-2 shrink-0 rounded-full bg-[#1D9E75]" />
                     <span className="text-[13px] text-[#2C2C2A] dark:text-zinc-50">
-                      {formatLogDate(log.date)}
+                      {formatLogDate(log.date, i18n.language)}
                     </span>
                   </div>
                   <span className="text-[13px] text-[#9E9B94] dark:text-zinc-500">
@@ -131,7 +135,7 @@ export default function HabitHistoryDrawer({
                     onClick={() => fetchNextPage()}
                     disabled={isFetchingNextPage}
                   >
-                    {isFetchingNextPage ? 'Loading...' : 'Load more'}
+                    {isFetchingNextPage ? t('history.loading') : t('history.loadMore')}
                   </Button>
                 </div>
               )}

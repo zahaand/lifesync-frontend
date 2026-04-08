@@ -1,9 +1,11 @@
+import { useTranslation } from 'react-i18next'
 import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useHabits } from '@/hooks/useHabits'
 import { useGoalsSummary } from '@/hooks/useGoals'
 
 export default function StatsCard() {
+  const { t } = useTranslation('profile')
   const { data: habitsData, isLoading: habitsLoading } = useHabits()
   const { activeCount, completedCount, isLoading: goalsLoading } = useGoalsSummary()
 
@@ -21,28 +23,28 @@ export default function StatsCard() {
 
   const stats = [
     {
-      label: 'ACTIVE HABITS',
+      label: t('stats.activeHabits'),
       value: String(activeHabitsCount),
       sub: '',
       colorClass: 'text-[#534AB7]',
       loading: habitsLoading,
     },
     {
-      label: 'BEST STREAK',
-      value: bestStreakValue > 0 ? `${bestStreakValue} days` : '—',
+      label: t('stats.bestStreak'),
+      value: bestStreakValue > 0 ? t('stats.bestStreak', { count: bestStreakValue }) : '—',
       sub: bestStreakName || '',
       colorClass: 'text-[#854F0B] dark:text-amber-400',
       loading: habitsLoading,
     },
     {
-      label: 'ACTIVE GOALS',
+      label: t('stats.activeGoals'),
       value: String(activeCount),
       sub: '',
       colorClass: 'text-[#534AB7]',
       loading: goalsLoading,
     },
     {
-      label: 'COMPLETED GOALS',
+      label: t('stats.completedGoals'),
       value: String(completedCount),
       sub: '',
       colorClass: 'text-[#3B6D11] dark:text-green-400',
@@ -53,7 +55,7 @@ export default function StatsCard() {
   return (
     <Card className="p-6">
       <CardContent className="p-0">
-        <h2 className="mb-4 text-[16px] font-medium text-[#2C2C2A] dark:text-zinc-50">Stats</h2>
+        <h2 className="mb-4 text-[16px] font-medium text-[#2C2C2A] dark:text-zinc-50">{t('stats.title')}</h2>
 
         <div className="grid grid-cols-2 gap-3">
           {stats.map((s) => (

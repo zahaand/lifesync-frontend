@@ -1,7 +1,9 @@
 import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import i18n from 'i18next'
 import { Loader2 } from 'lucide-react'
 import {
   Dialog,
@@ -16,31 +18,31 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import type { Habit, HabitFrequency, DayOfWeek, CreateHabitRequest } from '@/types/habits'
 
-const DAYS: { value: DayOfWeek; label: string }[] = [
-  { value: 'MONDAY', label: 'Mo' },
-  { value: 'TUESDAY', label: 'Tu' },
-  { value: 'WEDNESDAY', label: 'We' },
-  { value: 'THURSDAY', label: 'Th' },
-  { value: 'FRIDAY', label: 'Fr' },
-  { value: 'SATURDAY', label: 'Sa' },
-  { value: 'SUNDAY', label: 'Su' },
+const DAY_KEYS: { value: DayOfWeek; labelKey: string }[] = [
+  { value: 'MONDAY', labelKey: 'days.mo' },
+  { value: 'TUESDAY', labelKey: 'days.tu' },
+  { value: 'WEDNESDAY', labelKey: 'days.we' },
+  { value: 'THURSDAY', labelKey: 'days.th' },
+  { value: 'FRIDAY', labelKey: 'days.fr' },
+  { value: 'SATURDAY', labelKey: 'days.sa' },
+  { value: 'SUNDAY', labelKey: 'days.su' },
 ]
 
-const FREQUENCIES: { value: HabitFrequency; label: string }[] = [
-  { value: 'DAILY', label: 'Daily' },
-  { value: 'WEEKLY', label: 'Weekly' },
-  { value: 'CUSTOM', label: 'Custom' },
+const FREQUENCY_KEYS: { value: HabitFrequency; labelKey: string }[] = [
+  { value: 'DAILY', labelKey: 'form.frequencyDaily' },
+  { value: 'WEEKLY', labelKey: 'form.frequencyWeekly' },
+  { value: 'CUSTOM', labelKey: 'form.frequencyCustom' },
 ]
 
 const habitFormSchema = z
   .object({
-    title: z.string().min(1, 'Name is required').max(200, 'Name must be 200 characters or less'),
+    title: z.string().min(1).max(200),
     description: z.string().optional(),
     frequency: z.enum(['DAILY', 'WEEKLY', 'CUSTOM'] as const),
     targetDaysOfWeek: z.array(z.enum([
       'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY',
     ] as const)).optional(),
-    reminderTime: z.string().regex(/^\d{2}:\d{2}$/, 'Time must be in HH:mm format').optional().or(z.literal('')),
+    reminderTime: z.string().regex(/^\d{2}:\d{2}$/).optional().or(z.literal('')),
   })
   .refine(
     (data) => {
@@ -49,7 +51,7 @@ const habitFormSchema = z
       }
       return true
     },
-    { message: 'Select at least one day', path: ['targetDaysOfWeek'] },
+    { message: i18n.t('habits:form.targetDaysRequired'), path: ['targetDaysOfWeek'] },
   )
 
 type HabitFormValues = z.infer<typeof habitFormSchema>
@@ -71,6 +73,7 @@ export default function HabitFormModal({
   onSubmit,
   isPending,
 }: HabitFormModalProps) {
+  const { t } = useTranslation('habits')
   const {
     register,
     handleSubmit,
@@ -149,7 +152,7 @@ export default function HabitFormModal({
       <DialogContent className="max-w-[480px] p-0">
         <DialogHeader className="px-5 pt-5 pb-0">
           <DialogTitle className="text-[16px] font-semibold">
-            {mode === 'create' ? 'New habit' : 'Edit habit'}
+            {mode === 'create' ? t('form.createTitle') : t('form.editTitle')}
           </DialogTitle>
         </DialogHeader>
 
@@ -157,12 +160,12 @@ export default function HabitFormModal({
           <div className="space-y-4 px-5 py-5">
             {/* Name */}
             <div className="space-y-1.5">
-              <Label htmlFor="title" className="text-[13px]">Name</Label>
+              <Label htmlFor="title" className="text-[13px]">{t('form.nameLabel')}</Label>
               <Input
                 id="title"
                 data-testid="habit-title-input"
                 {...register('title')}
-                placeholder="e.g. Morning Run"
+                placeholder={t('form.namePlaceholder')}
                 className="h-9 border-[#C7C4BB] dark:border-zinc-800 rounded-lg"
               />
               {errors.title && (
@@ -173,21 +176,21 @@ export default function HabitFormModal({
             {/* Description */}
             <div className="space-y-1.5">
               <Label htmlFor="description" className="text-[13px]">
-                Description <span className="text-[#9E9B94] dark:text-zinc-500">(optional)</span>
+                {t('form.descriptionLabel')} <span className="text-[#9E9B94] dark:text-zinc-500">{t('common:optional')}</span>
               </Label>
               <Textarea
                 id="description"
                 {...register('description')}
-                placeholder="What is this habit about?"
+                placeholder={t('form.descriptionPlaceholder')}
                 className="h-20 border-[#C7C4BB] dark:border-zinc-800 rounded-lg resize-none"
               />
             </div>
 
             {/* Frequency */}
             <div className="space-y-1.5">
-              <Label className="text-[13px]">Frequency</Label>
+              <Label className="text-[13px]">{t('form.frequencyLabel')}</Label>
               <div className="flex gap-1">
-                {FREQUENCIES.map((f) => (
+                {FREQUENCY_KEYS.map((f) => (
                   <Button
                     key={f.value}
                     type="button"
@@ -198,7 +201,7 @@ export default function HabitFormModal({
                         : 'bg-[#F5F4F0] dark:bg-zinc-800 text-[#666360] dark:text-zinc-500 hover:bg-[#EDEDEB] dark:hover:bg-zinc-700'
                     }`}
                   >
-                    {f.label}
+                    {t(f.labelKey)}
                   </Button>
                 ))}
               </div>
@@ -207,9 +210,9 @@ export default function HabitFormModal({
             {/* Target days (CUSTOM only) */}
             {frequency === 'CUSTOM' && (
               <div className="space-y-1.5">
-                <Label className="text-[13px]">Target days</Label>
+                <Label className="text-[13px]">{t('form.targetDaysLabel')}</Label>
                 <div className="flex flex-wrap gap-2">
-                  {DAYS.map((day) => {
+                  {DAY_KEYS.map((day) => {
                     const isSelected = selectedDays.includes(day.value)
                     return (
                       <Button
@@ -222,7 +225,7 @@ export default function HabitFormModal({
                             : 'bg-[#F5F4F0] dark:bg-zinc-800 text-[#666360] dark:text-zinc-500 border border-[#E8E6DF] dark:border-zinc-800 hover:bg-[#EDEDEB] dark:hover:bg-zinc-700'
                         }`}
                       >
-                        {day.label}
+                        {t(day.labelKey)}
                       </Button>
                     )
                   })}
@@ -236,7 +239,7 @@ export default function HabitFormModal({
             {/* Reminder time */}
             <div className="space-y-1.5">
               <Label htmlFor="reminderTime" className="text-[13px]">
-                Reminder time <span className="text-[#9E9B94] dark:text-zinc-500">(optional)</span>
+                {t('form.reminderTimeLabel')} <span className="text-[#9E9B94] dark:text-zinc-500">{t('common:optional')}</span>
               </Label>
               <Input
                 id="reminderTime"
@@ -254,7 +257,7 @@ export default function HabitFormModal({
               onClick={() => onOpenChange(false)}
               className="border-[#C7C4BB] text-[13px]"
             >
-              Cancel
+              {t('form.cancel')}
             </Button>
             <Button
               type="submit"
@@ -263,7 +266,7 @@ export default function HabitFormModal({
               className="bg-[#534AB7] text-[#EEEDFE] text-[13px]"
             >
               {isPending && <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />}
-              {mode === 'create' ? 'Create' : 'Save'}
+              {mode === 'create' ? t('form.create') : t('form.save')}
             </Button>
           </DialogFooter>
         </form>

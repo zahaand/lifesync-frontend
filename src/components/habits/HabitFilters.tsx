@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Search } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -11,10 +12,10 @@ type HabitFiltersProps = {
   onSearchChange: (query: string) => void
 }
 
-const TABS: { value: FilterTab; label: string }[] = [
-  { value: 'ALL', label: 'All' },
-  { value: 'ACTIVE', label: 'Active' },
-  { value: 'ARCHIVED', label: 'Archived' },
+const TABS: { value: FilterTab; labelKey: string }[] = [
+  { value: 'ALL', labelKey: 'filter.all' },
+  { value: 'ACTIVE', labelKey: 'filter.active' },
+  { value: 'ARCHIVED', labelKey: 'filter.archived' },
 ]
 
 export default function HabitFilters({
@@ -23,6 +24,8 @@ export default function HabitFilters({
   searchQuery,
   onSearchChange,
 }: HabitFiltersProps) {
+  const { t } = useTranslation('habits')
+
   return (
     <div className="flex items-center gap-3 mb-5 overflow-x-auto">
       {TABS.map((tab) => (
@@ -37,14 +40,14 @@ export default function HabitFilters({
               : 'bg-transparent text-[#666360] dark:text-zinc-500 border-[#E8E6DF] dark:border-zinc-800'
           }`}
         >
-          {tab.label}
+          {t(tab.labelKey)}
         </Button>
       ))}
       <div className="ml-auto relative">
         <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#9E9B94] dark:text-zinc-500" />
         <Input
           type="text"
-          placeholder="Search habits..."
+          placeholder={t('filter.search')}
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           className="max-w-[220px] h-[34px] border-[#E8E6DF] dark:border-zinc-800 rounded-lg text-[13px] pl-8 bg-[#F5F4F0] dark:bg-zinc-800"
