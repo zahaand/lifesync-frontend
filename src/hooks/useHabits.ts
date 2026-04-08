@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import i18n from 'i18next'
 import { habitsApi } from '@/api/habits'
 import type { HabitPageResponse, CreateHabitRequest, UpdateHabitRequest } from '@/types/habits'
 
@@ -24,10 +25,10 @@ export function useCreateHabit() {
     mutationFn: (data: CreateHabitRequest) => habitsApi.createHabit(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['habits'] })
-      toast.success('Habit created')
+      toast.success(i18n.t('habits:message.created'))
     },
     onError: () => {
-      toast.error('Failed to create habit')
+      toast.error(i18n.t('habits:message.createFailed'))
     },
   })
 }
@@ -42,7 +43,7 @@ export function useUpdateHabit() {
       queryClient.invalidateQueries({ queryKey: ['habits'] })
     },
     onError: () => {
-      toast.error('Failed to update habit')
+      toast.error(i18n.t('habits:message.updateFailed'))
     },
   })
 }
@@ -54,10 +55,10 @@ export function useDeleteHabit() {
     mutationFn: (habitId: string) => habitsApi.deleteHabit(habitId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['habits'] })
-      toast.success('Habit deleted')
+      toast.success(i18n.t('habits:message.deleted'))
     },
     onError: () => {
-      toast.error('Failed to delete habit')
+      toast.error(i18n.t('habits:message.deleteFailed'))
     },
   })
 }
@@ -98,7 +99,7 @@ export function useCompleteHabit() {
       if (context?.allSnapshot) {
         queryClient.setQueryData(['habits'], context.allSnapshot)
       }
-      toast.error('Failed to complete habit', { duration: 3000 })
+      toast.error(i18n.t('habits:message.completeFailed'), { duration: 3000 })
     },
     onSettled: (_data, _error, habitId) => {
       queryClient.invalidateQueries({ queryKey: ['habits'] })
@@ -144,7 +145,7 @@ export function useUncompleteHabit() {
       if (context?.allSnapshot) {
         queryClient.setQueryData(['habits'], context.allSnapshot)
       }
-      toast.error('Failed to uncomplete habit', { duration: 3000 })
+      toast.error(i18n.t('habits:message.uncompleteFailed'), { duration: 3000 })
     },
     onSettled: (_data, _error, { habitId }) => {
       queryClient.invalidateQueries({ queryKey: ['habits'] })

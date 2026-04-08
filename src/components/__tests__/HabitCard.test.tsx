@@ -46,7 +46,7 @@ describe('HabitCard', () => {
     renderCard()
 
     expect(screen.getByText('Morning Run')).toBeInTheDocument()
-    expect(screen.getByText(/5 day streak/)).toBeInTheDocument()
+    expect(screen.getByText(/card\.streak/)).toBeInTheDocument()
   })
 
   it('triggers onComplete when checkbox clicked', async () => {

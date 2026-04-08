@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
+import i18n from 'i18next'
 import { usersApi } from '@/api/users'
 import { useAuthStore } from '@/stores/authStore'
 import type { UpdateUserRequest, UpdateTelegramRequest } from '@/types/users'
@@ -28,10 +29,10 @@ export function useUpdateProfile() {
         displayName: profile.displayName,
       }
       useAuthStore.getState().setUser(user)
-      toast.success('Profile updated')
+      toast.success(i18n.t('profile:message.updated'))
     },
     onError: () => {
-      toast.error('Failed to update profile')
+      toast.error(i18n.t('profile:message.updateFailed'))
     },
   })
 }
@@ -43,10 +44,10 @@ export function useUpdateTelegram() {
     mutationFn: (data: UpdateTelegramRequest) => usersApi.updateTelegram(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users', 'me'] })
-      toast.success('Telegram linked')
+      toast.success(i18n.t('profile:message.telegramLinked'))
     },
     onError: () => {
-      toast.error('Failed to link Telegram')
+      toast.error(i18n.t('profile:message.telegramLinkFailed'))
     },
   })
 }
@@ -63,7 +64,7 @@ export function useDeleteAccount() {
       navigate('/login')
     },
     onError: () => {
-      toast.error('Failed to delete account')
+      toast.error(i18n.t('profile:message.deleteFailed'))
     },
   })
 }

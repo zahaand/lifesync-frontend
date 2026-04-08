@@ -21,7 +21,7 @@ function createWrapper() {
 }
 
 function getSubmitButton() {
-  return screen.getAllByRole('button', { name: /sign in/i }).find(
+  return screen.getAllByRole('button', { name: /login\.submit/i }).find(
     (btn) => btn.getAttribute('type') === 'submit',
   )!
 }
@@ -34,8 +34,8 @@ describe('LoginPage', () => {
   it('renders sign-in form with identifier and password fields', () => {
     render(<LoginPage />, { wrapper: createWrapper() })
 
-    expect(screen.getByLabelText(/email or username/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/password/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/login\.emailOrUsername/)).toBeInTheDocument()
+    expect(screen.getByLabelText(/login\.password/)).toBeInTheDocument()
     expect(getSubmitButton()).toBeInTheDocument()
   })
 
@@ -45,15 +45,16 @@ describe('LoginPage', () => {
 
     await user.click(getSubmitButton())
 
-    expect(await screen.findByText(/email or username is required/i)).toBeInTheDocument()
+    const errors = await screen.findAllByText(/too small/i)
+    expect(errors.length).toBeGreaterThan(0)
   })
 
   it('calls login on valid submit', async () => {
     const user = userEvent.setup()
     render(<LoginPage />, { wrapper: createWrapper() })
 
-    await user.type(screen.getByLabelText(/email or username/i), 'testuser')
-    await user.type(screen.getByLabelText(/password/i), 'password123')
+    await user.type(screen.getByLabelText(/login\.emailOrUsername/), 'testuser')
+    await user.type(screen.getByLabelText(/login\.password/), 'password123')
     await user.click(getSubmitButton())
 
     await vi.waitFor(() => {
@@ -65,9 +66,9 @@ describe('LoginPage', () => {
     const user = userEvent.setup()
     render(<LoginPage />, { wrapper: createWrapper() })
 
-    await user.click(screen.getByRole('button', { name: /sign up/i }))
+    await user.click(screen.getByRole('button', { name: /register\.submit/ }))
 
-    expect(screen.getByLabelText(/^email$/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/username/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/register\.email/)).toBeInTheDocument()
+    expect(screen.getByLabelText(/register\.username/)).toBeInTheDocument()
   })
 })

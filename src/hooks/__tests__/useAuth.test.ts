@@ -43,7 +43,7 @@ describe('useLogin', () => {
 
     await waitFor(() => expect(result.current.isError).toBe(true))
 
-    expect(setError).toHaveBeenCalledWith('root', { message: 'Invalid credentials' })
+    expect(setError).toHaveBeenCalledWith('root', { message: 'auth:error.invalidCredentials' })
   })
 })
 
