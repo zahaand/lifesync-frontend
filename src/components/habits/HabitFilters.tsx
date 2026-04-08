@@ -33,21 +33,21 @@ export default function HabitFilters({
           onClick={() => onFilterChange(tab.value)}
           className={`shrink-0 text-[12px] px-3 py-1.5 rounded-full h-auto ${
             activeFilter === tab.value
-              ? 'bg-[#EEEDFE] text-[#3C3489] border-[#AFA9EC] font-medium'
-              : 'bg-transparent text-[#666360] border-[#E8E6DF]'
+              ? 'bg-[#EEEDFE] dark:bg-[#534AB7]/20 text-[#3C3489] border-[#AFA9EC] dark:border-[#534AB7] font-medium'
+              : 'bg-transparent text-[#666360] dark:text-zinc-500 border-[#E8E6DF] dark:border-zinc-800'
           }`}
         >
           {tab.label}
         </Button>
       ))}
       <div className="ml-auto relative">
-        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#9E9B94]" />
+        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#9E9B94] dark:text-zinc-500" />
         <Input
           type="text"
           placeholder="Search habits..."
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
-          className="max-w-[220px] h-[34px] border-[#E8E6DF] rounded-lg text-[13px] pl-8 bg-[#F5F4F0]"
+          className="max-w-[220px] h-[34px] border-[#E8E6DF] dark:border-zinc-800 rounded-lg text-[13px] pl-8 bg-[#F5F4F0] dark:bg-zinc-800"
         />
       </div>
     </div>

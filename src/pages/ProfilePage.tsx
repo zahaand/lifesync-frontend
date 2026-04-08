@@ -9,7 +9,7 @@ export default function ProfilePage() {
 
   return (
     <div className="mx-auto max-w-full space-y-4 px-0 md:max-w-[680px]">
-      <h1 className="mb-2 text-[20px] font-semibold text-[#2C2C2A]">Profile</h1>
+      <h1 className="mb-2 text-[20px] font-semibold text-[#2C2C2A] dark:text-zinc-50">Profile</h1>
       <AccountCard profile={profile} isLoading={isLoading} />
       <TelegramCard profile={profile} isLoading={isLoading} />
       <StatsCard />

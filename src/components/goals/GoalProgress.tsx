@@ -14,7 +14,8 @@ export default function GoalProgressSection({ goal }: GoalProgressProps) {
   const updateProgress = useUpdateGoalProgress()
 
   const isCompleted = goal.status === 'COMPLETED'
-  const progressColor = isCompleted ? '#3B6D11' : '#534AB7'
+  const isDark = document.documentElement.classList.contains('dark')
+  const progressColor = isCompleted ? (isDark ? '#4ade80' : '#3B6D11') : '#534AB7'
   const clamped = Math.max(0, Math.min(100, goal.progress))
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,19 +43,19 @@ export default function GoalProgressSection({ goal }: GoalProgressProps) {
   }
 
   return (
-    <div className="rounded-xl border border-[#E8E6DF] bg-white p-5">
-      <div className="mb-3 text-[11px] font-medium uppercase tracking-wider text-[#9E9B94]">
+    <div className="rounded-xl border border-[#E8E6DF] dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5">
+      <div className="mb-3 text-[11px] font-medium uppercase tracking-wider text-[#9E9B94] dark:text-zinc-500">
         Progress
       </div>
       <div
-        className={`mb-2 text-[32px] font-semibold ${isCompleted ? 'text-[#3B6D11]' : 'text-[#534AB7]'}`}
+        className={`mb-2 text-[32px] font-semibold ${isCompleted ? 'text-[#3B6D11] dark:text-green-400' : 'text-[#534AB7]'}`}
       >
         {clamped}%
       </div>
       <SharedGoalProgress
         value={clamped}
         color={progressColor}
-        className="mb-4 h-[8px] rounded-full bg-[#F5F4F0]"
+        className="mb-4 h-[8px] rounded-full bg-[#F5F4F0] dark:bg-zinc-800"
       />
       <div className="flex items-center gap-2">
         <Input
@@ -62,7 +63,7 @@ export default function GoalProgressSection({ goal }: GoalProgressProps) {
           inputMode="numeric"
           value={inputValue}
           onChange={handleInputChange}
-          className="h-9 w-20 rounded-lg border-[#C7C4BB] text-center"
+          className="h-9 w-20 rounded-lg border-[#C7C4BB] dark:border-zinc-800 text-center"
         />
         <Button
           className="h-9 rounded-lg bg-[#534AB7] px-4 text-[#EEEDFE]"

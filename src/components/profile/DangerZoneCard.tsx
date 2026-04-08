@@ -18,14 +18,14 @@ export default function DangerZoneCard({ username }: DangerZoneCardProps) {
 
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-[14px] font-medium text-[#2C2C2A]">Delete account</p>
-              <p className="text-[13px] text-[#9E9B94]">
+              <p className="text-[14px] font-medium text-[#2C2C2A] dark:text-zinc-50">Delete account</p>
+              <p className="text-[13px] text-[#9E9B94] dark:text-zinc-500">
                 Permanently delete your account and all data. This cannot be undone.
               </p>
             </div>
             <Button
               variant="outline"
-              className="shrink-0 rounded-lg border-red-300 text-[13px] text-red-600 hover:bg-red-50"
+              className="shrink-0 rounded-lg border-red-300 dark:border-red-800 text-[13px] text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950"
               onClick={() => setDialogOpen(true)}
             >
               Delete account

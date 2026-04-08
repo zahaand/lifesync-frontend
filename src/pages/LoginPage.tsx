@@ -38,7 +38,7 @@ function RegisterForm({onSuccess}: { onSuccess: () => void }) {
             )}
 
             <div>
-                <Label htmlFor="register-email" className="mb-1 block text-[12px] font-medium text-[#666360]">
+                <Label htmlFor="register-email" className="mb-1 block text-[12px] font-medium text-[#666360] dark:text-zinc-500">
                     Email
                 </Label>
                 <Input
@@ -46,7 +46,7 @@ function RegisterForm({onSuccess}: { onSuccess: () => void }) {
                     data-testid="email-input"
                     type="email"
                     placeholder="alice@example.com"
-                    className={`h-[36px] rounded-lg border-[#C7C4BB] px-3 text-[13px] text-[#2C2C2A] placeholder:text-[#9E9B94] focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] ${values.email ? 'bg-[#F5F4F0]' : 'bg-white'}`}
+                    className={`h-[36px] rounded-lg border-[#C7C4BB] dark:border-zinc-800 px-3 text-[13px] text-[#2C2C2A] dark:text-zinc-50 placeholder:text-[#9E9B94] dark:placeholder:text-zinc-600 focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] ${values.email ? 'bg-[#F5F4F0] dark:bg-zinc-800' : 'bg-white dark:bg-zinc-900'}`}
                     {...register('email')}
                 />
                 {errors.email && (
@@ -55,7 +55,7 @@ function RegisterForm({onSuccess}: { onSuccess: () => void }) {
             </div>
 
             <div>
-                <Label htmlFor="register-username" className="mb-1 block text-[12px] font-medium text-[#666360]">
+                <Label htmlFor="register-username" className="mb-1 block text-[12px] font-medium text-[#666360] dark:text-zinc-500">
                     Username
                 </Label>
                 <Input
@@ -63,18 +63,18 @@ function RegisterForm({onSuccess}: { onSuccess: () => void }) {
                     data-testid="username-input"
                     type="text"
                     placeholder="alice-dev"
-                    className={`h-[36px] rounded-lg border-[#C7C4BB] px-3 text-[13px] text-[#2C2C2A] placeholder:text-[#9E9B94] focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] ${values.username ? 'bg-[#F5F4F0]' : 'bg-white'}`}
+                    className={`h-[36px] rounded-lg border-[#C7C4BB] dark:border-zinc-800 px-3 text-[13px] text-[#2C2C2A] dark:text-zinc-50 placeholder:text-[#9E9B94] dark:placeholder:text-zinc-600 focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] ${values.username ? 'bg-[#F5F4F0] dark:bg-zinc-800' : 'bg-white dark:bg-zinc-900'}`}
                     {...register('username')}
                 />
                 {errors.username ? (
                     <p className="mt-1 text-[12px] text-red-600">{errors.username.message}</p>
                 ) : (
-                    <p className="mt-1 text-[11px] text-[#9E9B94]">3–32 characters: letters, digits, _ and -</p>
+                    <p className="mt-1 text-[11px] text-[#9E9B94] dark:text-zinc-600">3–32 characters: letters, digits, _ and -</p>
                 )}
             </div>
 
             <div>
-                <Label htmlFor="register-password" className="mb-1 block text-[12px] font-medium text-[#666360]">
+                <Label htmlFor="register-password" className="mb-1 block text-[12px] font-medium text-[#666360] dark:text-zinc-500">
                     Password
                 </Label>
                 <Input
@@ -82,7 +82,7 @@ function RegisterForm({onSuccess}: { onSuccess: () => void }) {
                     data-testid="register-password-input"
                     type="password"
                     placeholder="Minimum 8 characters"
-                    className={`h-[36px] rounded-lg border-[#C7C4BB] px-3 text-[13px] text-[#2C2C2A] placeholder:text-[#9E9B94] focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] ${values.password ? 'bg-[#F5F4F0]' : 'bg-white'}`}
+                    className={`h-[36px] rounded-lg border-[#C7C4BB] dark:border-zinc-800 px-3 text-[13px] text-[#2C2C2A] dark:text-zinc-50 placeholder:text-[#9E9B94] dark:placeholder:text-zinc-600 focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] ${values.password ? 'bg-[#F5F4F0] dark:bg-zinc-800' : 'bg-white dark:bg-zinc-900'}`}
                     {...register('password')}
                 />
                 {errors.password && (
@@ -136,7 +136,7 @@ function LoginForm() {
             )}
 
             <div>
-                <Label htmlFor="login-identifier" className="mb-1 block text-[12px] font-medium text-[#666360]">
+                <Label htmlFor="login-identifier" className="mb-1 block text-[12px] font-medium text-[#666360] dark:text-zinc-500">
                     Email or username
                 </Label>
                 <Input
@@ -144,18 +144,18 @@ function LoginForm() {
                     data-testid="identifier-input"
                     type="text"
                     placeholder="alice@example.com"
-                    className={`h-[36px] rounded-lg border-[#C7C4BB] px-3 text-[13px] text-[#2C2C2A] placeholder:text-[#9E9B94] focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] ${values.identifier ? 'bg-[#F5F4F0]' : 'bg-white'}`}
+                    className={`h-[36px] rounded-lg border-[#C7C4BB] dark:border-zinc-800 px-3 text-[13px] text-[#2C2C2A] dark:text-zinc-50 placeholder:text-[#9E9B94] dark:placeholder:text-zinc-600 focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] ${values.identifier ? 'bg-[#F5F4F0] dark:bg-zinc-800' : 'bg-white dark:bg-zinc-900'}`}
                     {...register('identifier')}
                 />
                 {errors.identifier ? (
                     <p className="mt-1 text-[12px] text-red-600">{errors.identifier.message}</p>
                 ) : (
-                    <p className="mt-1 text-[11px] text-[#9E9B94]">You can sign in with either email or username</p>
+                    <p className="mt-1 text-[11px] text-[#9E9B94] dark:text-zinc-600">You can sign in with either email or username</p>
                 )}
             </div>
 
             <div>
-                <Label htmlFor="login-password" className="mb-1 block text-[12px] font-medium text-[#666360]">
+                <Label htmlFor="login-password" className="mb-1 block text-[12px] font-medium text-[#666360] dark:text-zinc-500">
                     Password
                 </Label>
                 <Input
@@ -163,7 +163,7 @@ function LoginForm() {
                     data-testid="password-input"
                     type="password"
                     placeholder="••••••••"
-                    className={`h-[36px] rounded-lg border-[#C7C4BB] px-3 text-[13px] text-[#2C2C2A] placeholder:text-[#9E9B94] focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] ${values.password ? 'bg-[#F5F4F0]' : 'bg-white'}`}
+                    className={`h-[36px] rounded-lg border-[#C7C4BB] dark:border-zinc-800 px-3 text-[13px] text-[#2C2C2A] dark:text-zinc-50 placeholder:text-[#9E9B94] dark:placeholder:text-zinc-600 focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] ${values.password ? 'bg-[#F5F4F0] dark:bg-zinc-800' : 'bg-white dark:bg-zinc-900'}`}
                     {...register('password')}
                 />
                 {errors.password && (
@@ -215,8 +215,8 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-[#F1EFE8]">
-            <div className="w-full max-w-[380px] rounded-xl border border-[#C7C4BB] bg-white p-8">
+        <div className="flex min-h-screen items-center justify-center bg-[#F1EFE8] dark:bg-background">
+            <div className="w-full max-w-[380px] rounded-xl border border-[#C7C4BB] dark:border-zinc-800 bg-white dark:bg-zinc-900 p-8">
                 {/* Logo */}
                 <div className="mb-5 text-center">
                     <span className="text-[22px] font-semibold tracking-tight text-[#534AB7]">
@@ -226,10 +226,10 @@ export default function LoginPage() {
 
                 {/* Title + Subtitle */}
                 <div className="mb-5 text-center">
-                    <h1 className="text-[18px] font-semibold text-[#2C2C2A]">
+                    <h1 className="text-[18px] font-semibold text-[#2C2C2A] dark:text-zinc-50">
                         {activeTab === 'signin' ? 'Welcome back' : 'Create your account'}
                     </h1>
-                    <p className="text-[13px] text-[#9E9B94]">
+                    <p className="text-[13px] text-[#9E9B94] dark:text-zinc-500">
                         {activeTab === 'signin'
                             ? 'Sign in to continue'
                             : 'Start tracking habits and goals'}
@@ -237,7 +237,7 @@ export default function LoginPage() {
                 </div>
 
                 {/* Tabs */}
-                <div className="mb-5 grid h-[34px] grid-cols-2 overflow-hidden rounded-lg border border-[#C7C4BB]">
+                <div className="mb-5 grid h-[34px] grid-cols-2 overflow-hidden rounded-lg border border-[#C7C4BB] dark:border-zinc-800">
                     <Button
                         type="button"
                         variant="ghost"
@@ -246,7 +246,7 @@ export default function LoginPage() {
                         className={`h-full rounded-none border-0 text-[13px] font-medium transition-colors ${
                             activeTab === 'signin'
                                 ? 'bg-[#534AB7] text-[#EEEDFE] hover:bg-[#534AB7] hover:text-[#EEEDFE]'
-                                : 'bg-white text-[#666360] hover:bg-[#F5F4F0]'
+                                : 'bg-white dark:bg-zinc-900 text-[#666360] dark:text-zinc-500 hover:bg-[#F5F4F0] dark:hover:bg-zinc-800'
                         }`}
                     >
                         Sign in
@@ -259,7 +259,7 @@ export default function LoginPage() {
                         className={`h-full rounded-none border-0 text-[13px] font-medium transition-colors ${
                             activeTab === 'signup'
                                 ? 'bg-[#534AB7] text-[#EEEDFE] hover:bg-[#534AB7] hover:text-[#EEEDFE]'
-                                : 'bg-white text-[#666360] hover:bg-[#F5F4F0]'
+                                : 'bg-white dark:bg-zinc-900 text-[#666360] dark:text-zinc-500 hover:bg-[#F5F4F0] dark:hover:bg-zinc-800'
                         }`}
                     >
                         Sign up
@@ -268,7 +268,7 @@ export default function LoginPage() {
 
                 {/* Success message */}
                 {successMessage && (
-                    <div className="mb-3 rounded-lg border border-[#9FE1CB] bg-[#E1F5EE] p-3 text-[13px] text-[#085041]">
+                    <div className="mb-3 rounded-lg border border-[#9FE1CB] dark:border-emerald-800 bg-[#E1F5EE] dark:bg-emerald-900/20 p-3 text-[13px] text-[#085041] dark:text-emerald-300">
                         {successMessage}
                     </div>
                 )}

@@ -163,7 +163,7 @@ export default function HabitFormModal({
                 data-testid="habit-title-input"
                 {...register('title')}
                 placeholder="e.g. Morning Run"
-                className="h-9 border-[#C7C4BB] rounded-lg"
+                className="h-9 border-[#C7C4BB] dark:border-zinc-800 rounded-lg"
               />
               {errors.title && (
                 <p className="text-[12px] text-red-500">{errors.title.message}</p>
@@ -173,13 +173,13 @@ export default function HabitFormModal({
             {/* Description */}
             <div className="space-y-1.5">
               <Label htmlFor="description" className="text-[13px]">
-                Description <span className="text-[#9E9B94]">(optional)</span>
+                Description <span className="text-[#9E9B94] dark:text-zinc-500">(optional)</span>
               </Label>
               <Textarea
                 id="description"
                 {...register('description')}
                 placeholder="What is this habit about?"
-                className="h-20 border-[#C7C4BB] rounded-lg resize-none"
+                className="h-20 border-[#C7C4BB] dark:border-zinc-800 rounded-lg resize-none"
               />
             </div>
 
@@ -195,7 +195,7 @@ export default function HabitFormModal({
                     className={`flex-1 text-[13px] h-9 rounded-lg ${
                       frequency === f.value
                         ? 'bg-[#534AB7] text-[#EEEDFE]'
-                        : 'bg-[#F5F4F0] text-[#666360] hover:bg-[#EDEDEB]'
+                        : 'bg-[#F5F4F0] dark:bg-zinc-800 text-[#666360] dark:text-zinc-500 hover:bg-[#EDEDEB] dark:hover:bg-zinc-700'
                     }`}
                   >
                     {f.label}
@@ -219,7 +219,7 @@ export default function HabitFormModal({
                         className={`w-10 h-10 rounded-full text-[12px] p-0 ${
                           isSelected
                             ? 'bg-[#534AB7] text-[#EEEDFE]'
-                            : 'bg-[#F5F4F0] text-[#666360] border border-[#E8E6DF] hover:bg-[#EDEDEB]'
+                            : 'bg-[#F5F4F0] dark:bg-zinc-800 text-[#666360] dark:text-zinc-500 border border-[#E8E6DF] dark:border-zinc-800 hover:bg-[#EDEDEB] dark:hover:bg-zinc-700'
                         }`}
                       >
                         {day.label}
@@ -236,18 +236,18 @@ export default function HabitFormModal({
             {/* Reminder time */}
             <div className="space-y-1.5">
               <Label htmlFor="reminderTime" className="text-[13px]">
-                Reminder time <span className="text-[#9E9B94]">(optional)</span>
+                Reminder time <span className="text-[#9E9B94] dark:text-zinc-500">(optional)</span>
               </Label>
               <Input
                 id="reminderTime"
                 type="time"
                 {...register('reminderTime')}
-                className="h-9 border-[#C7C4BB] rounded-lg"
+                className="h-9 border-[#C7C4BB] dark:border-zinc-800 rounded-lg"
               />
             </div>
           </div>
 
-          <DialogFooter className="border-t border-[#E8E6DF] px-5 py-4">
+          <DialogFooter className="border-t border-[#E8E6DF] dark:border-zinc-800 px-5 py-4">
             <Button
               type="button"
               variant="outline"

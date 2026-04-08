@@ -141,8 +141,8 @@ export default function HabitsPage() {
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-[20px] font-semibold text-[#2C2C2A]">Habits</h1>
-          <p className="text-[13px] text-[#9E9B94] mt-1">
+          <h1 className="text-[20px] font-semibold text-[#2C2C2A] dark:text-zinc-50">Habits</h1>
+          <p className="text-[13px] text-[#9E9B94] dark:text-zinc-500 mt-1">
             {activeHabits.length} active · {archivedHabits.length} archived
           </p>
         </div>
@@ -174,7 +174,7 @@ export default function HabitsPage() {
           {/* Active section */}
           {filteredActive.length > 0 && (
             <div>
-              <h2 className="text-[11px] font-medium uppercase tracking-wider text-[#9E9B94] mb-3">
+              <h2 className="text-[11px] font-medium uppercase tracking-wider text-[#9E9B94] dark:text-zinc-500 mb-3">
                 Active — {filteredActive.length}
               </h2>
               {filteredActive.map((habit) => (
@@ -196,7 +196,7 @@ export default function HabitsPage() {
           {/* Archived section */}
           {filteredArchived.length > 0 && (
             <div className={filteredActive.length > 0 ? 'mt-5' : ''}>
-              <h2 className="text-[11px] font-medium uppercase tracking-wider text-[#9E9B94] mb-3">
+              <h2 className="text-[11px] font-medium uppercase tracking-wider text-[#9E9B94] dark:text-zinc-500 mb-3">
                 Archived — {filteredArchived.length}
               </h2>
               {filteredArchived.map((habit) => (

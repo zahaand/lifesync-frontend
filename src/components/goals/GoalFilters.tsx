@@ -24,8 +24,8 @@ export default function GoalFilters({ activeFilter, onFilterChange }: GoalFilter
             variant="ghost"
             className={`h-auto rounded-full px-3 py-1.5 text-[12px] ${
               isActive
-                ? 'border border-[#AFA9EC] bg-[#EEEDFE] font-medium text-[#3C3489] hover:bg-[#EEEDFE]'
-                : 'border border-[#E8E6DF] bg-transparent text-[#666360] hover:bg-[#F5F4F0]'
+                ? 'border border-[#AFA9EC] dark:border-[#534AB7] bg-[#EEEDFE] dark:bg-[#534AB7]/20 font-medium text-[#3C3489] hover:bg-[#EEEDFE]'
+                : 'border border-[#E8E6DF] dark:border-zinc-800 bg-transparent text-[#666360] dark:text-zinc-500 hover:bg-[#F5F4F0] dark:hover:bg-zinc-800'
             }`}
             onClick={() => onFilterChange(tab.value)}
           >

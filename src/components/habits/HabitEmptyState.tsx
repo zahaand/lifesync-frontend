@@ -10,16 +10,16 @@ export default function HabitEmptyState({ variant, onCreateClick }: HabitEmptySt
   if (variant === 'no-results') {
     return (
       <div className="flex flex-col items-center justify-center py-16">
-        <SearchX className="mb-3 h-8 w-8 text-[#C7C4BB]" />
-        <p className="text-[13px] text-[#9E9B94]">No habits match your search.</p>
+        <SearchX className="mb-3 h-8 w-8 text-[#C7C4BB] dark:text-zinc-600" />
+        <p className="text-[13px] text-[#9E9B94] dark:text-zinc-500">No habits match your search.</p>
       </div>
     )
   }
 
   return (
     <div className="flex flex-col items-center justify-center py-16">
-      <Inbox className="mb-3 h-8 w-8 text-[#C7C4BB]" />
-      <p className="text-[13px] text-[#9E9B94]">
+      <Inbox className="mb-3 h-8 w-8 text-[#C7C4BB] dark:text-zinc-600" />
+      <p className="text-[13px] text-[#9E9B94] dark:text-zinc-500">
         {"No habits yet. Click '+ New habit' to create your first."}
       </p>
       {onCreateClick && (
