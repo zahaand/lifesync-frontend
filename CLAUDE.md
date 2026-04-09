@@ -1,6 +1,6 @@
 # lifesync-frontend Development Guidelines
 
-Auto-generated from all feature plans. Last updated: 2026-04-08
+Auto-generated from all feature plans. Last updated: 2026-04-09
 
 ## Active Technologies
 - TypeScript 5.9, React 19.2 + React Router v7, TanStack React Query v5, Axios, Zustand, React Hook Form + Zod, shadcn/ui (Nova preset) + Radix, Lucide React, Sonner (003-habits-page)
@@ -11,6 +11,8 @@ Auto-generated from all feature plans. Last updated: 2026-04-08
 - N/A (frontend only — backend at http://localhost:8080/api/v1) (007-pre-release)
 - TypeScript 5.9, React 19.2, Node 20+ + Vite 8, React Router v7, TanStack React Query v5, Zustand, shadcn/ui (Nova preset) + Radix, Lucide React, Sonner, Tailwind CSS v4 (008-dark-mode-user-menu)
 - localStorage (theme preference key) (008-dark-mode-user-menu)
+- TypeScript 5.9, React 19.2, Node 20+ + Vite 8, React Router v7, TanStack React Query v5, Zustand, shadcn/ui (Nova preset) + Radix, Lucide React, Sonner, Tailwind CSS v4, react-i18next, i18next, date-fns (NEW), react-day-picker (NEW — shadcn/ui Calendar dependency) (010-bugfixes-ux)
+- localStorage (theme, locale), Zustand (auth tokens) (010-bugfixes-ux)
 
 - TypeScript 5.9, React 19.2, Node 20+ + React Router v7, TanStack React Query v5, Axios, Zustand, React Hook Form, Zod, shadcn/ui (Nova preset) + Radix primitives, Lucide React (001-auth-routing-layout)
 - Sonner (toast notifications) (002-dashboard-page)
@@ -32,9 +34,9 @@ npm test && npm run lint
 TypeScript 5.9, React 19.2, Node 20+: Follow standard conventions
 
 ## Recent Changes
+- 010-bugfixes-ux: Added TypeScript 5.9, React 19.2, Node 20+ + Vite 8, React Router v7, TanStack React Query v5, Zustand, shadcn/ui (Nova preset) + Radix, Lucide React, Sonner, Tailwind CSS v4, react-i18next, i18next, date-fns (NEW), react-day-picker (NEW — shadcn/ui Calendar dependency)
 - 009-i18n: Added [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
 - 008-dark-mode-user-menu: Added TypeScript 5.9, React 19.2, Node 20+ + Vite 8, React Router v7, TanStack React Query v5, Zustand, shadcn/ui (Nova preset) + Radix, Lucide React, Sonner, Tailwind CSS v4
-- 007-pre-release: Added TypeScript 5.9, React 19.2, Node 20+ + Vite 8, React Router v7, TanStack React Query v5, Axios, Zustand, shadcn/ui, Lucide React, Sonner
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->
