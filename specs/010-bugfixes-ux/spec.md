@@ -146,7 +146,10 @@ New users see contextual info icons next to Goals heading, Milestones section, a
 - What happens if the user pastes a username with mixed case? The Zod transform normalizes it to lowercase before submission.
 - What happens if the habit form title has only whitespace? Treat as empty — no confirmation dialog needed (whitespace-only is not meaningful content).
 - What happens if the user clears the title after typing? No confirmation needed — title is empty again.
+- What happens in edit mode when the form is pre-filled? The unsaved changes guard uses `isDirty` from React Hook Form (or compares current values to defaults) — if the user hasn't changed anything, closing skips the dialog. If the user has modified any field, the guard triggers.
 - What happens if the date-fns locale fails to load? Fall back to the default (English) Calendar locale.
+- Date picker empty state: when no targetDate is set, the Calendar Popover trigger shows placeholder text: EN: "Pick a date" / RU: "Выберите дату". The Calendar opens to the current month with no date selected.
+- Date picker edit mode: when editing an existing goal with a targetDate, the Calendar opens pre-selected on that date. The Popover trigger shows the formatted date string.
 - What happens if multiple goal mutations fire rapidly? Each mutation's onSuccess invalidates queries; React Query deduplicates the refetch.
 - What happens to tooltip accessibility? Info icons must have aria-label, tooltips must be accessible via keyboard focus (Tab + Enter).
 
@@ -165,15 +168,15 @@ New users see contextual info icons next to Goals heading, Milestones section, a
 ### Functional Requirements
 
 - **FR-001**: Registration form MUST validate password complexity on the frontend via Zod: minimum 8 characters, plus four separate `.refine()` checks — one for uppercase, one for lowercase, one for digit, one for special character — each with its own translated error message.
-- **FR-002**: Registration form MUST display specific translated error messages for each unmet password requirement.
-- **FR-003**: Registration form MUST parse backend 400 error responses and display the message field content to the user (falling back to generic error if no message field).
+- **FR-002**: Registration form MUST display specific translated error messages for each unmet password requirement. Password validation error display strategy: React Hook Form with Zod shows the FIRST failing `.refine()` error at a time (default RHF behavior with `mode: 'onChange'`). As the user satisfies each rule, the next unmet rule shows. No custom multi-error UI needed — standard RHF + Zod behavior.
+- **FR-003**: Registration form MUST parse backend 400 error responses (expected shape: `{ message: string }`) and display the `message` field content to the user. If the response has no `message` field or is not an object, fall back to the generic translated "Registration failed" error.
 - **FR-004**: Registration form MUST apply `.toLowerCase()` transform to the username field value before submission via Zod schema transform.
 - **FR-005**: Registration form MUST display a hint below the username field: "Username is case-insensitive and will be stored in lowercase" (translated).
 - **FR-006**: Registration form MUST apply `.trim()` to the email field value before submission.
 - **FR-007**: Both HabitFormModal and GoalFormModal MUST show an AlertDialog confirmation when the user attempts to close the modal while the title field contains non-whitespace content.
 - **FR-008**: The AlertDialog MUST offer "Keep editing" (returns to form) and "Discard" (closes modal and clears data) actions. Same behavior in both form modals.
-- **FR-009**: All goal mutations (link habit, unlink habit, update progress) MUST invalidate the relevant React Query cache entries on success, matching the pattern used by Add Milestone.
-- **FR-010**: Goal form MUST use a shadcn/ui Calendar component (Popover + Calendar) instead of native `<input type="date">` for the target date field.
+- **FR-009**: All goal mutations (link habit, unlink habit, update progress, and any others such as create, update, delete, add milestone, toggle milestone, update progress) MUST invalidate the relevant React Query cache entries on success so that goal detail and goal list views reflect changes without page refresh.
+- **FR-010**: Goal form MUST use a shadcn/ui Calendar component (Popover + Calendar) instead of native `<input type="date">` for the target date field. The selected date MUST be formatted as `YYYY-MM-DD` string for form state and backend submission.
 - **FR-011**: The Calendar component MUST accept the current i18n locale and display month/day names in the active language.
 - **FR-012**: Profile AccountCard MUST NOT render ghost/duplicate button elements during or after save mutation.
 - **FR-013**: Login form MUST apply `.toLowerCase().trim()` transform to the identifier field value before submission via Zod schema transform.
@@ -217,3 +220,7 @@ New users see contextual info icons next to Goals heading, Milestones section, a
 - Tooltip content is static educational text, not user-generated — it goes through the i18n system.
 - shadcn/ui Tooltip (Radix-based) handles touch and focus events natively — no need to replace with Popover for mobile.
 - The unsaved changes guard applies to both HabitFormModal and GoalFormModal.
+- New translation keys are added to existing namespaces: auth (password validation messages, username hint), habits (unsaved changes dialog for HabitFormModal), goals (unsaved changes dialog for GoalFormModal, date picker placeholder, tooltip content), common (shared button labels if needed).
+- UnsavedChangesGuard uses React Hook Form `formState.isDirty` to detect unsaved changes. Additionally checks that the title field value (after `.trim()`) is non-empty, since `isDirty` alone may be true even for empty fields after touch. Guard triggers when: `isDirty === true AND title.trim() !== ''`.
+- date-fns is added as a direct dependency (`npm install date-fns`). Calendar component installed via `npx shadcn@latest add calendar`. Locale imports: `import { ru } from 'date-fns/locale'` and `import { enUS } from 'date-fns/locale'`.
+- Locale mapping for Calendar: `i18n.language === 'ru'` → date-fns `ru` locale; `i18n.language === 'en'` (or any other) → date-fns `enUS` locale. Applied via `locale={i18n.language === 'ru' ? ru : enUS}` on the Calendar component prop.
