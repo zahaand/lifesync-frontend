@@ -41,7 +41,7 @@ A user registers with "TestUser" as their username. The frontend normalizes it t
 
 ### User Story 3 — Unsaved Changes Confirmation (Priority: P1)
 
-A user is creating a new habit, has typed a title, and accidentally clicks the X button or clicks outside the modal. Instead of silently losing data, the user sees a confirmation dialog asking whether to discard changes.
+A user is creating a new habit or goal, has typed a title, and accidentally clicks the X button or clicks outside the modal. Instead of silently losing data, the user sees a confirmation dialog asking whether to discard changes. Applies to both HabitFormModal and GoalFormModal.
 
 **Why this priority**: Silent data loss causes frustration and erodes trust in the application.
 
@@ -150,18 +150,28 @@ New users see contextual info icons next to Goals heading, Milestones section, a
 - What happens if multiple goal mutations fire rapidly? Each mutation's onSuccess invalidates queries; React Query deduplicates the refetch.
 - What happens to tooltip accessibility? Info icons must have aria-label, tooltips must be accessible via keyboard focus (Tab + Enter).
 
+## Clarifications
+
+### Session 2026-04-09
+
+- Q: Password complexity — single Zod .regex() or separate .refine() checks? → A: Four separate .refine() checks with individual translated error messages per missing requirement (uppercase, lowercase, digit, special character).
+- Q: Unsaved changes guard scope — HabitFormModal only or both forms? → A: Both HabitFormModal and GoalFormModal.
+- Q: Calendar component — check existing date-fns or always add explicitly? → A: Always explicitly add date-fns to package.json as a direct dependency.
+- Q: Ghost button investigation — inspect first or fix directly? → A: Two-phase approach — inspect AccountCard first, report findings, then fix.
+- Q: Tooltip trigger on mobile — shadcn/ui Tooltip as-is or Popover? → A: Use shadcn/ui Tooltip as-is (Radix handles focus/touch natively).
+
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
 
-- **FR-001**: Registration form MUST validate password complexity on the frontend via Zod: minimum 8 characters, at least one uppercase letter, one lowercase letter, one digit, and one special character.
+- **FR-001**: Registration form MUST validate password complexity on the frontend via Zod: minimum 8 characters, plus four separate `.refine()` checks — one for uppercase, one for lowercase, one for digit, one for special character — each with its own translated error message.
 - **FR-002**: Registration form MUST display specific translated error messages for each unmet password requirement.
 - **FR-003**: Registration form MUST parse backend 400 error responses and display the message field content to the user (falling back to generic error if no message field).
 - **FR-004**: Registration form MUST apply `.toLowerCase()` transform to the username field value before submission via Zod schema transform.
 - **FR-005**: Registration form MUST display a hint below the username field: "Username is case-insensitive and will be stored in lowercase" (translated).
 - **FR-006**: Registration form MUST apply `.trim()` to the email field value before submission.
-- **FR-007**: Habit form modal MUST show an AlertDialog confirmation when the user attempts to close the modal while the title field contains non-whitespace content.
-- **FR-008**: The AlertDialog MUST offer "Keep editing" (returns to form) and "Discard" (closes modal and clears data) actions.
+- **FR-007**: Both HabitFormModal and GoalFormModal MUST show an AlertDialog confirmation when the user attempts to close the modal while the title field contains non-whitespace content.
+- **FR-008**: The AlertDialog MUST offer "Keep editing" (returns to form) and "Discard" (closes modal and clears data) actions. Same behavior in both form modals.
 - **FR-009**: All goal mutations (link habit, unlink habit, update progress) MUST invalidate the relevant React Query cache entries on success, matching the pattern used by Add Milestone.
 - **FR-010**: Goal form MUST use a shadcn/ui Calendar component (Popover + Calendar) instead of native `<input type="date">` for the target date field.
 - **FR-011**: The Calendar component MUST accept the current i18n locale and display month/day names in the active language.
@@ -202,7 +212,8 @@ New users see contextual info icons next to Goals heading, Milestones section, a
 - The backend already returns a `message` field in 400 error responses for password validation failures.
 - The backend accepts lowercase-only usernames without issues.
 - The Calendar component from shadcn/ui supports locale props via date-fns locale objects. If the Calendar component is not yet installed, it will be added via `npx shadcn@latest add calendar`.
-- date-fns is a new dependency required for the Calendar component's locale support.
-- The ghost button issue in AccountCard is caused by a rendering/conditional logic bug, not a shadcn/ui defect.
+- date-fns MUST be added as an explicit direct dependency in package.json (not relied upon as transitive).
+- The ghost button issue in AccountCard requires a two-phase approach: inspect the component first, report findings, then fix based on the actual root cause.
 - Tooltip content is static educational text, not user-generated — it goes through the i18n system.
-- The habit form unsaved changes guard applies only to the HabitFormModal, not to GoalFormModal (out of scope for this sprint unless explicitly requested).
+- shadcn/ui Tooltip (Radix-based) handles touch and focus events natively — no need to replace with Popover for mobile.
+- The unsaved changes guard applies to both HabitFormModal and GoalFormModal.
