@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -12,6 +12,16 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -74,6 +84,7 @@ export default function HabitFormModal({
   isPending,
 }: HabitFormModalProps) {
   const { t } = useTranslation('habits')
+  const [showDiscardDialog, setShowDiscardDialog] = useState(false)
   const {
     register,
     handleSubmit,
@@ -94,6 +105,23 @@ export default function HabitFormModal({
 
   const frequency = watch('frequency')
   const selectedDays = watch('targetDaysOfWeek') ?? []
+
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!nextOpen) {
+      const title = watch('title')
+      if (title && title.trim().length > 0) {
+        setShowDiscardDialog(true)
+        return
+      }
+    }
+    onOpenChange(nextOpen)
+  }
+
+  const handleDiscard = () => {
+    setShowDiscardDialog(false)
+    reset()
+    onOpenChange(false)
+  }
 
   useEffect(() => {
     if (open) {
@@ -148,7 +176,7 @@ export default function HabitFormModal({
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="max-w-[480px] p-0">
         <DialogHeader className="px-5 pt-5 pb-0">
           <DialogTitle className="text-[16px] font-semibold">
@@ -211,6 +239,7 @@ export default function HabitFormModal({
             {frequency === 'CUSTOM' && (
               <div className="space-y-1.5">
                 <Label className="text-[13px]">{t('form.targetDaysLabel')}</Label>
+                <p className="text-[11px] text-[#9E9B94] dark:text-zinc-600">{t('form.customFrequencyHint')}</p>
                 <div className="flex flex-wrap gap-2">
                   {DAY_KEYS.map((day) => {
                     const isSelected = selectedDays.includes(day.value)
@@ -254,7 +283,7 @@ export default function HabitFormModal({
             <Button
               type="button"
               variant="outline"
-              onClick={() => onOpenChange(false)}
+              onClick={() => handleOpenChange(false)}
               className="border-[#C7C4BB] text-[13px]"
             >
               {t('form.cancel')}
@@ -271,6 +300,24 @@ export default function HabitFormModal({
           </DialogFooter>
         </form>
       </DialogContent>
+
+      <AlertDialog open={showDiscardDialog} onOpenChange={setShowDiscardDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('form.unsavedChanges.title')}</AlertDialogTitle>
+            <AlertDialogDescription>{t('form.unsavedChanges.description')}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('form.unsavedChanges.keepEditing')}</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDiscard}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {t('form.unsavedChanges.discard')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Dialog>
   )
 }
