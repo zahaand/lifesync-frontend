@@ -19,9 +19,9 @@
 
 **Purpose**: Install new dependencies and add shadcn/ui components required by multiple user stories
 
-- [ ] T001 Install date-fns as direct dependency via `npm install date-fns`
-- [ ] T002 Install shadcn/ui Calendar component via `npx shadcn@latest add calendar` into src/components/ui/calendar.tsx
-- [ ] T003 Install shadcn/ui AlertDialog component via `npx shadcn@latest add alert-dialog` into src/components/ui/alert-dialog.tsx
+- [X] T001 Install date-fns as direct dependency via `npm install date-fns`
+- [X] T002 Install shadcn/ui Calendar component via `npx shadcn@latest add calendar` into src/components/ui/calendar.tsx
+- [X] T003 Install shadcn/ui AlertDialog component via `npx shadcn@latest add alert-dialog` into src/components/ui/alert-dialog.tsx
 
 **Checkpoint**: New dependencies and UI primitives are available for all user stories
 
@@ -33,12 +33,12 @@
 
 **⚠️ CRITICAL**: Translation keys must exist before UI components reference them
 
-- [ ] T004 [P] Add password hint, username hint, and error keys to src/locales/en/auth.json (~3 keys: register.passwordHint, register.usernameHintCase, error.passwordValidation)
-- [ ] T005 [P] Add unsaved changes dialog keys to src/locales/en/habits.json (~4 keys: form.discardTitle, form.discardDescription, form.discardKeep, form.discardConfirm)
-- [ ] T006 [P] Add unsaved changes dialog, date picker placeholder, and tooltip keys to src/locales/en/goals.json (~10 keys: form.discardTitle, form.discardDescription, form.discardKeep, form.discardConfirm, form.pickDate, tooltip.goalsInfo, tooltip.goalsInfoLabel, tooltip.milestonesInfo, tooltip.milestonesInfoLabel, tooltip.linkedHabitsInfo, tooltip.linkedHabitsInfoLabel)
-- [ ] T007 [P] Add Russian translations for all new auth keys to src/locales/ru/auth.json (mirror T004 keys: register.passwordHint = "Минимум 8 символов", register.usernameHintCase, error.passwordValidation)
-- [ ] T008 [P] Add Russian translations for all new habits keys to src/locales/ru/habits.json (mirror T005 keys)
-- [ ] T009 [P] Add Russian translations for all new goals keys to src/locales/ru/goals.json (mirror T006 keys)
+- [X] T004 [P] Add password hint, username hint, and error keys to src/locales/en/auth.json (~3 keys: register.passwordHint, register.usernameHintCase, error.passwordValidation)
+- [X] T005 [P] Add unsaved changes dialog keys to src/locales/en/habits.json (~4 keys: form.discardTitle, form.discardDescription, form.discardKeep, form.discardConfirm)
+- [X] T006 [P] Add unsaved changes dialog, date picker placeholder, and tooltip keys to src/locales/en/goals.json (~10 keys: form.discardTitle, form.discardDescription, form.discardKeep, form.discardConfirm, form.pickDate, tooltip.goalsInfo, tooltip.goalsInfoLabel, tooltip.milestonesInfo, tooltip.milestonesInfoLabel, tooltip.linkedHabitsInfo, tooltip.linkedHabitsInfoLabel)
+- [X] T007 [P] Add Russian translations for all new auth keys to src/locales/ru/auth.json (mirror T004 keys: register.passwordHint = "Минимум 8 символов", register.usernameHintCase, error.passwordValidation)
+- [X] T008 [P] Add Russian translations for all new habits keys to src/locales/ru/habits.json (mirror T005 keys)
+- [X] T009 [P] Add Russian translations for all new goals keys to src/locales/ru/goals.json (mirror T006 keys)
 
 **Checkpoint**: All translation keys exist in EN and RU — UI tasks can now reference them
 
@@ -52,9 +52,9 @@
 
 ### Implementation for User Story 1
 
-- [ ] T010 [US1] ~~REMOVED — no .refine() checks needed~~ No changes to Zod schema — existing `min(8)` validation in registerSchema in src/types/auth.ts is already correct
-- [ ] T011 [US1] Add backend 400 error handling in useRegister mutation in src/hooks/useAuth.ts — parse `{ message }` from error response body, call `setError('password', { message })` for status 400; fall back to generic translated error if no message field
-- [ ] T012 [US1] Add static password hint below password field in RegisterForm in src/pages/LoginPage.tsx — always visible, not a dynamic indicator. Use `t('auth:register.passwordHint')` key. EN: "Minimum 8 characters" / RU: "Минимум 8 символов"
+- [X] T010 [US1] ~~REMOVED — no .refine() checks needed~~ No changes to Zod schema — existing `min(8)` validation in registerSchema in src/types/auth.ts is already correct
+- [X] T011 [US1] Add backend 400 error handling in useRegister mutation in src/hooks/useAuth.ts — parse `{ message }` from error response body, call `setError('root', { message })` for status 400; fall back to generic translated error if no message field
+- [X] T012 [US1] Add static password hint below password field in RegisterForm in src/pages/LoginPage.tsx — always visible, not a dynamic indicator. Use `t('auth:register.passwordHint')` key. EN: "Minimum 8 characters" / RU: "Минимум 8 символов"
 
 **Checkpoint**: Password hint visible in both languages; backend errors parsed and displayed
 
@@ -68,9 +68,9 @@
 
 ### Implementation for User Story 2
 
-- [ ] T013 [P] [US2] Add `.transform(v => v.toLowerCase())` to username field in registerSchema in src/types/auth.ts
-- [ ] T014 [P] [US2] Add `.transform(v => v.toLowerCase().trim())` to email field in registerSchema in src/types/auth.ts
-- [ ] T015 [US2] Add username case-insensitivity hint below username field in RegisterForm in src/pages/LoginPage.tsx using `t('auth:register.usernameHintCase')` key
+- [X] T013 [P] [US2] Add `.transform(v => v.toLowerCase())` to username field in registerSchema in src/types/auth.ts
+- [X] T014 [P] [US2] Add `.transform(v => v.toLowerCase().trim())` to email field in registerSchema in src/types/auth.ts
+- [X] T015 [US2] Add username case-insensitivity hint below username field in RegisterForm in src/pages/LoginPage.tsx using `t('auth:register.usernameHint')` key (already wired)
 
 **Checkpoint**: Username normalized to lowercase, email trimmed+lowercased, hint visible in both languages
 
@@ -84,8 +84,8 @@
 
 ### Implementation for User Story 3
 
-- [ ] T016 [P] [US3] Add unsaved changes guard to HabitFormModal in src/components/habits/HabitFormModal.tsx — intercept Dialog `onOpenChange(false)`, check `watch('title').trim().length > 0`, show AlertDialog with discard/keep options using translation keys from habits namespace
-- [ ] T017 [P] [US3] Add unsaved changes guard to GoalFormModal in src/components/goals/GoalFormModal.tsx — same pattern as T016 but using goals namespace translation keys
+- [X] T016 [P] [US3] Add unsaved changes guard to HabitFormModal in src/components/habits/HabitFormModal.tsx — intercept Dialog `onOpenChange(false)`, check `watch('title').trim().length > 0`, show AlertDialog with discard/keep options using translation keys from habits namespace
+- [X] T017 [P] [US3] Add unsaved changes guard to GoalFormModal in src/components/goals/GoalFormModal.tsx — same pattern as T016 but using goals namespace translation keys
 
 **Checkpoint**: Both modals show confirmation when title has content; empty forms close immediately
 
@@ -99,7 +99,7 @@
 
 ### Implementation for User Story 4
 
-- [ ] T018 [US4] Investigate cache invalidation in src/hooks/useGoals.ts — verify all mutation `onSuccess` handlers call `invalidateQueries({ queryKey: ['goals'] })`; check consuming components (GoalLinkedHabits, GoalProgress, GoalDetail) for stale closures, local state shadows, or disabled queries; fix root cause found during investigation
+- [X] T018 [US4] Investigate cache invalidation in src/hooks/useGoals.ts — all 9 mutations already call `invalidateQueries({ queryKey: ['goals'] })` on success. No missing invalidation found. No fix needed.
 
 **Checkpoint**: All goal mutations (link, unlink, progress, create, update, delete, milestones) cause immediate UI refresh
 
@@ -113,7 +113,7 @@
 
 ### Implementation for User Story 5
 
-- [ ] T019 [US5] Replace `<Input type="date" {...register('targetDate')} />` with Popover + Calendar pattern in GoalFormModal in src/components/goals/GoalFormModal.tsx — use `Controller` from react-hook-form, pass `locale={i18n.language === 'ru' ? ru : enUS}` from date-fns/locale, format selected date as `YYYY-MM-DD` string, show placeholder text via `t('goals:form.pickDate')`, pre-select existing date in edit mode
+- [X] T019 [US5] Replace `<Input type="date">` with Popover + Calendar pattern in GoalFormModal in src/components/goals/GoalFormModal.tsx — locale-aware via date-fns, format as YYYY-MM-DD, placeholder via `t('goals:form.pickDate')`, pre-select existing date in edit mode
 
 **Checkpoint**: Date picker shows locale-aware month/day names, dates formatted correctly for backend
 
@@ -127,7 +127,7 @@
 
 ### Implementation for User Story 6
 
-- [ ] T020 [US6] Investigate and fix ghost button in src/components/profile/AccountCard.tsx — inspect Cancel/Save button rendering during `isPending` and `isDirty` state transitions; apply fix (likely: consistent button dimensions via min-width, or conditional rendering to prevent layout shift during `reset()` + mutation state change)
+- [X] T020 [US6] Fix ghost button in src/components/profile/AccountCard.tsx — root cause: buttons always rendered with `disabled={!isDirty}` caused flash during isPending→reset() transition. Fix: only render buttons when `isDirty`; added `min-w-[120px]` to Save button to prevent layout shift.
 
 **Checkpoint**: No ghost/duplicate buttons visible during or after profile save
 
@@ -141,7 +141,7 @@
 
 ### Implementation for User Story 7
 
-- [ ] T021 [US7] Add `.transform(v => v.toLowerCase().trim())` to identifier field in loginSchema in src/types/auth.ts
+- [X] T021 [US7] Add `.transform(v => v.toLowerCase().trim())` to identifier field in loginSchema in src/types/auth.ts
 
 **Checkpoint**: Login identifier lowercased and trimmed before submission
 
@@ -155,9 +155,9 @@
 
 ### Implementation for User Story 8
 
-- [ ] T022 [P] [US8] Add info icon + Tooltip next to "Goals" heading in src/pages/GoalsPage.tsx — use shadcn/ui Tooltip + Lucide Info icon with `<button>` wrapper for keyboard accessibility, content via `t('goals:tooltip.goalsInfo')`, aria-label via `t('goals:tooltip.goalsInfoLabel')`
-- [ ] T023 [P] [US8] Add info icon + Tooltip next to "Milestones" section title in src/components/goals/GoalMilestones.tsx — same pattern as T022, content via `t('goals:tooltip.milestonesInfo')`
-- [ ] T024 [P] [US8] Add info icon + Tooltip next to "Linked Habits" section title in src/components/goals/GoalLinkedHabits.tsx — same pattern as T022, content via `t('goals:tooltip.linkedHabitsInfo')`
+- [X] T022 [P] [US8] Add info icon + Tooltip next to "Goals" heading in src/pages/GoalsPage.tsx
+- [X] T023 [P] [US8] Add info icon + Tooltip next to "Milestones" section title in src/components/goals/GoalMilestones.tsx
+- [X] T024 [P] [US8] Add info icon + Tooltip next to "Linked Habits" section title in src/components/goals/GoalLinkedHabits.tsx
 
 **Checkpoint**: Three tooltips visible, accessible via hover/tap/keyboard, translated in both languages
 
@@ -167,10 +167,10 @@
 
 **Purpose**: Final validation across all changes
 
-- [ ] T025 [P] Run `tsc --noEmit` and fix any type errors introduced by schema transforms or new components
-- [ ] T026 [P] Run `npm test` and fix any broken existing tests (all 55 must pass)
-- [ ] T027 Run `npm run build` and verify zero errors
-- [ ] T028 Run quickstart.md verification scenarios (BUG-001 through UX-001) end-to-end
+- [X] T025 [P] Run `tsc --noEmit` — zero type errors
+- [X] T026 [P] Run `npm test` — all 55 tests pass (10 files)
+- [X] T027 Run `npm run build` — zero errors (chunk size warning pre-existing)
+- [ ] T028 Run quickstart.md verification scenarios (BUG-001 through UX-001) end-to-end — requires manual browser testing
 
 ---
 
