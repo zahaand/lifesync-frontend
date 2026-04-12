@@ -5,13 +5,13 @@ import i18n from 'i18next'
 import {authApi} from '@/api/auth'
 import {useAuthStore} from '@/stores/authStore'
 import {useLocaleStore} from '@/stores/localeStore'
-import type {RegisterRequest, LoginRequest, ConflictError, ValidationError} from '@/types/auth'
+import type {RegisterRequest, LoginRequest, ConflictError, ValidationError, GenericError} from '@/types/auth'
 import type {UseFormSetError} from 'react-hook-form'
 
 export function useRegister(setError: UseFormSetError<RegisterRequest>) {
     return useMutation({
         mutationFn: authApi.register,
-        onError: (error: AxiosError<ConflictError | ValidationError>) => {
+        onError: (error: AxiosError<ConflictError | ValidationError | GenericError>) => {
             const status = error.response?.status
             const data = error.response?.data
 
@@ -29,8 +29,10 @@ export function useRegister(setError: UseFormSetError<RegisterRequest>) {
                         setError(fieldName, {message: err.message})
                     }
                 }
+            } else if (status === 400 && data && 'message' in data) {
+                setError('root', {message: (data as GenericError).message})
             } else {
-                setError('root', {message: i18n.t('auth:error.generic')})
+                setError('root', {message: i18n.t('auth:error.registrationFailed')})
             }
         },
     })

@@ -134,24 +134,25 @@ export default function AccountCard({ profile, isLoading }: AccountCardProps) {
               <p className="text-[11px] text-[#9E9B94] dark:text-zinc-500">{t('account.emailReadOnly')}</p>
             </div>
 
-            <div className="flex justify-end gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                className="rounded-lg border-[#C7C4BB] dark:border-zinc-800 px-4 py-2 text-[13px] text-[#666360] dark:text-zinc-500"
-                onClick={handleCancel}
-                disabled={!isDirty}
-              >
-                {t('account.cancelButton')}
-              </Button>
-              <Button
-                type="submit"
-                className="rounded-lg bg-[#534AB7] px-4 py-2 text-[13px] font-medium text-[#EEEDFE]"
-                disabled={!isDirty || updateProfile.isPending}
-              >
-                {updateProfile.isPending ? t('common:status.saving') : t('account.saveButton')}
-              </Button>
-            </div>
+            {isDirty && (
+              <div className="flex justify-end gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="rounded-lg border-[#C7C4BB] dark:border-zinc-800 px-4 py-2 text-[13px] text-[#666360] dark:text-zinc-500"
+                  onClick={handleCancel}
+                >
+                  {t('account.cancelButton')}
+                </Button>
+                <Button
+                  type="submit"
+                  className="min-w-[120px] rounded-lg bg-[#534AB7] px-4 py-2 text-[13px] font-medium text-[#EEEDFE]"
+                  disabled={updateProfile.isPending}
+                >
+                  {updateProfile.isPending ? t('common:status.saving') : t('account.saveButton')}
+                </Button>
+              </div>
+            )}
           </form>
         </div>
       </CardContent>

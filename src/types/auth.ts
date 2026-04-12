@@ -3,17 +3,18 @@ import { z } from 'zod'
 // --- Zod Schemas ---
 
 export const registerSchema = z.object({
-  email: z.string().email(),
+  email: z.string().email().transform(v => v.toLowerCase().trim()),
   username: z
     .string()
     .min(3)
     .max(32)
-    .regex(/^[a-z0-9_-]+$/),
+    .regex(/^[a-zA-Z0-9_-]+$/)
+    .transform(v => v.toLowerCase()),
   password: z.string().min(8),
 })
 
 export const loginSchema = z.object({
-  identifier: z.string().min(1),
+  identifier: z.string().min(1).transform(v => v.toLowerCase().trim()),
   password: z.string().min(1),
 })
 

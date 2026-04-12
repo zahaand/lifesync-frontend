@@ -1,12 +1,19 @@
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { format, parse } from 'date-fns'
+import { ru } from 'date-fns/locale'
+import { enUS } from 'date-fns/locale'
+import { CalendarIcon } from 'lucide-react'
+import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
+import { Calendar } from '@/components/ui/calendar'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import {
   Dialog,
   DialogContent,
@@ -15,6 +22,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import {
   Select,
   SelectContent,
@@ -42,10 +59,12 @@ type GoalFormModalProps = {
 }
 
 export default function GoalFormModal({ open, onOpenChange, mode, goal }: GoalFormModalProps) {
-  const { t } = useTranslation('goals')
+  const { t, i18n } = useTranslation('goals')
   const createGoal = useCreateGoal()
   const updateGoal = useUpdateGoal()
   const isPending = createGoal.isPending || updateGoal.isPending
+  const [showDiscardDialog, setShowDiscardDialog] = useState(false)
+  const [calendarOpen, setCalendarOpen] = useState(false)
 
   const {
     register,
@@ -53,7 +72,7 @@ export default function GoalFormModal({ open, onOpenChange, mode, goal }: GoalFo
     reset,
     setValue,
     watch,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<GoalFormValues>({
     resolver: zodResolver(goalSchema),
     defaultValues: {
@@ -65,6 +84,12 @@ export default function GoalFormModal({ open, onOpenChange, mode, goal }: GoalFo
   })
 
   const statusValue = watch('status')
+  const targetDateValue = watch('targetDate')
+  const dateLocale = i18n.language === 'ru' ? ru : enUS
+
+  const selectedDate = targetDateValue
+    ? parse(targetDateValue, 'yyyy-MM-dd', new Date())
+    : undefined
 
   useEffect(() => {
     if (open) {
@@ -85,6 +110,23 @@ export default function GoalFormModal({ open, onOpenChange, mode, goal }: GoalFo
       }
     }
   }, [open, mode, goal, reset])
+
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!nextOpen) {
+      const title = watch('title')
+      if (isDirty && title && title.trim().length > 0) {
+        setShowDiscardDialog(true)
+        return
+      }
+    }
+    onOpenChange(nextOpen)
+  }
+
+  const handleDiscard = () => {
+    setShowDiscardDialog(false)
+    reset()
+    onOpenChange(false)
+  }
 
   const onSubmit = (values: GoalFormValues) => {
     if (mode === 'create') {
@@ -117,7 +159,7 @@ export default function GoalFormModal({ open, onOpenChange, mode, goal }: GoalFo
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="max-w-[480px]">
         <DialogHeader>
           <DialogTitle className="text-[16px] font-semibold">
@@ -157,11 +199,34 @@ export default function GoalFormModal({ open, onOpenChange, mode, goal }: GoalFo
             {/* Target date */}
             <div>
               <Label className="mb-1.5 text-[13px]">{t('form.targetDateLabel')}</Label>
-              <Input
-                {...register('targetDate')}
-                type="date"
-                className="h-9 rounded-lg border-[#C7C4BB] dark:border-zinc-800"
-              />
+              <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className={cn(
+                      'h-9 w-full justify-start rounded-lg border-[#C7C4BB] dark:border-zinc-800 text-left text-[13px] font-normal',
+                      !targetDateValue && 'text-[#9E9B94] dark:text-zinc-500',
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 size-4" />
+                    {selectedDate
+                      ? format(selectedDate, 'PPP', { locale: dateLocale })
+                      : t('form.pickDate')}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={selectedDate}
+                    onSelect={(date) => {
+                      setValue('targetDate', date ? format(date, 'yyyy-MM-dd') : '')
+                      setCalendarOpen(false)
+                    }}
+                    locale={dateLocale}
+                  />
+                </PopoverContent>
+              </Popover>
             </div>
 
             {/* Status (edit only) */}
@@ -189,7 +254,7 @@ export default function GoalFormModal({ open, onOpenChange, mode, goal }: GoalFo
               type="button"
               variant="outline"
               className="rounded-lg border-[#C7C4BB] dark:border-zinc-800 px-4 py-2 text-[13px] text-[#666360] dark:text-zinc-500"
-              onClick={() => onOpenChange(false)}
+              onClick={() => handleOpenChange(false)}
             >
               {t('form.cancel')}
             </Button>
@@ -204,6 +269,24 @@ export default function GoalFormModal({ open, onOpenChange, mode, goal }: GoalFo
           </DialogFooter>
         </form>
       </DialogContent>
+
+      <AlertDialog open={showDiscardDialog} onOpenChange={setShowDiscardDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('form.unsavedChanges.title')}</AlertDialogTitle>
+            <AlertDialogDescription>{t('form.unsavedChanges.description')}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('form.unsavedChanges.keepEditing')}</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDiscard}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {t('form.unsavedChanges.discard')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Dialog>
   )
 }

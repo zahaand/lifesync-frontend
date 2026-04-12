@@ -43,11 +43,19 @@
     "cancel": "Cancel",
     "create": "Create",
     "save": "Save",
-    "saving": "Saving..."
+    "saving": "Saving...",
+    "pickDate": "Pick a date",
+    "unsavedChanges": {
+      "title": "Discard changes?",
+      "description": "All entered data will be lost.",
+      "keepEditing": "Keep editing",
+      "discard": "Discard"
+    }
   },
   "detail": {
     "editButton": "Edit",
-    "description": "Description"
+    "description": "Description",
+    "progressHint": "Enter a value from 0 to 100. Progress also updates automatically when you complete linked habits."
   },
   "milestones": {
     "title": "Milestones",
@@ -88,6 +96,14 @@
     "habitLinkFailed": "Failed to link habit",
     "habitUnlinked": "Habit unlinked",
     "habitUnlinkFailed": "Failed to unlink habit"
+  },
+  "tooltips": {
+    "goalsHeading": "Goals are long-term objectives you want to achieve. Link habits to a goal to automatically track progress as you complete your daily habits.",
+    "goalsHeadingLabel": "What are Goals?",
+    "milestones": "Milestones are checkpoints on the way to your goal. Mark them as complete to track your progress step by step.",
+    "milestonesLabel": "What are Milestones?",
+    "linkedHabits": "Habits linked to this goal automatically update its progress when you complete them.",
+    "linkedHabitsLabel": "What are Linked Habits?"
   },
   "deleteDialog": {
     "title": "Delete goal",

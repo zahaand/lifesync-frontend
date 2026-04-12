@@ -29,6 +29,7 @@
     "idLabel": "Telegram Chat ID",
     "idPlaceholder": "e.g. 123456789",
     "hint": "Link your Telegram to receive habit reminders via bot",
+    "chatIdHint": "To find your Telegram Chat ID:\n1. Open Telegram and search for @userinfobot\n2. Send any message to the bot\n3. Copy the 'Id' number from the response",
     "linkButton": "Link Telegram",
     "updateButton": "Update"
   },

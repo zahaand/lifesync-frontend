@@ -64,7 +64,14 @@
     "reminderTimeLabel": "Reminder time",
     "cancel": "Cancel",
     "create": "Create",
-    "save": "Save"
+    "save": "Save",
+    "customFrequencyHint": "Select the days of the week when you want to perform this habit.",
+    "unsavedChanges": {
+      "title": "Discard changes?",
+      "description": "All entered data will be lost.",
+      "keepEditing": "Keep editing",
+      "discard": "Discard"
+    }
   },
   "history": {
     "title": "Completion history",

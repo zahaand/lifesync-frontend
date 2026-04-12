@@ -2,12 +2,14 @@ import { useTranslation } from 'react-i18next'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { Info } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { updateTelegramSchema } from '@/types/users'
 import { useUpdateTelegram } from '@/hooks/useUsers'
 import type { UserProfile } from '@/types/users'
@@ -61,9 +63,23 @@ export default function TelegramCard({ profile, isLoading }: TelegramCardProps) 
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
           <div className="space-y-1.5">
-            <Label htmlFor="telegramChatId" className="text-[13px] text-[#2C2C2A] dark:text-zinc-50">
-              {t('telegram.idLabel')}
-            </Label>
+            <div className="flex items-center gap-1.5">
+              <Label htmlFor="telegramChatId" className="text-[13px] text-[#2C2C2A] dark:text-zinc-50">
+                {t('telegram.idLabel')}
+              </Label>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button type="button" aria-label={t('telegram.idLabel')}>
+                      <Info className="size-3.5 text-[#9E9B94] dark:text-zinc-500" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-xs whitespace-pre-line text-sm">
+                    {t('telegram.chatIdHint')}
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
             <Input
               id="telegramChatId"
               placeholder={t('telegram.idPlaceholder')}

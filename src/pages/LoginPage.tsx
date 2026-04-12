@@ -87,8 +87,10 @@ function RegisterForm({onSuccess}: { onSuccess: () => void }) {
                     className={`h-[36px] rounded-lg border-[#C7C4BB] dark:border-zinc-800 px-3 text-[13px] text-[#2C2C2A] dark:text-zinc-50 placeholder:text-[#9E9B94] dark:placeholder:text-zinc-600 focus:border-[#534AB7] focus:ring-2 focus:ring-[#534AB7] ${values.password ? 'bg-[#F5F4F0] dark:bg-zinc-800' : 'bg-white dark:bg-zinc-900'}`}
                     {...register('password')}
                 />
-                {errors.password && (
+                {errors.password ? (
                     <p className="mt-1 text-[12px] text-red-600">{errors.password.message}</p>
+                ) : (
+                    <p className="mt-1 text-[11px] text-[#9E9B94] dark:text-zinc-600">{t('register.passwordHint')}</p>
                 )}
             </div>
 
