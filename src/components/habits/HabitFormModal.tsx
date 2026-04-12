@@ -91,7 +91,7 @@ export default function HabitFormModal({
     watch,
     setValue,
     reset,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<HabitFormValues>({
     resolver: zodResolver(habitFormSchema),
     defaultValues: {
@@ -109,7 +109,7 @@ export default function HabitFormModal({
   const handleOpenChange = (nextOpen: boolean) => {
     if (!nextOpen) {
       const title = watch('title')
-      if (title && title.trim().length > 0) {
+      if (isDirty && title && title.trim().length > 0) {
         setShowDiscardDialog(true)
         return
       }

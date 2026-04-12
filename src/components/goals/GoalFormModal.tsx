@@ -72,7 +72,7 @@ export default function GoalFormModal({ open, onOpenChange, mode, goal }: GoalFo
     reset,
     setValue,
     watch,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<GoalFormValues>({
     resolver: zodResolver(goalSchema),
     defaultValues: {
@@ -114,7 +114,7 @@ export default function GoalFormModal({ open, onOpenChange, mode, goal }: GoalFo
   const handleOpenChange = (nextOpen: boolean) => {
     if (!nextOpen) {
       const title = watch('title')
-      if (title && title.trim().length > 0) {
+      if (isDirty && title && title.trim().length > 0) {
         setShowDiscardDialog(true)
         return
       }
