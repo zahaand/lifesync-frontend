@@ -1,10 +1,10 @@
 🇷🇺 Описание на русском ниже / 🇬🇧 Russian description below
 
-# LifeSync Frontend v1.2.0
+# LifeSync Frontend v1.3.0
 
 B2C habit and goal tracking web application. Built with React 19 and TypeScript 5.9 using a strict layered architecture with server state isolation.
 
-55 unit tests | 22 E2E tests | 9 sprints | full mobile support | dark mode | bilingual UI (EN/RU)
+55 unit tests | 22 E2E tests | 10 sprints | full mobile support | dark mode | bilingual UI (EN/RU)
 
 ## Methodology
 
@@ -20,7 +20,7 @@ Each feature goes through a structured SDD cycle:
 - **Implement** — code generation following the task list
 - **Analyze** — post-implementation review against spec and constitution
 
-The project was developed over 9 sprints, each following this full cycle.
+The project was developed over 10 sprints, each following this full cycle.
 
 ## Architecture
 
@@ -73,6 +73,10 @@ Dark mode with system preference detection on first visit and a persistent theme
 
 English and Russian with instant switching, browser language detection, and backend profile sync. Uses react-i18next with 7 translation namespaces (~190 keys per language). Russian pluralization uses `_one/_few/_many` suffixes for streak counts, milestones, and linked habits. Zod validation messages are translated via a global error map. An inline `<head>` script sets `<html lang>` before React renders to prevent flash of incorrect language.
 
+### Contextual Hints
+
+Onboarding tooltips for Goals, Milestones and Linked Habits, password hints, Telegram setup guide, and inline field hints. All hints are translated via i18next and accessible via keyboard and touch.
+
 ### Smart Greeting
 
 The dashboard greeting uses `displayName` from the user profile when available, falling back to `username`. The time-of-day greeting (Good morning / Good afternoon / Good evening) is determined client-side based on the current hour.
@@ -92,6 +96,7 @@ Unit and component tests use Vitest with happy-dom, Testing Library for renderin
 - **Sprint 7: Pre-release** — unit tests, E2E tests, data-testid strategy, documentation, build verification
 - **Sprint 8: Dark mode** — class-based Tailwind CSS v4 dark theme, FOCT prevention, OS preference detection, user menu update
 - **Sprint 9: Internationalization** — react-i18next, EN + RU, ~190 translation keys, Zod validation messages translated, backend locale sync, browser language detection
+- **Sprint 10: Bug fixes & UX** — username/email normalization, unsaved changes guard, locale-aware date picker, ghost button fix, onboarding tooltips, contextual hints
 
 ## Screenshots
 
@@ -199,11 +204,11 @@ tests/
 
 ---
 
-# LifeSync Frontend v1.2.0
+# LifeSync Frontend v1.3.0
 
 B2C веб-приложение для трекинга привычек и целей. Построено на React 19 и TypeScript 5.9 со строгой слоистой архитектурой и изоляцией серверного состояния.
 
-55 юнит-тестов | 22 E2E-теста | 9 спринтов | полная мобильная поддержка | тёмная тема | двуязычный интерфейс (EN/RU)
+55 юнит-тестов | 22 E2E-теста | 10 спринтов | полная мобильная поддержка | тёмная тема | двуязычный интерфейс (EN/RU)
 
 ## Методология
 
@@ -219,7 +224,7 @@ B2C веб-приложение для трекинга привычек и це
 - **Implement** — генерация кода по списку задач
 - **Analyze** — пост-имплементационный обзор против спецификации и конституции
 
-Проект разработан за 9 спринтов, каждый из которых прошёл полный цикл.
+Проект разработан за 10 спринтов, каждый из которых прошёл полный цикл.
 
 ## Архитектура
 
@@ -272,6 +277,10 @@ JWT-аутентификация с access- и refresh-токенами. Access-
 
 Английский и русский с мгновенным переключением, определением языка браузера и синхронизацией с профилем backend. Используется react-i18next с 7 неймспейсами переводов (~190 ключей на язык). Русская плюрализация через суффиксы `_one/_few/_many` для серий, вех и привязанных привычек. Сообщения валидации Zod переведены через глобальный error map. Инлайн-скрипт в `<head>` устанавливает `<html lang>` до рендеринга React для предотвращения мерцания неверного языка.
 
+### Контекстные подсказки
+
+Onboarding tooltips для целей, этапов и привязанных привычек, подсказки пароля, инструкция по Telegram и inline подсказки полей. Все подсказки переведены через i18next и доступны с клавиатуры и через тач.
+
 ### Умное приветствие
 
 Приветствие на дашборде использует `displayName` из профиля пользователя, если доступно, с фоллбэком на `username`. Приветствие по времени суток (Доброе утро / Добрый день / Добрый вечер) определяется на клиенте по текущему часу.
@@ -291,6 +300,7 @@ JWT-аутентификация с access- и refresh-токенами. Access-
 - **Спринт 7: Предрелиз** — юнит-тесты, E2E-тесты, стратегия data-testid, документация, проверка сборки
 - **Спринт 8: Тёмная тема** — class-based Tailwind CSS v4, FOCT prevention, определение OS preference, обновление меню
 - **Спринт 9: Интернационализация** — react-i18next, EN + RU, ~190 ключей перевода, перевод Zod валидаций, синхронизация с backend, определение языка браузера
+- **Спринт 10: Исправление багов и UX** — нормализация username/email, защита от потери данных, локализованный date picker, исправление ghost button, onboarding tooltips, контекстные подсказки
 
 ## Скриншоты
 
