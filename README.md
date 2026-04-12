@@ -4,7 +4,15 @@
 
 B2C habit and goal tracking web application. Built with React 19 and TypeScript 5.9 using a strict layered architecture with server state isolation.
 
+**Demo:** [LifeSynk web-app](https://lifesync-frontend-ten.vercel.app)
+
 55 unit tests | 22 E2E tests | 10 sprints | full mobile support | dark mode | bilingual UI (EN/RU)
+
+<img width="1552" height="922" alt="Снимок экрана — 2026-04-12 в 21 36 44" src="https://github.com/user-attachments/assets/71f9772b-8279-49e9-abd9-d3e093a995d1" />
+
+<img width="1552" height="922" alt="Снимок экрана — 2026-04-12 в 21 36 54" src="https://github.com/user-attachments/assets/70d2a151-0de9-4cda-8267-2473d1631003" />
+
+<img width="1552" height="922" alt="Снимок экрана — 2026-04-12 в 21 37 04" src="https://github.com/user-attachments/assets/fef1871e-7450-45ee-a95e-5e7bd8388524" />
 
 ## Methodology
 
@@ -207,6 +215,8 @@ tests/
 # LifeSync Frontend v1.3.0
 
 B2C веб-приложение для трекинга привычек и целей. Построено на React 19 и TypeScript 5.9 со строгой слоистой архитектурой и изоляцией серверного состояния.
+
+**Демо:** [LifeSynk web-app](https://lifesync-frontend-ten.vercel.app)
 
 55 юнит-тестов | 22 E2E-теста | 10 спринтов | полная мобильная поддержка | тёмная тема | двуязычный интерфейс (EN/RU)
 
