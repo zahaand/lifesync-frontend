@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Info } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import {
   Select,
   SelectContent,
@@ -43,8 +45,20 @@ export default function GoalLinkedHabits({ goalId, linkedHabitIds }: GoalLinkedH
 
   return (
     <div className="rounded-xl border border-[#E8E6DF] dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5">
-      <div className="mb-3 text-[11px] font-medium uppercase tracking-wider text-[#9E9B94] dark:text-zinc-500">
+      <div className="mb-3 flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-[#9E9B94] dark:text-zinc-500">
         {t('linkedHabits.title')}
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button type="button" aria-label={t('tooltips.linkedHabitsLabel')}>
+                <Info className="size-3.5 text-[#9E9B94] dark:text-zinc-500" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent className="max-w-xs text-sm normal-case tracking-normal font-normal">
+              {t('tooltips.linkedHabits')}
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
 
       {linkedHabits.length === 0 ? (

@@ -1,7 +1,8 @@
 import { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Plus, ArrowLeft } from 'lucide-react'
+import { Plus, ArrowLeft, Info } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Skeleton } from '@/components/ui/skeleton'
 import GoalCard from '@/components/goals/GoalCard'
 import GoalDetail from '@/components/goals/GoalDetail'
@@ -66,7 +67,21 @@ export default function GoalsPage() {
           {/* Header */}
           <div className="mb-5 flex items-start justify-between">
             <div>
-              <h1 className="text-[20px] font-semibold text-[#2C2C2A] dark:text-zinc-50">{t('page.title')}</h1>
+              <div className="flex items-center gap-1.5">
+                <h1 className="text-[20px] font-semibold text-[#2C2C2A] dark:text-zinc-50">{t('page.title')}</h1>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button type="button" aria-label={t('tooltips.goalsHeadingLabel')}>
+                        <Info className="size-4 text-[#9E9B94] dark:text-zinc-500" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent className="max-w-xs text-sm">
+                      {t('tooltips.goalsHeading')}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
               <p className="mt-1 text-[13px] text-[#9E9B94] dark:text-zinc-500">
                 {activeCount} {t('page.statsActive')} · {completedCount} {t('page.statsCompleted')}
               </p>

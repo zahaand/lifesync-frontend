@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { X } from 'lucide-react'
+import { X, Info } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Checkbox } from '@/components/ui/checkbox'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { useAddMilestone, useUpdateMilestone, useDeleteMilestone } from '@/hooks/useGoals'
 import type { Milestone } from '@/types/goals'
 
@@ -42,8 +43,20 @@ export default function GoalMilestones({ goalId, milestones }: GoalMilestonesPro
 
   return (
     <div className="rounded-xl border border-[#E8E6DF] dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5">
-      <div className="mb-3 text-[11px] font-medium uppercase tracking-wider text-[#9E9B94] dark:text-zinc-500">
+      <div className="mb-3 flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-[#9E9B94] dark:text-zinc-500">
         {t('milestones.title')}
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button type="button" aria-label={t('tooltips.milestonesLabel')}>
+                <Info className="size-3.5 text-[#9E9B94] dark:text-zinc-500" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent className="max-w-xs text-sm normal-case tracking-normal font-normal">
+              {t('tooltips.milestones')}
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
 
       {milestones.length === 0 ? (

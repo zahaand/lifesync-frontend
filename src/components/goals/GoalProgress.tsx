@@ -75,6 +75,7 @@ export default function GoalProgressSection({ goal }: GoalProgressProps) {
           {updateProgress.isPending ? t('progress.updating') : t('progress.updateButton')}
         </Button>
       </div>
+      <p className="mt-2 text-[11px] text-[#9E9B94] dark:text-zinc-500">{t('detail.progressHint')}</p>
     </div>
   )
 }
