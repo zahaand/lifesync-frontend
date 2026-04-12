@@ -30,6 +30,7 @@
     "idLabel": "Telegram Chat ID",
     "idPlaceholder": "напр. 123456789",
     "hint": "Свяжите Telegram для получения напоминаний о привычках",
+    "chatIdHint": "Как найти Telegram Chat ID:\n1. Откройте Telegram и найдите @userinfobot\n2. Отправьте боту любое сообщение\n3. Скопируйте число 'Id' из ответа",
     "linkButton": "Связать Telegram",
     "updateButton": "Обновить"
   },
