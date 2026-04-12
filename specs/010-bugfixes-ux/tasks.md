@@ -33,10 +33,10 @@
 
 **⚠️ CRITICAL**: Translation keys must exist before UI components reference them
 
-- [X] T004 [P] Add password hint, username hint, and error keys to src/locales/en/auth.json (~3 keys: register.passwordHint, register.usernameHintCase, error.passwordValidation)
-- [X] T005 [P] Add unsaved changes dialog keys to src/locales/en/habits.json (~4 keys: form.discardTitle, form.discardDescription, form.discardKeep, form.discardConfirm)
-- [X] T006 [P] Add unsaved changes dialog, date picker placeholder, and tooltip keys to src/locales/en/goals.json (~10 keys: form.discardTitle, form.discardDescription, form.discardKeep, form.discardConfirm, form.pickDate, tooltip.goalsInfo, tooltip.goalsInfoLabel, tooltip.milestonesInfo, tooltip.milestonesInfoLabel, tooltip.linkedHabitsInfo, tooltip.linkedHabitsInfoLabel)
-- [X] T007 [P] Add Russian translations for all new auth keys to src/locales/ru/auth.json (mirror T004 keys: register.passwordHint = "Минимум 8 символов", register.usernameHintCase, error.passwordValidation)
+- [X] T004 [P] Add password hint, username hint, and error keys to src/locales/en/auth.json (~3 keys: register.passwordHint, register.usernameHint, error.registrationFailed)
+- [X] T005 [P] Add unsaved changes dialog keys to src/locales/en/habits.json (~4 keys: form.unsavedChanges.title, form.unsavedChanges.description, form.unsavedChanges.keepEditing, form.unsavedChanges.discard)
+- [X] T006 [P] Add unsaved changes dialog, date picker placeholder, and tooltip keys to src/locales/en/goals.json (~10 keys: form.unsavedChanges.title, form.unsavedChanges.description, form.unsavedChanges.keepEditing, form.unsavedChanges.discard, form.pickDate, tooltip.goalsHeading, tooltip.goalsHeadingLabel, tooltip.milestones, tooltip.milestonesLabel, tooltip.linkedHabits, tooltip.linkedHabitsLabel)
+- [X] T007 [P] Add Russian translations for all new auth keys to src/locales/ru/auth.json (mirror T004 keys: register.passwordHint = "Минимум 8 символов", register.usernameHint, error.registrationFailed)
 - [X] T008 [P] Add Russian translations for all new habits keys to src/locales/ru/habits.json (mirror T005 keys)
 - [X] T009 [P] Add Russian translations for all new goals keys to src/locales/ru/goals.json (mirror T006 keys)
 

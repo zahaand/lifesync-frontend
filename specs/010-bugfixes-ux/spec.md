@@ -100,7 +100,7 @@ After saving profile changes, no ghost elements appear near the save button. The
 
 **Acceptance Scenarios**:
 
-1. **Given** the user edits their display name and clicks Save, **When** the mutation is in progress, **Then** only a single button (showing "Saving..." or equivalent) is visible.
+1. **Given** the user edits their display name and clicks Save, **When** the mutation is in progress, **Then** the Cancel and Save buttons remain visible (Save shows "Saving..." and is disabled); no ghost or duplicate elements appear.
 2. **Given** the save mutation completes, **When** the UI returns to its default state, **Then** the button area is clean with no visual artifacts.
 
 ---
@@ -145,7 +145,7 @@ New users see contextual info icons next to Goals heading, Milestones section, a
 - What happens if the user pastes a username with mixed case? The Zod transform normalizes it to lowercase before submission.
 - What happens if the habit form title has only whitespace? Treat as empty — no confirmation dialog needed (whitespace-only is not meaningful content).
 - What happens if the user clears the title after typing? No confirmation needed — title is empty again.
-- What happens in edit mode when the form is pre-filled? The unsaved changes guard uses `isDirty` from React Hook Form (or compares current values to defaults) — if the user hasn't changed anything, closing skips the dialog. If the user has modified any field, the guard triggers.
+- What happens in edit mode when the form is pre-filled? The unsaved changes guard uses `formState.isDirty` from React Hook Form — if the user hasn't changed anything from the `reset()` defaults, closing skips the dialog. If the user has modified any field, the guard triggers.
 - What happens if the date-fns locale fails to load? Fall back to the default (English) Calendar locale.
 - Date picker empty state: when no targetDate is set, the Calendar Popover trigger shows placeholder text: EN: "Pick a date" / RU: "Выберите дату". The Calendar opens to the current month with no date selected.
 - Date picker edit mode: when editing an existing goal with a targetDate, the Calendar opens pre-selected on that date. The Popover trigger shows the formatted date string.
@@ -167,7 +167,7 @@ New users see contextual info icons next to Goals heading, Milestones section, a
 ### Functional Requirements
 
 - **FR-001**: Registration form MUST display a static translated hint below the password field showing the actual backend requirement: "Minimum 8 characters" (EN) / "Минимум 8 символов" (RU). Translation key: `auth:register.passwordHint`. The existing Zod `min(8)` validation in the register schema is already correct — no additional `.refine()` checks needed. Password complexity validation (uppercase, lowercase, digit, special character) is deferred to a future sprint (TD-003).
-- **FR-002**: Registration form MUST parse backend 400 error responses and display the `message` field content to the user. No per-rule frontend error messages — the hint covers the requirement, and backend errors are shown as received.
+- ~~**FR-002**~~: *REMOVED — duplicate of FR-003.*
 - **FR-003**: Registration form MUST parse backend 400 error responses (expected shape: `{ message: string }`) and display the `message` field content to the user. If the response has no `message` field or is not an object, fall back to the generic translated "Registration failed" error.
 - **FR-004**: Registration form MUST apply `.toLowerCase()` transform to the username field value before submission via Zod schema transform.
 - **FR-005**: Registration form MUST display a hint below the username field: "Username is case-insensitive and will be stored in lowercase" (translated).

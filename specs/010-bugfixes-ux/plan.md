@@ -5,7 +5,7 @@
 
 ## Summary
 
-Fix 7 bugs and add onboarding tooltips. Bugs: password validation with per-rule error messages (4x `.refine()`), username/email normalization via Zod `.transform()`, unsaved changes guard on both form modals (AlertDialog), goal mutation cache invalidation investigation, native date picker → shadcn/ui Calendar with date-fns locales, AccountCard ghost button fix, login identifier normalization. UX: 3 info-icon tooltips on Goals page/detail explaining concepts.
+Fix 7 bugs and add onboarding tooltips. Bugs: static password hint + backend 400 error parsing, username/email normalization via Zod `.transform()`, unsaved changes guard on both form modals (AlertDialog), goal mutation cache invalidation investigation, native date picker → shadcn/ui Calendar with date-fns locales, AccountCard ghost button fix, login identifier normalization. UX: 3 info-icon tooltips on Goals page/detail explaining concepts.
 
 ## Technical Context
 
@@ -28,7 +28,7 @@ Fix 7 bugs and add onboarding tooltips. Bugs: password validation with per-rule 
 | I. API-Layer Isolation | PASS | All mutations go through `src/api/`. No direct axios calls added |
 | II. Server State via React Query | PASS | Cache invalidation fixes improve React Query usage. No local state for server data |
 | III. Component-Logic Separation | PASS | Validation logic in Zod schemas (`src/types/`). Unsaved changes guard logic inline in modal (UI state, not business logic). Tooltips are pure UI |
-| IV. Type Safety | PASS | Zod schemas with `.transform()` and `.refine()` — fully typed. No `any` |
+| IV. Type Safety | PASS | Zod schemas with `.transform()` — fully typed. No `any` |
 | V. Design System Fidelity | PASS | AlertDialog, Calendar, Tooltip from shadcn/ui. Info icon from Lucide React. No manual UI edits |
 
 **Technology Constraints**:
@@ -55,7 +55,7 @@ specs/010-bugfixes-ux/
 ```text
 src/
 ├── types/
-│   └── auth.ts                # MODIFY — registerSchema: add .refine() for password, .transform() for username/email; loginSchema: .transform() for identifier
+│   └── auth.ts                # MODIFY — registerSchema: .transform() for username/email; loginSchema: .transform() for identifier
 ├── hooks/
 │   ├── useAuth.ts             # MODIFY — useRegister: handle 400 status with message field
 │   └── useGoals.ts            # INVESTIGATE — verify cache invalidation (may already be correct)
@@ -98,19 +98,9 @@ src/
 
 ## Design Decisions
 
-### D1: Password Complexity Validation
+### D1: Password Hint (Static)
 
-Add 4 separate `.refine()` checks to `registerSchema` in `src/types/auth.ts`:
-
-```
-z.string().min(8)
-  .refine(v => /[A-Z]/.test(v), { message: i18n.t('auth:validation.passwordUppercase') })
-  .refine(v => /[a-z]/.test(v), { message: i18n.t('auth:validation.passwordLowercase') })
-  .refine(v => /[0-9]/.test(v), { message: i18n.t('auth:validation.passwordDigit') })
-  .refine(v => /[!@#$%^&*()_+\-=\[\]{}|;':,.\/<>?]/.test(v), { message: i18n.t('auth:validation.passwordSpecial') })
-```
-
-Each `.refine()` returns a specific translated message when its rule fails. Multiple rules can fail simultaneously — Zod reports all failing refines.
+The existing `z.string().min(8)` validation in `registerSchema` is sufficient. No `.refine()` checks are added — password complexity validation (uppercase, lowercase, digit, special character) is deferred to TD-003. The frontend displays a static translated hint below the password field: "Minimum 8 characters" (EN) / "Минимум 8 символов" (RU) via `t('auth:register.passwordHint')`. Backend 400 errors are parsed and displayed as-is.
 
 ### D2: Backend 400 Error Handling
 
@@ -215,26 +205,26 @@ The `<button>` wrapper ensures keyboard focusability (Tab + Enter/Space). Radix 
 
 New keys needed across namespaces:
 
-**auth.json** (~12 keys):
-- `validation.passwordUppercase`: "Must contain at least one uppercase letter"
-- `validation.passwordLowercase`: "Must contain at least one lowercase letter"
-- `validation.passwordDigit`: "Must contain at least one digit"
-- `validation.passwordSpecial`: "Must contain at least one special character"
-- `validation.passwordRequirements`: "Password must be at least 8 characters with uppercase, lowercase, digit, and special character"
-- `register.usernameHintCase`: "Username is case-insensitive and will be stored in lowercase"
-- `error.passwordValidation`: "Password does not meet requirements"
+**auth.json** (~3 keys):
+- `register.passwordHint`: "Minimum 8 characters"
+- `register.usernameHint`: "Username is case-insensitive and will be stored in lowercase"
+- `error.registrationFailed`: "Registration failed. Please try again."
 
-**habits.json** (~4 keys):
-- `form.discardTitle`: "Discard changes?"
-- `form.discardDescription`: "All entered data will be lost."
-- `form.discardKeep`: "Keep editing"
-- `form.discardConfirm`: "Discard"
+**habits.json** (~4 keys, nested under `form.unsavedChanges`):
+- `form.unsavedChanges.title`: "Discard changes?"
+- `form.unsavedChanges.description`: "All entered data will be lost."
+- `form.unsavedChanges.keepEditing`: "Keep editing"
+- `form.unsavedChanges.discard`: "Discard"
 
-**goals.json** (~7 keys):
-- `form.discardTitle`, `form.discardDescription`, `form.discardKeep`, `form.discardConfirm` (same pattern as habits)
-- `tooltip.goalsInfo`: "Goals are long-term objectives you want to achieve. Link habits to a goal to automatically track progress as you complete your daily habits."
-- `tooltip.milestonesInfo`: "Milestones are checkpoints on the way to your goal. Mark them as complete to track your progress step by step."
-- `tooltip.linkedHabitsInfo`: "Habits linked to this goal automatically update its progress when you complete them. The more habits you complete, the closer you get to your goal."
+**goals.json** (~10 keys):
+- `form.unsavedChanges.title`, `form.unsavedChanges.description`, `form.unsavedChanges.keepEditing`, `form.unsavedChanges.discard` (same nested pattern as habits)
+- `form.pickDate`: "Pick a date"
+- `tooltip.goalsHeading`: "Goals are long-term objectives you want to achieve. Link habits to a goal to automatically track progress as you complete your daily habits."
+- `tooltip.goalsHeadingLabel`: "What are Goals?"
+- `tooltip.milestones`: "Milestones are checkpoints on the way to your goal. Mark them as complete to track your progress step by step."
+- `tooltip.milestonesLabel`: "What are Milestones?"
+- `tooltip.linkedHabits`: "Habits linked to this goal automatically update its progress when you complete them. The more habits you complete, the closer you get to your goal."
+- `tooltip.linkedHabitsLabel`: "What are Linked Habits?"
 
 ## Post-Design Constitution Re-Check
 
