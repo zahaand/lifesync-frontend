@@ -106,13 +106,6 @@ Unit and component tests use Vitest with happy-dom, Testing Library for renderin
 - **Sprint 9: Internationalization** — react-i18next, EN + RU, ~190 translation keys, Zod validation messages translated, backend locale sync, browser language detection
 - **Sprint 10: Bug fixes & UX** — username/email normalization, unsaved changes guard, locale-aware date picker, ghost button fix, onboarding tooltips, contextual hints
 
-## Screenshots
-
-| Desktop | Mobile |
-|---------|--------|
-|         |        |
-|         |        |
-
 ## Technology Stack
 
 | Concern | Technology |
@@ -311,13 +304,6 @@ Onboarding tooltips для целей, этапов и привязанных п
 - **Спринт 8: Тёмная тема** — class-based Tailwind CSS v4, FOCT prevention, определение OS preference, обновление меню
 - **Спринт 9: Интернационализация** — react-i18next, EN + RU, ~190 ключей перевода, перевод Zod валидаций, синхронизация с backend, определение языка браузера
 - **Спринт 10: Исправление багов и UX** — нормализация username/email, защита от потери данных, локализованный date picker, исправление ghost button, onboarding tooltips, контекстные подсказки
-
-## Скриншоты
-
-| Десктоп | Мобильный |
-|---------|-----------|
-|         |           |
-|         |           |
 
 ## Стек технологий
 
