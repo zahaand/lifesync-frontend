@@ -7,20 +7,19 @@
 
 ## User Scenarios & Testing *(mandatory)*
 
-### User Story 1 — Registration Password Validation (Priority: P1)
+### User Story 1 — Registration Password Hint (Priority: P1)
 
-A user registers a new account with a weak password (e.g. "12345678"). Instead of a generic "Registration failed" message, the user sees a clear, translated error message explaining exact password requirements: at least 8 characters, one uppercase letter, one lowercase letter, one digit, and one special character.
+A user registers a new account. A clear hint below the password field explains the actual backend requirement: minimum 8 characters. If the backend returns a 400 error, the frontend parses and displays the `message` field content. Password complexity validation (uppercase, lowercase, digit, special character) is deferred to a future sprint (TD-003).
 
 **Why this priority**: Users are unable to register successfully without understanding password requirements. This blocks onboarding.
 
-**Independent Test**: Attempt registration with a weak password and verify the specific error message appears in the selected language.
+**Independent Test**: Open registration form and verify the password hint is visible. Attempt registration with a short password and verify the backend error message appears in the selected language.
 
 **Acceptance Scenarios**:
 
-1. **Given** a user enters a password like "12345678" on the registration form, **When** they submit, **Then** the frontend Zod validation shows a translated error explaining all four character-class requirements.
-2. **Given** a user enters "Abcdefg1" (no special character), **When** they submit, **Then** the Zod validation error specifies the missing requirement.
-3. **Given** the backend returns a 400 error with a message field for a password that passes frontend validation but fails backend rules, **When** the error response arrives, **Then** the frontend displays the backend's error message (translated via i18next if a matching key exists, otherwise displayed as-is).
-4. **Given** the app is in Russian, **When** any password validation error appears, **Then** the error text is in Russian.
+1. **Given** the registration form is displayed, **When** the user looks at the password field, **Then** a hint below says "Minimum 8 characters" (translated for the active language).
+2. **Given** the backend returns a 400 error with a message field for a password that fails backend rules, **When** the error response arrives, **Then** the frontend displays the backend's error message (translated via i18next if a matching key exists, otherwise displayed as-is).
+3. **Given** the app is in Russian, **When** the password hint is displayed, **Then** the hint text is in Russian ("Минимум 8 символов").
 
 ---
 
@@ -157,7 +156,7 @@ New users see contextual info icons next to Goals heading, Milestones section, a
 
 ### Session 2026-04-09
 
-- Q: Password complexity — single Zod .regex() or separate .refine() checks? → A: Four separate .refine() checks with individual translated error messages per missing requirement (uppercase, lowercase, digit, special character).
+- Q: Password complexity — single Zod .regex() or separate .refine() checks? → A: ~~Four separate .refine() checks~~ **Deferred (TD-003)**. Frontend shows a static hint ("Minimum 8 characters") and relies on existing `min(8)` Zod validation. Backend 400 errors are parsed and displayed.
 - Q: Unsaved changes guard scope — HabitFormModal only or both forms? → A: Both HabitFormModal and GoalFormModal.
 - Q: Calendar component — check existing date-fns or always add explicitly? → A: Always explicitly add date-fns to package.json as a direct dependency.
 - Q: Ghost button investigation — inspect first or fix directly? → A: Two-phase approach — inspect AccountCard first, report findings, then fix.
@@ -167,8 +166,8 @@ New users see contextual info icons next to Goals heading, Milestones section, a
 
 ### Functional Requirements
 
-- **FR-001**: Registration form MUST validate password complexity on the frontend via Zod: minimum 8 characters, plus four separate `.refine()` checks — one for uppercase, one for lowercase, one for digit, one for special character — each with its own translated error message.
-- **FR-002**: Registration form MUST display specific translated error messages for each unmet password requirement. Password validation error display strategy: React Hook Form with Zod shows the FIRST failing `.refine()` error at a time (default RHF behavior with `mode: 'onChange'`). As the user satisfies each rule, the next unmet rule shows. No custom multi-error UI needed — standard RHF + Zod behavior.
+- **FR-001**: Registration form MUST display a static translated hint below the password field showing the actual backend requirement: "Minimum 8 characters" (EN) / "Минимум 8 символов" (RU). Translation key: `auth:register.passwordHint`. The existing Zod `min(8)` validation in the register schema is already correct — no additional `.refine()` checks needed. Password complexity validation (uppercase, lowercase, digit, special character) is deferred to a future sprint (TD-003).
+- **FR-002**: Registration form MUST parse backend 400 error responses and display the `message` field content to the user. No per-rule frontend error messages — the hint covers the requirement, and backend errors are shown as received.
 - **FR-003**: Registration form MUST parse backend 400 error responses (expected shape: `{ message: string }`) and display the `message` field content to the user. If the response has no `message` field or is not an object, fall back to the generic translated "Registration failed" error.
 - **FR-004**: Registration form MUST apply `.toLowerCase()` transform to the username field value before submission via Zod schema transform.
 - **FR-005**: Registration form MUST display a hint below the username field: "Username is case-insensitive and will be stored in lowercase" (translated).
@@ -190,7 +189,7 @@ New users see contextual info icons next to Goals heading, Milestones section, a
 
 ### Key Entities
 
-- **PasswordComplexityRule**: Frontend validation rule for password strength. Enforces: minLength(8), hasUppercase, hasLowercase, hasDigit, hasSpecialCharacter.
+- **PasswordHint**: Static translated hint below the password field showing backend requirement: minimum 8 characters. Complexity rules (uppercase, lowercase, digit, special) deferred to TD-003.
 - **UnsavedChangesGuard**: Logic that detects non-empty form content and intercepts modal close to show a confirmation dialog.
 - **OnboardingTooltip**: An info icon + shadcn/ui Tooltip combination that displays educational content for a feature concept.
 
@@ -198,7 +197,7 @@ New users see contextual info icons next to Goals heading, Milestones section, a
 
 ### Measurable Outcomes
 
-- **SC-001**: Registration with a weak password shows a specific, translated error — not a generic failure message.
+- **SC-001**: Registration form shows a static translated hint "Minimum 8 characters" below the password field; backend 400 errors are parsed and displayed.
 - **SC-002**: Username "TestUser" is submitted as "testuser" on registration.
 - **SC-003**: Closing a partially filled habit form triggers a confirmation dialog; empty form closes immediately.
 - **SC-004**: Linking a habit to a goal updates the UI immediately without page refresh.

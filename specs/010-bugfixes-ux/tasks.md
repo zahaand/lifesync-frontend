@@ -33,10 +33,10 @@
 
 **⚠️ CRITICAL**: Translation keys must exist before UI components reference them
 
-- [ ] T004 [P] Add password validation, username hint, and error keys to src/locales/en/auth.json (~7 keys: validation.passwordUppercase, validation.passwordLowercase, validation.passwordDigit, validation.passwordSpecial, validation.passwordRequirements, register.usernameHintCase, error.passwordValidation)
+- [ ] T004 [P] Add password hint, username hint, and error keys to src/locales/en/auth.json (~3 keys: register.passwordHint, register.usernameHintCase, error.passwordValidation)
 - [ ] T005 [P] Add unsaved changes dialog keys to src/locales/en/habits.json (~4 keys: form.discardTitle, form.discardDescription, form.discardKeep, form.discardConfirm)
 - [ ] T006 [P] Add unsaved changes dialog, date picker placeholder, and tooltip keys to src/locales/en/goals.json (~10 keys: form.discardTitle, form.discardDescription, form.discardKeep, form.discardConfirm, form.pickDate, tooltip.goalsInfo, tooltip.goalsInfoLabel, tooltip.milestonesInfo, tooltip.milestonesInfoLabel, tooltip.linkedHabitsInfo, tooltip.linkedHabitsInfoLabel)
-- [ ] T007 [P] Add Russian translations for all new auth keys to src/locales/ru/auth.json (mirror T004 keys)
+- [ ] T007 [P] Add Russian translations for all new auth keys to src/locales/ru/auth.json (mirror T004 keys: register.passwordHint = "Минимум 8 символов", register.usernameHintCase, error.passwordValidation)
 - [ ] T008 [P] Add Russian translations for all new habits keys to src/locales/ru/habits.json (mirror T005 keys)
 - [ ] T009 [P] Add Russian translations for all new goals keys to src/locales/ru/goals.json (mirror T006 keys)
 
@@ -44,19 +44,19 @@
 
 ---
 
-## Phase 3: User Story 1 — Registration Password Validation (Priority: P1) 🎯 MVP
+## Phase 3: User Story 1 — Registration Password Hint (Priority: P1) 🎯 MVP
 
-**Goal**: Show specific, translated per-rule error messages when password doesn't meet complexity requirements
+**Goal**: Show a clear static hint below the password field explaining the actual backend requirement (minimum 8 characters). Parse and display backend 400 errors. Password complexity validation deferred to TD-003.
 
-**Independent Test**: Register with "12345678" → see "Must contain at least one uppercase letter"; fix and resubmit → see next rule failure
+**Independent Test**: Open registration form → see "Minimum 8 characters" hint below password field; submit short password → see backend error message
 
 ### Implementation for User Story 1
 
-- [ ] T010 [US1] Add 4 `.refine()` checks to password field in registerSchema in src/types/auth.ts — uppercase, lowercase, digit, special character — each with translated i18n message via `i18n.t('auth:validation.passwordUppercase')` etc.
+- [ ] T010 [US1] ~~REMOVED — no .refine() checks needed~~ No changes to Zod schema — existing `min(8)` validation in registerSchema in src/types/auth.ts is already correct
 - [ ] T011 [US1] Add backend 400 error handling in useRegister mutation in src/hooks/useAuth.ts — parse `{ message }` from error response body, call `setError('password', { message })` for status 400; fall back to generic translated error if no message field
-- [ ] T012 [US1] Add password requirements hint text below password field in RegisterForm in src/pages/LoginPage.tsx using `t('auth:validation.passwordRequirements')` key
+- [ ] T012 [US1] Add static password hint below password field in RegisterForm in src/pages/LoginPage.tsx — always visible, not a dynamic indicator. Use `t('auth:register.passwordHint')` key. EN: "Minimum 8 characters" / RU: "Минимум 8 символов"
 
-**Checkpoint**: Password validation shows specific per-rule errors in both languages
+**Checkpoint**: Password hint visible in both languages; backend errors parsed and displayed
 
 ---
 
@@ -180,7 +180,7 @@
 
 - **Setup (Phase 1)**: No dependencies — install deps first
 - **Foundational (Phase 2)**: Can start after Setup; translation keys BLOCK UI tasks
-- **US1 (Phase 3)**: Depends on Phase 2 (translation keys) + T010 modifies same file as T013/T014/T021
+- **US1 (Phase 3)**: Depends on Phase 2 (translation keys); T010 removed (no schema changes), T011–T012 are independent
 - **US2 (Phase 4)**: Depends on Phase 2; T013/T014 modify src/types/auth.ts (coordinate with T010)
 - **US3 (Phase 5)**: Depends on Phase 1 (AlertDialog) + Phase 2 (translation keys)
 - **US4 (Phase 6)**: Depends on Phase 2 only — independent investigation
@@ -192,8 +192,8 @@
 
 ### Shared File Coordination: src/types/auth.ts
 
-Tasks T010, T013, T014, and T021 all modify `src/types/auth.ts`. Execute in order:
-1. T010 (password refines) → T013 + T014 (register transforms) → T021 (login transform)
+Tasks T013, T014, and T021 modify `src/types/auth.ts` (T010 removed — no schema changes needed). Execute in order:
+1. T013 + T014 (register transforms) → T021 (login transform)
 
 ### User Story Independence
 
@@ -254,7 +254,7 @@ Task: "Add info tooltip next to Linked Habits in src/components/goals/GoalLinked
 
 - [P] tasks = different files, no dependencies
 - [Story] label maps task to specific user story for traceability
-- src/types/auth.ts is modified by 4 tasks — execute sequentially to avoid conflicts
+- src/types/auth.ts is modified by 3 tasks (T013, T014, T021) — execute sequentially to avoid conflicts
 - Investigation tasks (T018, T020) may expand into additional fixes during implementation
 - Commit after each task or logical group
 - Stop at any checkpoint to validate story independently
