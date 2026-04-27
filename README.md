@@ -392,7 +392,7 @@ src/
 ├── locales/        # JSON-файлы переводов (en/, ru/ — по 7 неймспейсов)
 ├── stores/         # Zustand-хранилища (authStore, themeStore, localeStore)
 ├── test/           # Настройка тестов, MSW-обработчики, тестовые у��илиты
-├��─ types/          # TypeScript-определения типов (auth, habits, goals, users, habitLogs)
+├── types/          # TypeScript-определения типов (auth, habits, goals, users, habitLogs)
 └── lib/            # Утилиты (cn) и конфиг i18n (i18n.ts)
 tests/
 └── e2e/            # Playwright E2E-тесты (auth, habits, goals, profile, mobile)
